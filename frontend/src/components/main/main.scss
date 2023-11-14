@@ -1,0 +1,12 @@
+.main {
+  background-color: rgb(255, 180, 211);
+  flex-grow: 1;
+  width: 100%;
+  padding-top: 100px;
+
+  &__cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+}
