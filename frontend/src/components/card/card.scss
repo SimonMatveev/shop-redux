@@ -1,7 +1,16 @@
 .card {
   width: 100%;
-  display: flex;
-  flex-direction: column;
+  position: relative;
+
+
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    transition: scale .3s;
+    text-decoration: none;
+    color: black;
+  }
 
   &__img {
     width: 100%;
@@ -11,7 +20,8 @@
 
   &__title {
     margin: 0;
-    font-size: 20px;
+    font-size: 18px;
+    max-width: 55%;
   }
 
   &__text {
@@ -20,12 +30,18 @@
     padding: 10px 0;
     align-items: start;
     flex-grow: 1;
+    box-sizing: border-box;
+  }
+
+  &__prices {
+    flex-shrink: 0;
   }
 
   &__price {
     margin: 0;
     font-size: 20px;
     font-weight: 900;
+    padding-top: 22px;
   }
 
   &__price_saleon {
@@ -34,9 +50,50 @@
     text-decoration: line-through;
     margin-bottom: 5px;
     text-align: right;
+    padding-top: 0;
   }
 
   &__price_withsale {
     color: red;
+    padding-top: 0;
+  }
+
+  &__btn {
+    background-color: rgb(255, 0, 0);
+    border: none;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    position: absolute;
+    bottom: -40px;
+    left: 0;
+    width: 100%;
+    display: none;
+
+    &:hover {
+      background-color: rgb(204, 3, 3);
+    }
+  }
+
+  &:hover {
+    scale: 1.05;
+    z-index: 1000;
+  }
+
+  &:hover::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    right: -20px;
+    bottom: -60px;
+    border-radius: 5px;
+    z-index: -1;
+    background-color: white;
+  }
+
+  &:hover &__btn {
+    display: block;
+    cursor: pointer;
   }
 }

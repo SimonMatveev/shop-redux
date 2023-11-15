@@ -19,6 +19,23 @@ const DATA_ERR_STATUS = 400;
 const DEL_ERR_STATUS = 403;
 const NOT_FOUND_ERR_STATUS = 404;
 
+const CATEGORY_ENUM = [
+  'RPG',
+  'ACTION',
+  'IMMERSIVE-SIM',
+  'VN',
+  'SOULS-LIKE',
+  '3RD-PERSON',
+  '1ST-PERSON',
+  'SHOOTER',
+  'RACING',
+  'SIMULATOR',
+  'SURVIVAL',
+  'HORROR',
+];
+
+const PLATFORM_ENUM = ['PC', 'PS4', 'PS5', 'XBOX-ONE', 'XBOX-X', 'Switch'];
+
 module.exports = {
   GET_USER_ERR,
   CREATE_USER_ERR,
@@ -38,4 +55,6 @@ module.exports = {
   NOT_FOUND_ERR_STATUS,
   AUTH_ERR,
   TOKEN_ERR,
+  CATEGORY_ENUM,
+  PLATFORM_ENUM,
 };

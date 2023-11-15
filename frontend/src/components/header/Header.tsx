@@ -1,15 +1,11 @@
-import { FC } from 'react'
-import { NavLink, Link } from 'react-router-dom'
-import { IUser } from '../../types/types'
+import { FC } from 'react';
+import { NavLink, Link } from 'react-router-dom';
 import './header.scss';
 import Container from '../container/Container';
+import { useGetCurrentUserQuery } from '../../store/api/users.storeApi';
 
-interface IHeaderProps {
-  currentUser: IUser | undefined;
-  isLoading: boolean;
-}
-
-const Header: FC<IHeaderProps> = ({ currentUser, isLoading }) => {
+const Header: FC = () => {
+  const { isLoading, data: currentUser } = useGetCurrentUserQuery(null, {});
   return (
     <header className='header'>
       <Container newClass='header__container'>

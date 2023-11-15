@@ -9,20 +9,19 @@ import Main from '../main/Main'
 import NotFound from '../not-found/NotFound'
 import Header from '../header/Header'
 import Footer from '../footer/Footer'
+import ItemPage from '../item-page/ItemPage'
 
 const App = () => {
-  const { data: currentUser, isLoading } = useGetCurrentUserQuery(null, {});
-
   return (
     <div className='page'>
       <Routes>
         <Route path='/signin' element={
-          <ProtectedRoute isLoading={isLoading} currentUser={currentUser} onlyUnauth>
+          <ProtectedRoute  onlyUnauth>
             <Signin />
           </ProtectedRoute>
         } />
         <Route path='/signup' element={
-          <ProtectedRoute isLoading={isLoading} currentUser={currentUser} onlyUnauth>
+          <ProtectedRoute  onlyUnauth>
             <Signup />
           </ProtectedRoute>
         } />
@@ -31,15 +30,18 @@ const App = () => {
         } />
         <Route path='/*' element={
           <>
-            <Header currentUser={currentUser} isLoading={isLoading} />
+            <Header/>
             <Routes>
               <Route path='/profile' element={
-                <ProtectedRoute isLoading={isLoading} currentUser={currentUser}>
+                <ProtectedRoute>
                   <Profile />
                 </ProtectedRoute>
               } />
               <Route path='/' element={
                 <Main />
+              } />
+              <Route path='/items/:itemId' element={
+                <ItemPage />
               } />
               <Route path='/*' element={
                 <Navigate to='/404' />

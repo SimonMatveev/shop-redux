@@ -1,5 +1,6 @@
 const { celebrate, Joi } = require('celebrate');
 const REG_EXP_URL = require('../utils/regexp');
+const { PLATFORM_ENUM, CATEGORY_ENUM } = require('../utils/constants');
 
 const validateSignUp = celebrate({
   body: Joi.object().keys({
@@ -27,11 +28,14 @@ const validateAddItem = celebrate({
   body: Joi.object().keys({
     name: Joi.string().required(),
     description: Joi.string().required(),
-    brand: Joi.string().required(),
+    studio: Joi.string().required(),
     price: Joi.number().required(),
     priceWithSale: Joi.number(),
-    category: Joi.array().items(Joi.string().required()),
+    category: Joi.array().items(Joi.string().required().valid(...CATEGORY_ENUM)),
     inStockAmount: Joi.number().required(),
+    releaseDate: Joi.string().required(),
+    platforms: Joi.array().items(Joi.string().required().valid(...PLATFORM_ENUM)),
+    series: Joi.string(),
     images: Joi.array().items(Joi.string().required().pattern(REG_EXP_URL, { name: 'url' })),
   }),
 });

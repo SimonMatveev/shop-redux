@@ -1,15 +1,44 @@
+export enum ENUM_CATEGORY {
+  RPG = 'RPG',
+  ACTION = 'ACTION',
+  IMMERSIVE_SIM = 'IMMERSIVE-SIM',
+  VN = 'VN',
+  SOULS_LIKE = 'SOULS-LIKE',
+  THIRD_PERSON = '3RD-PERSON',
+  FIRST_PERSION = '1ST-PERSON',
+  SHOOTER = 'SHOOTER',
+  RACING = 'RACING',
+  SIMULATOR = 'SIMULATOR',
+  SURVIVAL = 'SURVIVAL',
+  HORROR = 'HORROR',
+}
+
+export enum ENUM_PLATFORMS {
+  PC = 'PC',
+  PS4 = 'PS4',
+  PS5 = 'PS5',
+  XBOX_ONE = 'XBOX-ONE',
+  XBOX_X = 'XBOX-X',
+  SWITCH = 'Switch',
+}
+
 export interface IItem {
   _id: string;
   name: string;
   description: string;
-  brand: string;
+  studio: string;
   price: number;
   priceWithSale?: number;
-  category: string[];
+  category: ENUM_CATEGORY[];
   rating: number;
   inStockAmount: number;
+  releaseDate: string;
+  platforms: ENUM_PLATFORMS[];
+  series?: string;
   images: string[];
 }
+
+export interface IItemInsert extends Omit<IItem, 'rating' | '_id'> { }
 
 export interface IItemData {
   data: IItem[]
