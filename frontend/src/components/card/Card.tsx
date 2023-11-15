@@ -1,13 +1,41 @@
-import { FC } from 'react'
+import { FC, MouseEventHandler } from 'react'
 import { IItem } from '../../types/types'
 import './card.scss'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { useDecrementCartMutation, useGetCurrentUserQuery, useIncrementCartMutation } from '../../store/api/users.storeApi'
 
 interface ICardProps {
   item: IItem
 }
 
 const Card: FC<ICardProps> = ({ item }) => {
+  const { data } = useGetCurrentUserQuery(null, {});
+  const [incrementCart, { isLoading: upIsLoading }] = useIncrementCartMutation();
+  const [decrementCart, { isLoading: downIsLoading }] = useDecrementCartMutation();
+  const navigate = useNavigate();
+
+  const isInCart = data?.cart.items.some(cartItem => cartItem.itemInCart._id === item._id) || false;
+  const thisItemInCart = data?.cart.items.find(cartItem => cartItem.itemInCart._id === item._id);
+
+  const handleClick: MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault();
+    if (data) {
+      incrementCart(item._id);
+    } else {
+      navigate('/signin');
+    }
+  }
+
+  const handleIncrement: MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault();
+    incrementCart(item._id);
+  }
+
+  const handleDecrement: MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault();
+    decrementCart(item._id);
+  }
+
   return (
     <article className='card' >
       <Link className='card__wrapper' to={`/items/${item._id}`}>
@@ -24,9 +52,16 @@ const Card: FC<ICardProps> = ({ item }) => {
             }
           </div>
         </div>
-        <button type='button' className='card__btn card__btn_t_buy'>В корзину</button>
+        {isInCart ?
+          <div className='card__btn-container'>
+            < button type='button' className='' onClick={handleDecrement}>-</button>
+            <span className='card__amount'>{thisItemInCart?.amount}</span>
+            < button type='button' className='' onClick={handleIncrement}>+</button>
+          </div> :
+          < button type='button' className='card__btn card__btn_t_buy' onClick={handleClick}>В корзину</button>
+        }
       </Link>
-    </article>
+    </article >
   )
 }
 

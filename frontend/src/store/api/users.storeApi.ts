@@ -4,11 +4,11 @@ import { storeApi } from "./storeApi";
 export const itemsApi = storeApi.injectEndpoints({
   endpoints: builder => ({
     getCurrentUser: builder.query<IUser, null>({
-      query: () => '/users',
+      query: () => '/users/me',
       providesTags: () => [{
         type: 'User',
       }],
-      transformResponse: (response: IUserData) => response.data
+      transformResponse: (response: IUserData) => response.data.user
     }),
     updateUser: builder.mutation<IUserNoPopulate, IPatchMe>({
       query: ({ name, email }) => ({
@@ -20,19 +20,25 @@ export const itemsApi = storeApi.injectEndpoints({
         type: 'User',
       }]
     }),
-    incrementCard: builder.mutation<IUserNoPopulate, string>({
+    incrementCart: builder.mutation<IUserNoPopulate, string>({
       query: (itemId) => ({
-        body: itemId,
-        url: '/users/card/add',
+        body: { itemId },
+        url: '/users/cart/add',
         method: 'POST',
-      })
+      }),
+      invalidatesTags: () => [{
+        type: 'User',
+      }]
     }),
-    decrementCard: builder.mutation<IUserNoPopulate, string>({
+    decrementCart: builder.mutation<IUserNoPopulate, string>({
       query: (itemId) => ({
-        body: itemId,
-        url: '/users/card/remove',
+        body: { itemId },
+        url: '/users/cart/remove',
         method: 'POST',
-      })
+      }),
+      invalidatesTags: () => [{
+        type: 'User',
+      }]
     }),
     signIn: builder.mutation<IUserNoPopulate, ISignin>({
       query: ({ email, password }) => ({
@@ -59,8 +65,8 @@ export const itemsApi = storeApi.injectEndpoints({
 export const {
   useGetCurrentUserQuery,
   useUpdateUserMutation,
-  useIncrementCardMutation,
-  useDecrementCardMutation,
+  useIncrementCartMutation,
+  useDecrementCartMutation,
   useSignInMutation,
   useSignUpMutation,
 } = itemsApi;

@@ -61,7 +61,9 @@ export interface IUser {
 }
 
 export interface IUserData {
-  data: IUser
+  data: {
+    user: IUser
+  }
 }
 
 export interface IUserNoPopulate extends Omit<IUser, 'cart'> {

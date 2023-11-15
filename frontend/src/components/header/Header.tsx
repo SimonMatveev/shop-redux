@@ -6,6 +6,7 @@ import { useGetCurrentUserQuery } from '../../store/api/users.storeApi';
 
 const Header: FC = () => {
   const { isLoading, data: currentUser } = useGetCurrentUserQuery(null, {});
+
   return (
     <header className='header'>
       <Container newClass='header__container'>

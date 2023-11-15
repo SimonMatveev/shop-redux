@@ -69,6 +69,7 @@
     left: 0;
     width: 100%;
     display: none;
+    z-index: 1000;
 
     &:hover {
       background-color: rgb(204, 3, 3);
