@@ -2,7 +2,6 @@ import './app.scss'
 import { Route, Routes, Navigate } from 'react-router'
 import Signin from '../signin/Signin'
 import Signup from '../signup/Signup'
-import { useGetCurrentUserQuery } from '../../store/api/users.storeApi'
 import ProtectedRoute from '../protected-route/ProtectedRoute'
 import Profile from '../profile/Profile'
 import Main from '../main/Main'
@@ -12,6 +11,7 @@ import Footer from '../footer/Footer'
 import ItemPage from '../item-page/ItemPage'
 
 const App = () => {
+
   return (
     <div className='page'>
       <Routes>

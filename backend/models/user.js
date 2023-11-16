@@ -80,7 +80,6 @@ userSchema.statics.incrementCart = function (userId, itemId) {
       } else {
         user.cart.items[index].amount++;
       }
-      console.log(user.cart);
       return user.cart;
     })
     .then(cart => this.findByIdAndUpdate(userId, { cart }, {

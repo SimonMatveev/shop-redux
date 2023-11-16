@@ -54,11 +54,11 @@ const Card: FC<ICardProps> = ({ item }) => {
         </div>
         {isInCart ?
           <div className='card__btn-container'>
-            < button type='button' className='' onClick={handleDecrement}>-</button>
+            < button type='button' className='card__btn card__btn_t_control' onClick={handleDecrement}>-</button>
             <span className='card__amount'>{thisItemInCart?.amount}</span>
-            < button type='button' className='' onClick={handleIncrement}>+</button>
+            < button type='button' className='card__btn card__btn_t_control' onClick={handleIncrement}>+</button>
           </div> :
-          < button type='button' className='card__btn card__btn_t_buy' onClick={handleClick}>В корзину</button>
+          < button type='button' className='card__btn' onClick={handleClick}>В корзину</button>
         }
       </Link>
     </article >
