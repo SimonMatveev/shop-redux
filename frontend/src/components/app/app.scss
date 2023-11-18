@@ -4,4 +4,8 @@
   min-height: 100vh;
   min-width: 320px;
   font-family: Inter, sans-serif;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
 }

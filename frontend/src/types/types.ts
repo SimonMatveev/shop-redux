@@ -77,7 +77,11 @@ export interface ISignin extends Pick<IUser, 'email'> {
   password: string;
 }
 
-export interface IPatchMe extends Pick<IUser, 'name' | 'email'> { }
+export interface IPatchMe {
+  name?: string;
+  email?: string;
+  password?: string;
+}
 
 export interface ISignup extends ISignin {
   name: string;
@@ -98,6 +102,12 @@ export interface IAuthInput {
 
 export interface IError {
   status: number;
+  data: {
+    message: string;
+  }
+}
+
+export interface IClearResponse {
   data: {
     message: string;
   }

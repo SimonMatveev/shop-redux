@@ -2,7 +2,8 @@ import { FC, MouseEventHandler } from 'react'
 import { IItem } from '../../types/types'
 import './card.scss'
 import { Link, useNavigate } from 'react-router-dom'
-import { useDecrementCartMutation, useGetCurrentUserQuery, useIncrementCartMutation } from '../../store/api/users.storeApi'
+import { useGetCurrentUserQuery, useIncrementCartMutation } from '../../store/api/users.storeApi'
+import AmountChanger from '../amount-changer/AmountChanger'
 
 interface ICardProps {
   item: IItem
@@ -11,11 +12,9 @@ interface ICardProps {
 const Card: FC<ICardProps> = ({ item }) => {
   const { data } = useGetCurrentUserQuery(null, {});
   const [incrementCart, { isLoading: upIsLoading }] = useIncrementCartMutation();
-  const [decrementCart, { isLoading: downIsLoading }] = useDecrementCartMutation();
   const navigate = useNavigate();
 
   const isInCart = data?.cart.items.some(cartItem => cartItem.itemInCart._id === item._id) || false;
-  const thisItemInCart = data?.cart.items.find(cartItem => cartItem.itemInCart._id === item._id);
 
   const handleClick: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
@@ -24,16 +23,6 @@ const Card: FC<ICardProps> = ({ item }) => {
     } else {
       navigate('/signin');
     }
-  }
-
-  const handleIncrement: MouseEventHandler<HTMLButtonElement> = (e) => {
-    e.preventDefault();
-    incrementCart(item._id);
-  }
-
-  const handleDecrement: MouseEventHandler<HTMLButtonElement> = (e) => {
-    e.preventDefault();
-    decrementCart(item._id);
   }
 
   return (
@@ -53,12 +42,8 @@ const Card: FC<ICardProps> = ({ item }) => {
           </div>
         </div>
         {isInCart ?
-          <div className='card__btn-container'>
-            < button type='button' className='card__btn card__btn_t_control' onClick={handleDecrement}>-</button>
-            <span className='card__amount'>{thisItemInCart?.amount}</span>
-            < button type='button' className='card__btn card__btn_t_control' onClick={handleIncrement}>+</button>
-          </div> :
-          < button type='button' className='card__btn' onClick={handleClick}>В корзину</button>
+          <AmountChanger item={item} /> :
+          < button type='button' className={`card__btn${upIsLoading ? ' card__btn_loading' : '  '}`} onClick={handleClick} disabled={upIsLoading}>{!upIsLoading ? 'В корзину' : 'Загрузка...'}</button>
         }
       </Link>
     </article >

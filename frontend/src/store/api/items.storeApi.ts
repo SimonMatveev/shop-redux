@@ -1,4 +1,4 @@
-import { IItem, IItemData } from "../../types/types";
+import { IItem, IItemData, IItemInsert } from "../../types/types";
 import { storeApi } from "./storeApi";
 
 export const itemsApi = storeApi.injectEndpoints({
@@ -10,8 +10,20 @@ export const itemsApi = storeApi.injectEndpoints({
       }],
       transformResponse: (response: IItemData) => response.data
     }),
-
+    addItem: builder.mutation<IItemData, IItemInsert>({
+      query: (data) => ({
+        body: data,
+        url: '/items',
+        method: 'POST',
+      }),
+      invalidatesTags: () => [{
+        type: 'Item',
+      }]
+    }),
   })
 })
 
-export const { useGetItemsQuery } = itemsApi;
+export const {
+  useGetItemsQuery,
+  useAddItemMutation,
+} = itemsApi;

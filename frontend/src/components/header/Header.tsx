@@ -1,11 +1,21 @@
 import { FC } from 'react';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link, } from 'react-router-dom';
 import './header.scss';
 import Container from '../container/Container';
 import { useGetCurrentUserQuery } from '../../store/api/users.storeApi';
+import useActions from '../../hooks/useActions';
 
-const Header: FC = () => {
+interface IHeaderProps {
+  onCheckout: boolean;
+}
+
+const Header: FC<IHeaderProps> = ({ onCheckout }) => {
   const { isLoading, data: currentUser } = useGetCurrentUserQuery(null, {});
+  const { toggleCartState } = useActions();
+
+  const handleCartClick = () => {
+    toggleCartState();
+  }
 
   return (
     <header className='header'>
@@ -16,7 +26,7 @@ const Header: FC = () => {
             {
               currentUser ?
                 <>
-                  <button className='header__btn' type='button' aria-label='Корзина'></button>
+                  {!onCheckout && <button className='header__btn' type='button' aria-label='Корзина' onClick={handleCartClick}></button>}
                   <NavLink className={({ isActive }) => `header__link ${isActive ? ' header__link_active' : ''}`} to='/profile'>Профиль</NavLink>
                 </> :
                 <>

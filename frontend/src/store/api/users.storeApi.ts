@@ -1,9 +1,10 @@
-import { IPatchMe, IUser, IUserNoPopulate, ISignin, ISignup, IError, IUserData, } from "../../types/types";
+import { AnyAction, Dispatch } from "@reduxjs/toolkit";
+import { IPatchMe, IUser, IUserNoPopulate, ISignin, ISignup, IError, IUserData, IClearResponse, } from "../../types/types";
 import { storeApi } from "./storeApi";
 
 export const itemsApi = storeApi.injectEndpoints({
   endpoints: builder => ({
-    getCurrentUser: builder.query<IUser, null>({
+    getCurrentUser: builder.query<IUser | null, null>({
       query: () => '/users/me',
       providesTags: () => [{
         type: 'User',
@@ -11,14 +12,16 @@ export const itemsApi = storeApi.injectEndpoints({
       transformResponse: (response: IUserData) => response.data.user
     }),
     updateUser: builder.mutation<IUserNoPopulate, IPatchMe>({
-      query: ({ name, email }) => ({
-        body: { name, email },
+      query: ({ name, email, password }) => ({
+        body: { name, email, password },
         url: '/users/me',
-        method: 'POST',
+        method: 'PATCH',
       }),
       invalidatesTags: () => [{
         type: 'User',
-      }]
+      }],
+      transformErrorResponse: (response) =>
+        response.status === 'FETCH_ERROR' ? response.error : (response as IError).data.message
     }),
     incrementCart: builder.mutation<IUserNoPopulate, string>({
       query: (itemId) => ({
@@ -35,6 +38,15 @@ export const itemsApi = storeApi.injectEndpoints({
         body: { itemId },
         url: '/users/cart/remove',
         method: 'POST',
+      }),
+      invalidatesTags: () => [{
+        type: 'User',
+      }]
+    }),
+    clearCart: builder.mutation<IClearResponse, null>({
+      query: () => ({
+        url: '/users/cart/clear',
+        method: 'DELETE',
       }),
       invalidatesTags: () => [{
         type: 'User',
@@ -58,6 +70,17 @@ export const itemsApi = storeApi.injectEndpoints({
       }),
       transformErrorResponse: (response) =>
         response.status === 'FETCH_ERROR' ? response.error : (response as IError).data.message
+    }),
+    signOut: builder.mutation<IClearResponse, null>({
+      query: () => ({
+        url: '/signout',
+        method: 'POST',
+      }),
+      invalidatesTags: () => [{
+        type: 'User',
+      }],
+      transformErrorResponse: (response) =>
+        response.status === 'FETCH_ERROR' ? response.error : (response as IError).data.message
     })
   })
 })
@@ -69,4 +92,10 @@ export const {
   useDecrementCartMutation,
   useSignInMutation,
   useSignUpMutation,
+  useClearCartMutation,
+  useSignOutMutation,
 } = itemsApi;
+
+export const resetUser = (dispatch: Dispatch) => {
+  dispatch(itemsApi.util.updateQueryData('getCurrentUser', null, () => null) as unknown as AnyAction)
+}

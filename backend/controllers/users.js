@@ -72,19 +72,26 @@ function createUser(req, res, next) {
     });
 }
 
-function updateUser(req, res, next) {
-  const { name, email } = req.body;
-
-  User.findByIdAndUpdate(req.user._id, { name, email }, {
-    new: true,
-    runValidators: true,
-  })
-    .then((user) => res.send({ data: user }))
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        next(new DataError(PATCH_USER_ERR));
-      } else next(err);
-    });
+async function updateUser(req, res, next) {
+  try {
+    const { name, email, password } = req.body;
+    let hash;
+    if (password) {
+      hash = await bcrypt.hash(password, 10)
+    }
+    const user = password ? await User.findByIdAndUpdate(req.user._id, { name, email, password: hash }, {
+      new: true,
+      runValidators: true,
+    }) : await User.findByIdAndUpdate(req.user._id, { name, email }, {
+      new: true,
+      runValidators: true,
+    })
+    res.send({ data: user })
+  } catch (err) {
+    if (err.name === 'ValidationError') {
+      next(new DataError(PATCH_USER_ERR));
+    } else next(err);
+  }
 }
 
 function login(req, res, next) {
@@ -139,6 +146,25 @@ function decrementCart(req, res, next) {
     });
 }
 
+function clearCart(req, res, next) {
+  User.findByIdAndUpdate(req.user._id, {
+    cart: {
+      items: [],
+      totalPrice: 0,
+      totalPriceWithSale: 0,
+    }
+  }, {
+    new: true,
+    runValidators: true,
+  })
+    .then(() => res.send({
+      data: {
+        message: 'Корзина очищена!',
+      }
+    }))
+    .catch(next);
+}
+
 module.exports = {
   getUsers,
   getCurrentUser,
@@ -148,4 +174,5 @@ module.exports = {
   logout,
   incrementCart,
   decrementCart,
+  clearCart,
 };

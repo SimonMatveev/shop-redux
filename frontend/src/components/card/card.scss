@@ -72,25 +72,8 @@
       background-color: rgb(204, 3, 3);
     }
 
-    &_t_control {
-      min-width: 38px;
+    &_loading {
+      opacity: .8;
     }
-  }
-
-  &__btn-container {
-    display: flex;
-    justify-content: center;
-  }
-
-  &__amount {
-    min-width: 38px;
-    text-align: center;
-    background-color: white;
-    margin: 0 5px;
-    border-radius: 5px;
-    line-height: 1;
-    padding: 10px;
-    box-sizing: border-box;
-    font-weight: 500;
   }
 }

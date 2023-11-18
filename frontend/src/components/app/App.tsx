@@ -1,5 +1,5 @@
 import './app.scss'
-import { Route, Routes, Navigate } from 'react-router'
+import { Route, Routes, Navigate, useLocation } from 'react-router'
 import Signin from '../signin/Signin'
 import Signup from '../signup/Signup'
 import ProtectedRoute from '../protected-route/ProtectedRoute'
@@ -9,19 +9,26 @@ import NotFound from '../not-found/NotFound'
 import Header from '../header/Header'
 import Footer from '../footer/Footer'
 import ItemPage from '../item-page/ItemPage'
+import useCartState from '../../hooks/useFavourites'
+import CartPopup from '../cart-popup/CartPopup'
+import Checkout from '../checkout/Checkout'
+import { CHECKOUT_PATHNAME } from '../../utils/constants'
 
 const App = () => {
+  const cartState = useCartState();
+  const location = useLocation();
+  const onCheckout = location.pathname === CHECKOUT_PATHNAME;
 
   return (
     <div className='page'>
       <Routes>
         <Route path='/signin' element={
-          <ProtectedRoute  onlyUnauth>
+          <ProtectedRoute onlyUnauth>
             <Signin />
           </ProtectedRoute>
         } />
         <Route path='/signup' element={
-          <ProtectedRoute  onlyUnauth>
+          <ProtectedRoute onlyUnauth>
             <Signup />
           </ProtectedRoute>
         } />
@@ -30,15 +37,20 @@ const App = () => {
         } />
         <Route path='/*' element={
           <>
-            <Header/>
+            <Header onCheckout={onCheckout} />
             <Routes>
+              <Route path='/' element={
+                <Main />
+              } />
               <Route path='/profile' element={
                 <ProtectedRoute>
                   <Profile />
                 </ProtectedRoute>
               } />
-              <Route path='/' element={
-                <Main />
+              <Route path='/checkout' element={
+                <ProtectedRoute>
+                  <Checkout />
+                </ProtectedRoute>
               } />
               <Route path='/items/:itemId' element={
                 <ItemPage />
@@ -48,6 +60,13 @@ const App = () => {
               } />
             </Routes>
             <Footer />
+            {(cartState && !onCheckout) &&
+              <>
+                <ProtectedRoute>
+                  <CartPopup />
+                </ProtectedRoute>
+              </>
+            }
           </>
         } />
       </Routes>

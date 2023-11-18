@@ -1,0 +1,31 @@
+.amount-changer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+
+  &__btn {
+    background-color: rgb(255, 0, 0);
+    border: none;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    min-width: 38px;
+
+    &_loading {
+      opacity: .3;
+    }
+  }
+
+  &__number {
+    min-width: 38px;
+    text-align: center;
+    background-color: white;
+    margin: 0 5px;
+    border-radius: 5px;
+    line-height: 1;
+    padding: 10px;
+    box-sizing: border-box;
+    font-weight: 500;
+  }
+}
