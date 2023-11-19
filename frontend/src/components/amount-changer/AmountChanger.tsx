@@ -21,7 +21,8 @@ const AmountChanger: FC<IAmountChangerProps> = ({ item, newClass }) => {
 
   const handleDecrement: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
-    decrementCart(item._id);
+    decrementCart(item._id)
+      .then(res => console.log(res))
   }
 
   return (

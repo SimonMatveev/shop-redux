@@ -42,7 +42,7 @@ function getCurrentUser(req, res, next) {
         throw new NotFoundError();
       }
       user.cart = calculateTotalPrice(user.cart);
-      res.send({ data: { user } });
+      res.send({ data: user });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -63,6 +63,8 @@ function createUser(req, res, next) {
       data: {
         name: user.name,
         email: user.email,
+        _id: user._id,
+        cart: user.cart,
       },
     }))
     .catch((err) => {
@@ -86,7 +88,7 @@ async function updateUser(req, res, next) {
       new: true,
       runValidators: true,
     })
-    res.send({ data: user })
+    res.send(user)
   } catch (err) {
     if (err.name === 'ValidationError') {
       next(new DataError(PATCH_USER_ERR));
@@ -127,7 +129,7 @@ function logout(req, res, next) {
 function incrementCart(req, res, next) {
   const { itemId } = req.body;
   return User.incrementCart(req.user._id, itemId)
-    .then((user) => res.send({ data: user }))
+    .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new DataError(PATCH_USER_ERR));
@@ -138,7 +140,7 @@ function incrementCart(req, res, next) {
 function decrementCart(req, res, next) {
   const { itemId } = req.body;
   return User.decrementCart(req.user._id, itemId)
-    .then((user) => res.send({ data: user }))
+    .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new DataError(PATCH_USER_ERR));
@@ -157,11 +159,7 @@ function clearCart(req, res, next) {
     new: true,
     runValidators: true,
   })
-    .then(() => res.send({
-      data: {
-        message: 'Корзина очищена!',
-      }
-    }))
+    .then((user) => res.send(user))
     .catch(next);
 }
 

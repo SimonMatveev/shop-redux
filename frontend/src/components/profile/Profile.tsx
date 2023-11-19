@@ -2,7 +2,7 @@ import { FC, FormEvent, useState, useEffect } from 'react'
 import Container from '../container/Container'
 import './profile.scss'
 import useFormAndValidation from '../../hooks/useFormAndValidation';
-import { resetUser, useGetCurrentUserQuery, useSignOutMutation, useUpdateUserMutation } from '../../store/api/users.storeApi';
+import { useGetCurrentUserQuery, useSignOutMutation, useUpdateUserMutation } from '../../store/api/users.storeApi';
 import { REG_EXP_EMAIL, REG_EXP_NAME, REG_EXP_PASSWORD } from '../../utils/constants';
 import { useDispatch } from 'react-redux';
 
@@ -12,7 +12,6 @@ const Profile: FC = () => {
   const { data } = useGetCurrentUserQuery(null, {});
   const [updateUser, { error: serverError, isSuccess: isSubmitSuccess }] = useUpdateUserMutation();
   const [signOut] = useSignOutMutation();
-  const dispatch = useDispatch();
 
   const getDataForSubmit = () => {
     const res: { [key: string]: string } = {};
@@ -29,7 +28,6 @@ const Profile: FC = () => {
 
   const handleSignOut = () => {
     signOut(null);
-    resetUser(dispatch);
   }
 
   useEffect(() => {

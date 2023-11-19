@@ -2,10 +2,12 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { createLogger } from "redux-logger";
 import { storeApi } from "./api/storeApi";
 import { cartStateReducer } from "./cart-state/cartState.slice";
+import { userReducer } from "./user/user.slice";
 
 const reducers = combineReducers({
   [storeApi.reducerPath]: storeApi.reducer,
-  cartState:cartStateReducer,
+  cartState: cartStateReducer,
+  user: userReducer,
 });
 
 const logger = createLogger({

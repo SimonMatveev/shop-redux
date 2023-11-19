@@ -9,7 +9,7 @@ export const itemsApi = storeApi.injectEndpoints({
       providesTags: () => [{
         type: 'User',
       }],
-      transformResponse: (response: IUserData) => response.data.user
+      transformResponse: (response) => (response as IUserData).data
     }),
     updateUser: builder.mutation<IUserNoPopulate, IPatchMe>({
       query: ({ name, email, password }) => ({
@@ -17,11 +17,21 @@ export const itemsApi = storeApi.injectEndpoints({
         url: '/users/me',
         method: 'PATCH',
       }),
-      invalidatesTags: () => [{
-        type: 'User',
-      }],
       transformErrorResponse: (response) =>
-        response.status === 'FETCH_ERROR' ? response.error : (response as IError).data.message
+        response.status === 'FETCH_ERROR' ? response.error : (response as IError).data.message,
+      async onQueryStarted({ name, email, password }, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          itemsApi.util.updateQueryData('getCurrentUser', null, (user) => {
+            if (name) user.name = name;
+            if (email) user.email = email;
+          })
+        )
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      }
     }),
     incrementCart: builder.mutation<IUserNoPopulate, string>({
       query: (itemId) => ({
@@ -76,11 +86,16 @@ export const itemsApi = storeApi.injectEndpoints({
         url: '/signout',
         method: 'POST',
       }),
-      invalidatesTags: () => [{
-        type: 'User',
-      }],
       transformErrorResponse: (response) =>
-        response.status === 'FETCH_ERROR' ? response.error : (response as IError).data.message
+        response.status === 'FETCH_ERROR' ? response.error : (response as IError).data.message,
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(itemsApi.util.updateQueryData('getCurrentUser', null, (user) => user = null))
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      }
     })
   })
 })
@@ -95,7 +110,3 @@ export const {
   useClearCartMutation,
   useSignOutMutation,
 } = itemsApi;
-
-export const resetUser = (dispatch: Dispatch) => {
-  dispatch(itemsApi.util.updateQueryData('getCurrentUser', null, () => null) as unknown as AnyAction)
-}

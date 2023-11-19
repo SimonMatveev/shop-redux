@@ -61,9 +61,7 @@ export interface IUser {
 }
 
 export interface IUserData {
-  data: {
-    user: IUser
-  }
+  data: IUser
 }
 
 export interface IUserNoPopulate extends Omit<IUser, 'cart'> {
@@ -111,4 +109,28 @@ export interface IClearResponse {
   data: {
     message: string;
   }
+}
+
+export interface IInitialStateForUser {
+  isLoading: Record<
+    | 'getUser'
+    | 'patchUser'
+    | 'signinUser'
+    | 'signupUser'
+    | 'signoutUser'
+    | 'decrementCart'
+    | 'incrementCart'
+    | 'clearCart',
+    boolean>;
+  error: Record<
+    | 'getUser'
+    | 'patchUser'
+    | 'signinUser'
+    | 'signupUser'
+    | 'signoutUser'
+    | 'decrementCart'
+    | 'incrementCart'
+    | 'clearCart',
+    string | null>;
+  user: IUser | null
 }
