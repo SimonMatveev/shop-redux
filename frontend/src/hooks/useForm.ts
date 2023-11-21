@@ -4,8 +4,8 @@ export function useForm(inputValues: { [key: string]: any }) {
   const [values, setValues] = useState(inputValues);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { value, name } = event.target;
-    setValues({ ...values, [name]: value });
+    const { name } = event.target;
+    setValues({ ...values, [name]: !values[name] });
   };
   return { values, handleChange, setValues };
 }

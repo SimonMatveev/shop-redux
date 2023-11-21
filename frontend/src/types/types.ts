@@ -44,6 +44,10 @@ export interface IItemData {
   data: IItem[]
 }
 
+export interface ISingleItemData {
+  data: IItem
+}
+
 export interface ICart {
   totalPrice: number;
   totalPriceWithSale: number;
@@ -137,4 +141,9 @@ export interface IInitialStateForUser {
     | 'clearCart',
     string | null>;
   user: IUser | null
+}
+
+export interface IFilters {
+  category: ENUM_CATEGORY[],
+  platforms: ENUM_PLATFORMS[],
 }

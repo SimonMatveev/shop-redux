@@ -72,6 +72,12 @@ const validateCart = celebrate({
   }),
 });
 
+const validateGetItem = celebrate({
+  params: Joi.object().keys({
+    itemId: Joi.string().length(24).hex().required(),
+  }),
+});
+
 module.exports = {
   validateSignUp,
   validateSignIn,
@@ -81,4 +87,5 @@ module.exports = {
   validateChangePrice,
   validateInStock,
   validateCart,
+  validateGetItem,
 };

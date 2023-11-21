@@ -1,17 +1,14 @@
-import { FC } from "react"
-import { useGetItemsQuery } from "../../store/api/items.storeApi"
+import { FC, useEffect } from "react"
+import { useGetItemQuery } from "../../store/api/items.storeApi"
 import { useParams } from "react-router"
 
 
 const ItemPage: FC = () => {
-  const { data } = useGetItemsQuery(null, {})
-  const params = useParams();
-
-  const item = data?.find(item => item._id === params.itemId);
-
+  const { itemId } = useParams();
+  const { data: item, isLoading } = useGetItemQuery(itemId as string, {});
   return (
     <section>
-      {item?.name}
+      {isLoading ? 'Загрузка...' : item?.name}
     </section>
   )
 }

@@ -1,4 +1,4 @@
-import { FC, useEffect, useState, useRef } from 'react';
+import { FC, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useClearCartMutation, useGetCurrentUserQuery } from '../../store/api/users.storeApi';
 import AmountChanger from '../amount-changer/AmountChanger';

@@ -1,0 +1,173 @@
+.filters {
+  padding-bottom: 30px;
+
+  &__button {
+    border: none;
+    background-color: red;
+    border-radius: 5px;
+    padding: 7px;
+    color: white;
+    transition: background-color, .3s;
+    cursor: pointer;
+    border: 3px solid transparent;
+
+    @media screen and (max-width: 425px) {
+      width: 100%;
+    }
+
+    &:hover {
+      background-color: rgb(204, 3, 3);
+    }
+
+    &_active {
+      background-color: transparent;
+      border: 3px solid red;
+      color: red;
+      &:hover {
+        background-color: transparent;
+      }
+    }
+
+    &_t {
+      &_toggle {
+        margin-bottom: 10px;
+      }
+
+      &_reset {
+        background-color: rgb(63, 63, 63);
+      }
+    }
+  }
+
+  &__form {
+    display: none;
+    flex-wrap: wrap;
+    column-gap: 20px;
+    row-gap: 10px;
+
+    &_active {
+      display: flex;
+    }
+  }
+
+  &__category {
+    position: relative;
+
+    @media screen and (max-width: 425px) {
+      flex-grow: 1;
+    }
+  }
+
+  &__select-title {
+    padding: 10px 40px 10px 10px;
+    border-radius: 5px;
+    background-color: red;
+    color: white;
+    border: none;
+    position: relative;
+    min-width: 200px;
+    cursor: pointer;
+
+    @media screen and (max-width: 425px) {
+      width: 100%;
+    }
+
+    &:hover {
+      background-color: rgb(204, 3, 3);
+    }
+
+    &::after {
+      content: '';
+      background-image: url(../../images/triangle.svg);
+      width: 15px;
+      height: 15px;
+      background-position: center;
+      background-size: contain;
+      background-repeat: no-repeat;
+      top: 50%;
+      transform: translateY(-50%);
+      right: 10px;
+      position: absolute;
+      transition: transform .3s;
+    }
+
+    &_open {
+      &::after {
+        transform: translateY(-50%) rotate(90deg);
+      }
+    }
+  }
+
+  &__options {
+    display: none;
+    position: absolute;
+    width: 100%;
+    top: 100%;
+    left: 0;
+    flex-direction: column;
+    background-color: white;
+    padding: 10px 0;
+    box-sizing: border-box;
+    border-radius: 5px;
+    z-index: 1000;
+
+    &_open {
+      display: flex;
+    }
+  }
+
+  &__checkbox {
+    display: none;
+
+    &:checked~.filters__option:after {
+      display: block;
+    }
+  }
+
+  &__option {
+    position: relative;
+    cursor: pointer;
+
+    &::before {
+      content: '';
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border: 1px solid #747474;
+      border-radius: 3px;
+      top: 3px;
+      left: -20px;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background-color: red;
+      border-radius: 2px;
+      top: 5px;
+      left: -18px;
+      display: none;
+    }
+  }
+
+  &__item {
+    padding: 5px 10px 5px 30px;
+    cursor: pointer;
+    transition: background-color .3s;
+
+    &:hover {
+      background-color: #c5c5c5;
+    }
+  }
+
+  &__controls {
+    display: flex;
+    gap: 20px;
+
+    @media screen and (max-width: 425px) {
+      width: 100%;
+    }
+  }
+}

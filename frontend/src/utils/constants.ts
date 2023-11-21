@@ -1,4 +1,4 @@
-import { ENUM_CATEGORY } from "../types/types";
+import { ENUM_CATEGORY, ENUM_PLATFORMS } from "../types/types";
 
 export const REG_EXP_EMAIL = '[\\-А-Яа-яA-Za-z0-9.]+@[\\-А-Яа-яA-Za-z0-9.]+\\.[а-яА-Яa-zA-Z]{2,}';
 export const REG_EXP_NAME = '[\\-А-Яа-яA-Za-z ]+';
@@ -59,5 +59,32 @@ export const CATEGORIES = [
   {
     id: ENUM_CATEGORY.VN,
     name: 'Визуальные новеллы',
+  },
+]
+
+export const PLATFORMS = [
+  {
+    id: ENUM_PLATFORMS.PC,
+    name: 'PC'
+  },
+  {
+    id: ENUM_PLATFORMS.PS4,
+    name: 'PlayStation 4'
+  },
+  {
+    id: ENUM_PLATFORMS.PS5,
+    name: 'PlayStation 5'
+  },
+  {
+    id: ENUM_PLATFORMS.XBOX_ONE,
+    name: 'XBOX One'
+  },
+  {
+    id: ENUM_PLATFORMS.XBOX_X,
+    name: 'XBOX X'
+  },
+  {
+    id: ENUM_PLATFORMS.SWITCH,
+    name: 'Nintendo Switch'
   },
 ]
