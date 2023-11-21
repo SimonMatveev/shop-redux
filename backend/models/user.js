@@ -85,8 +85,15 @@ userSchema.statics.incrementCart = function (userId, itemId) {
     .then(cart => this.findByIdAndUpdate(userId, { cart }, {
       new: true,
       runValidators: true,
-    }))
-    ;
+    }).populate({
+      path: 'cart',
+      populate: {
+        path: 'items',
+        populate: {
+          path: 'itemInCart'
+        }
+      }
+    }));
 };
 
 userSchema.statics.decrementCart = function (userId, itemId) {
@@ -108,6 +115,14 @@ userSchema.statics.decrementCart = function (userId, itemId) {
     .then(cart => this.findByIdAndUpdate(userId, { cart }, {
       new: true,
       runValidators: true,
+    }).populate({
+      path: 'cart',
+      populate: {
+        path: 'items',
+        populate: {
+          path: 'itemInCart'
+        }
+      }
     }))
     ;
 };

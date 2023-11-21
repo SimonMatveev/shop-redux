@@ -66,9 +66,13 @@ export interface IUserData {
 
 export interface IUserNoPopulate extends Omit<IUser, 'cart'> {
   cart: {
-    itemInCart: string,
-    amount: number
-  }[]
+    items: {
+      itemInCart: string,
+      amount: number
+    }[];
+    totalPrice: number;
+    totalPriceWithSale: number;
+  }
 }
 
 export interface ISignin extends Pick<IUser, 'email'> {

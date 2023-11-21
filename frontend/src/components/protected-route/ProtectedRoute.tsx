@@ -9,6 +9,7 @@ interface IProtectedRouteProps {
 
 const ProtectedRoute: FC<PropsWithChildren<IProtectedRouteProps>> = ({ children, onlyUnauth }) => {
   const { isLoading, data: currentUser } = useGetCurrentUserQuery(null, {});
+
   if (isLoading) return (<Preloader />);
   if ((onlyUnauth && !currentUser) || (!onlyUnauth && currentUser)) {
     return (<>{children}</>);

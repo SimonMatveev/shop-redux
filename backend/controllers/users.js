@@ -41,7 +41,7 @@ function getCurrentUser(req, res, next) {
       if (!user) {
         throw new NotFoundError();
       }
-      user.cart = calculateTotalPrice(user.cart);
+      calculateTotalPrice(user.cart);
       res.send({ data: user });
     })
     .catch((err) => {
@@ -129,7 +129,10 @@ function logout(req, res, next) {
 function incrementCart(req, res, next) {
   const { itemId } = req.body;
   return User.incrementCart(req.user._id, itemId)
-    .then((user) => res.send(user))
+    .then((user) => {
+      calculateTotalPrice(user.cart);
+      res.send(user);
+    })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new DataError(PATCH_USER_ERR));
@@ -140,7 +143,10 @@ function incrementCart(req, res, next) {
 function decrementCart(req, res, next) {
   const { itemId } = req.body;
   return User.decrementCart(req.user._id, itemId)
-    .then((user) => res.send(user))
+    .then((user) => {
+      calculateTotalPrice(user.cart);
+      res.send(user)
+    })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new DataError(PATCH_USER_ERR));
