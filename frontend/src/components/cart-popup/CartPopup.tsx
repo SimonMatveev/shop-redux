@@ -9,12 +9,12 @@ import useBodyBlock from '../../hooks/useBodyBlock';
 const CartPopup: FC = () => {
   const { data: currentUser } = useGetCurrentUserQuery(null, {});
   const [clearCart, { }] = useClearCartMutation();
-  const cart = currentUser!.cart;
-  const areItemsInCart = cart.items.length > 0;
-  const isWithSale = cart.totalPrice !== cart.totalPriceWithSale;
   const { toggleCartState } = useActions();
   const cartRef = useRef<HTMLDivElement>(null);
   const { handleClose, isOpened } = useBodyBlock(toggleCartState);
+  const cart = currentUser!.cart;
+  const areItemsInCart = cart.items.length > 0;
+  const isWithSale = cart.totalPrice !== cart.totalPriceWithSale;
 
   const handleCartClear = () => clearCart(null);
 
@@ -25,7 +25,6 @@ const CartPopup: FC = () => {
   const handleCloseKeyCB = (e: KeyboardEvent) => {
     if (e.key === 'Escape') handleClose();
   }
-
 
   useEffect(() => {
     window.addEventListener('click', handleCloseClickCB);
@@ -46,12 +45,13 @@ const CartPopup: FC = () => {
                 <ul className='cart__list'>
                   {cart.items.map(item => {
                     const { itemInCart: game } = item
+                    const isOnSale = game.price !== game.priceWithSale;
                     return (
                       <li key={game._id} className='cart__item'>
                         <p className='cart__item-title'>{game.name}</p>
                         <div className='cart__item-prices'>
-                          <p className={`cart__item-price${game.priceWithSale ? ' cart__item-price_t_saleon' : ''}`}>{game.price * item.amount} руб.</p>
-                          {game.priceWithSale && <p className='cart__item-price cart__item-price_t_with-sale'>{game.priceWithSale * item.amount}  руб.</p>}
+                          <p className={`cart__item-price${isOnSale ? ' cart__item-price_t_saleon' : ''}`}>{game.price * item.amount} руб.</p>
+                          {isOnSale && <p className='cart__item-price cart__item-price_t_with-sale'>{game.priceWithSale * item.amount}  руб.</p>}
                         </div>
                         <AmountChanger newClass='cart__item-controller' item={game} />
                       </li>

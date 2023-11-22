@@ -9,7 +9,7 @@ import NotFound from '../not-found/NotFound'
 import Header from '../header/Header'
 import Footer from '../footer/Footer'
 import ItemPage from '../item-page/ItemPage'
-import useCartState from '../../hooks/useFavourites'
+import useCartState from '../../hooks/useCartState'
 import CartPopup from '../cart-popup/CartPopup'
 import Checkout from '../checkout/Checkout'
 import { CHECKOUT_PATHNAME } from '../../utils/constants'
@@ -39,7 +39,7 @@ const App = () => {
           <>
             <Header onCheckout={onCheckout} />
             <Routes>
-              <Route path='/' element={
+              <Route path='/items' element={
                 <Main />
               } />
               <Route path='/profile' element={
@@ -54,6 +54,9 @@ const App = () => {
               } />
               <Route path='/items/:itemId' element={
                 <ItemPage />
+              } />
+              <Route path='/' element={
+                <Navigate to='/items' />
               } />
               <Route path='/*' element={
                 <Navigate to='/404' />

@@ -14,7 +14,7 @@ const ProtectedRoute: FC<PropsWithChildren<IProtectedRouteProps>> = ({ children,
   if ((onlyUnauth && !currentUser) || (!onlyUnauth && currentUser)) {
     return (<>{children}</>);
   } else {
-    return (<Navigate to='/' />);
+    return (<Navigate to='/items' />);
   }
 }
 

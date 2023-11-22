@@ -5,6 +5,7 @@ import Preloader from '../preloader/Preloader'
 import Card from '../card/Card'
 import { IItem } from '../../types/types'
 import Filters from '../filters/Filters'
+import Pagination from '../pagination/Pagination'
 
 const Main: FC = () => {
   const [items, setItems] = useState<IItem[] | undefined>([]);
@@ -15,9 +16,12 @@ const Main: FC = () => {
       <Container>
         {isLoading ?
           <Preloader /> :
-          <div className='main__cards'>
-            {items && items.map(item => (<Card key={item._id} item={item} />))}
-          </div>
+          <>
+            <div className='main__cards'>
+              {items && items.map(item => (<Card key={item._id} item={item} />))}
+            </div>
+            <Pagination items={items}/>
+          </>
         }
       </Container>
     </section>

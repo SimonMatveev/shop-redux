@@ -15,6 +15,7 @@ const Card: FC<ICardProps> = ({ item }) => {
   const navigate = useNavigate();
 
   const isInCart = data?.cart.items.some(cartItem => cartItem.itemInCart._id === item._id) || false;
+  const isOnSale = item.price !== item.priceWithSale;
 
   const handleClick: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
@@ -32,7 +33,7 @@ const Card: FC<ICardProps> = ({ item }) => {
         <div className='card__text'>
           <h2 className='card__title'>{item.name}</h2>
           <div className='card__prices'>
-            {!item.priceWithSale ?
+            {!isOnSale ?
               <p className='card__price'>{item.price} руб.</p> :
               <>
                 <p className='card__price card__price_saleon'>{item.price} руб.</p>

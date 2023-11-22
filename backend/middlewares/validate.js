@@ -78,6 +78,7 @@ const validateGetItem = celebrate({
   }),
 });
 
+
 module.exports = {
   validateSignUp,
   validateSignIn,

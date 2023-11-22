@@ -1,6 +1,5 @@
 const Item = require('../models/item');
 const NotFoundError = require('../errors/NotFoundError');
-const DelError = require('../errors/DelError');
 const DataError = require('../errors/DataError');
 const {
   ADD_MOVIE_ERR,
@@ -15,7 +14,7 @@ async function getItems(req, res, next) {
     const filters = req.query;
     const category = filters.category ? filters.category.split(',') : null;
     const platforms = filters.platforms ? filters.platforms.split(',') : null;
-    let items = await Item.find({})
+    let items = await Item.find({}).sort({ [filters.sortItem]: filters.sortOrder })
     let resItems = items.filter(item => {
       let isValidCategory = true;
       let isValidPlatform = true;
@@ -32,8 +31,11 @@ async function getItems(req, res, next) {
         }
       }
       return isValidCategory && isValidPlatform;
+    }).splice(0, filters.limit);
+    res.send({
+      data: resItems,
+      length: items.length,
     })
-    res.send({ data: resItems })
   } catch (err) {
     next(err);
   }

@@ -1,19 +1,18 @@
-import { ENUM_CATEGORY, ENUM_PLATFORMS, IItem, IItemData, IItemInsert, ISingleItemData } from "../../types/types";
+import { IFilters, IItem, IItemData, IItemInsert, ISingleItemData } from "../../types/types";
 import { storeApi } from "./storeApi";
 
 export const itemsApi = storeApi.injectEndpoints({
   endpoints: builder => ({
-    getItems: builder.query<IItem[], { category: ENUM_CATEGORY[], platforms: ENUM_PLATFORMS[] }>({
-      query: ({ category, platforms }) => {
+    getItems: builder.query<IItemData, IFilters>({
+      query: ({ category, platforms, sortItem, sortOrder, limit }) => {
         return {
           url: '/items',
-          params: { category, platforms }
+          params: { category, platforms, sortItem, sortOrder, limit }
         }
       },
       providesTags: () => [{
         type: 'Item',
       }],
-      transformResponse: (response: IItemData) => response.data
     }),
     getItem: builder.query<IItem, string>({
       query: (itemId) => `/items/${itemId}`,

@@ -20,7 +20,7 @@ const Header: FC<IHeaderProps> = ({ onCheckout }) => {
   return (
     <header className='header'>
       <Container newClass='header__container'>
-        <Link to='/' className='header__logo'>Shop.com</Link>
+        <Link to='/items' className='header__logo'>Shop.com</Link>
         {!isLoading &&
           <nav className='header__menu'>
             {

@@ -28,7 +28,7 @@ export interface IItem {
   description: string;
   studio: string;
   price: number;
-  priceWithSale?: number;
+  priceWithSale: number;
   category: ENUM_CATEGORY[];
   rating: number;
   inStockAmount: number;
@@ -41,7 +41,8 @@ export interface IItem {
 export interface IItemInsert extends Omit<IItem, 'rating' | '_id'> { }
 
 export interface IItemData {
-  data: IItem[]
+  data: IItem[],
+  length: number,
 }
 
 export interface ISingleItemData {
@@ -146,4 +147,8 @@ export interface IInitialStateForUser {
 export interface IFilters {
   category: ENUM_CATEGORY[],
   platforms: ENUM_PLATFORMS[],
+  sortItem: string,
+  sortOrder: string,
+  limit: string,
+  [key: string]: string | number | any[],
 }

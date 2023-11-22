@@ -1,11 +1,13 @@
-import { FC, Dispatch, SetStateAction, useEffect, FormEvent, useState, MouseEventHandler } from 'react'
+import { FC, Dispatch, SetStateAction, useEffect, FormEvent, useState, MouseEventHandler, ChangeEventHandler } from 'react'
 import { useGetItemsQuery } from '../../store/api/items.storeApi';
 import { ENUM_CATEGORY, ENUM_PLATFORMS, IFilters, IItem } from '../../types/types';
 import Container from '../container/Container';
 import { CATEGORIES, PLATFORMS } from '../../utils/constants';
-import { useForm } from '../../hooks/useForm';
-import { mapFilter } from '../../utils/functions';
 import './filters.scss'
+import { URLSearchParamsInit, useSearchParams } from 'react-router-dom';
+import useFiltersState from '../../hooks/useFiltersState';
+import useActions from '../../hooks/useActions';
+import useFilter from '../../hooks/useFilter';
 
 interface IfiltersProps {
   setItems: Dispatch<SetStateAction<IItem[] | undefined>>
@@ -13,28 +15,23 @@ interface IfiltersProps {
 }
 
 const Filters: FC<IfiltersProps> = ({ setIsLoading, setItems }) => {
-  const initialStateSaved = localStorage.getItem('filterState');
-  const initialStateDefault = { category: [], platforms: [], };
-  const [filters, setFilters] = useState<IFilters>(initialStateSaved ? JSON.parse(initialStateSaved) : initialStateDefault);
-  const { data, isLoading } = useGetItemsQuery(filters, {});
-  const initialStateCategory: { [key: string]: boolean, } = {};
-  const initialStatePlatform: { [key: string]: boolean, } = {};
-  CATEGORIES.forEach(category => initialStateCategory[category.id] = filters.category.some(item => item === category.id));
-  PLATFORMS.forEach(platform => initialStatePlatform[platform.id] = filters.platforms.some(item => item === platform.id));
+  const filtersState = useFiltersState();
+  const { data, isLoading } = useGetItemsQuery(filtersState, {});
+  const { resetFilters, setSorting, setFromParams } = useActions();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const { handleChange: handleCategoryChange, values: categoryValues, resetValues: resetCategoryValues, setFilter: setCategoryFilter } = useFilter(CATEGORIES, 'category');
+  const { handleChange: handlePlatformChange, values: platformValues, resetValues: resetPlatformValues, setFilter: setPlatformFilter } = useFilter(PLATFORMS, 'platforms');
 
   const filterToggleSaved = localStorage.getItem('filterToggle');
   const [isActive, setIsActive] = useState<boolean>(filterToggleSaved ? JSON.parse(filterToggleSaved) : false);
   const [isFilterOpen, setIsFilterOpen] = useState<{ [key: string]: boolean }>({ category: false, platforms: false, })
 
-  const { values: categoryValues, handleChange: handleCategoryChange, setValues: setCategoryValues, } = useForm(initialStateCategory);
-  const { values: platformValues, handleChange: handlePlatformChange, setValues: setPlatformValues, } = useForm(initialStatePlatform);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    setFilters({
-      category: mapFilter<ENUM_CATEGORY>(categoryValues),
-      platforms: mapFilter<ENUM_PLATFORMS>(platformValues),
-    });
+    setCategoryFilter();
+    setPlatformFilter();
     setIsFilterOpen({ category: false, platforms: false, });
   }
 
@@ -44,13 +41,9 @@ const Filters: FC<IfiltersProps> = ({ setIsLoading, setItems }) => {
   }
 
   const handleReset = () => {
-    setFilters(initialStateDefault);
-    const resetCategory: { [key: string]: boolean, } = {};
-    const resetPlatform: { [key: string]: boolean, } = {};
-    CATEGORIES.forEach(category => resetCategory[category.id] = false);
-    PLATFORMS.forEach(platform => resetPlatform[platform.id] = false);
-    setCategoryValues(resetCategory);
-    setPlatformValues(resetPlatform);
+    resetFilters();
+    resetCategoryValues();
+    resetPlatformValues();
     setIsFilterOpen({ category: false, platforms: false, });
   }
 
@@ -69,19 +62,28 @@ const Filters: FC<IfiltersProps> = ({ setIsLoading, setItems }) => {
       setIsFilterOpen(prev => { return { ...prev, [id]: false, } })
       window.removeEventListener('click', cb)
     } else {
-      window.addEventListener('click', cb)
       setIsFilterOpen(prev => { return { ...prev, [id]: true, } })
+      window.addEventListener('click', cb)
     }
   }
 
-  useEffect(() => {
-    localStorage.setItem('filterState', JSON.stringify(filters));
-  }, [filters])
+  const handleSelect: ChangeEventHandler<HTMLSelectElement> = (e) => {
+    const { value } = e.target.selectedOptions[0];
+    setSorting(value);
+  }
 
   useEffect(() => {
-    setItems(data);
+    if (data) setItems(data.data);
     setIsLoading(isLoading);
   }, [data, isLoading])
+
+  useEffect(() => {
+    setFromParams(searchParams);
+  }, [])
+
+  useEffect(() => {
+    setSearchParams(filtersState as URLSearchParamsInit);
+  }, [filtersState])
 
   return (
     <div className='filters'>
@@ -91,7 +93,7 @@ const Filters: FC<IfiltersProps> = ({ setIsLoading, setItems }) => {
           <div className='filters__category' id='category'>
             <button type='button' id='category'
               className={`filters__select-title${isFilterOpen.category ? ' filters__select-title_open' : ''}`}
-              onClick={handleSelectClick}>Выберите жанры</button>
+              onClick={handleSelectClick}>Выберите жанры{filtersState.category.length > 0 ? ': ' + filtersState.category.length : ''}</button>
             <div className={`filters__options${isFilterOpen.category ? ' filters__options_open' : ''}`}>
               {CATEGORIES.map((category) => (
                 <div className='filters__item' key={category.id}>
@@ -104,7 +106,7 @@ const Filters: FC<IfiltersProps> = ({ setIsLoading, setItems }) => {
           <div className='filters__category' id='platforms'>
             <button type='button' id='platforms'
               className={`filters__select-title${isFilterOpen.platforms ? ' filters__select-title_open' : ''}`}
-              onClick={handleSelectClick}>Выберите платформы</button>
+              onClick={handleSelectClick}>Выберите платформы{filtersState.platforms.length > 0 ? ': ' + filtersState.platforms.length : ''}</button>
             <div className={`filters__options${isFilterOpen.platforms ? ' filters__options_open' : ''}`} >
               {PLATFORMS.map((platform) => (
                 <div className='filters__item' key={platform.id}>
@@ -119,6 +121,23 @@ const Filters: FC<IfiltersProps> = ({ setIsLoading, setItems }) => {
             <button type='button' className='filters__button filters__button_t_reset' onClick={handleReset}>Сбросить фильтры</button>
           </div>
         </form>
+        <div className='sort'>
+          Сортировать по:
+          <select className='sort__select' onChange={handleSelect} defaultValue={`${filtersState.sortItem}-${filtersState.sortOrder}`}>
+            <option className='sort__option' value='name-asc'>
+              имени: А-Я
+            </option>
+            <option className='sort__option' value='name-desc'>
+              имени: Я-А
+            </option>
+            <option className='sort__option' value='priceWithSale-asc'>
+              цене: возрастание
+            </option>
+            <option className='sort__option' value='priceWithSale-desc'>
+              цене: убывание
+            </option>
+          </select>
+        </div>
       </Container>
     </div>
   )

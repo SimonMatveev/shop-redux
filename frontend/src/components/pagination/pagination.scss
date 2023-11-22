@@ -1,0 +1,19 @@
+.pagination {
+  padding-top: 40px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+
+  &__limit {
+    display: flex;
+    gap: 8px;
+  }
+
+  &__checkbox {
+    display: none;
+
+    &:checked+.pagination__label {
+      font-weight: 500;
+    }
+  }
+}

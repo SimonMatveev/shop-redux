@@ -21,6 +21,10 @@ const itemSchema = new mongoose.Schema({
   },
   priceWithSale: {
     type: Number,
+    required: true,
+    default: function() {
+      return this.price
+    },
   },
   category: [{
     type: String,
