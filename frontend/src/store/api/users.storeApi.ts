@@ -1,4 +1,5 @@
-import { IPatchMe, IUser, IUserNoPopulate, ISignin, ISignup, IError, IUserData, IClearResponse, } from "../../types/types";
+import { IPatchMe, IUser, IUserNoPopulate, ISignin, ISignup, IError, IUserData, IClearResponse, ENUM_LOCAL_STORAGE, ENUM_PLATFORMS, } from "../../types/types";
+import { filtersActions } from "../filters/filters.slice";
 import { storeApi } from "./storeApi";
 
 export const itemsApi = storeApi.injectEndpoints({
@@ -32,23 +33,20 @@ export const itemsApi = storeApi.injectEndpoints({
         }
       }
     }),
-    incrementCart: builder.mutation<IUser, string>({
-      query: (itemId) => ({
-        body: { itemId },
+    incrementCart: builder.mutation<IUser, { itemId: string, platform: ENUM_PLATFORMS }>({
+      query: ({ itemId, platform }) => ({
+        body: { itemId, platform },
         url: '/users/cart/add',
         method: 'POST',
       }),
-      async onCacheEntryAdded(itemId, { dispatch, cacheDataLoaded, getCacheEntry }) {
+      async onCacheEntryAdded(_, { dispatch, cacheDataLoaded, getCacheEntry }) {
         try {
           await cacheDataLoaded;
           const { cart: responseCart } = getCacheEntry().data!;
           dispatch(
             itemsApi.util.updateQueryData('getCurrentUser', null, (user) => {
               const { cart: userCart } = user!;
-              const id = userCart.items.findIndex(item => item.itemInCart._id === itemId);
-              if (id === -1) {
-                userCart.items = [...responseCart.items]
-              } else userCart.items[id].amount++;
+              userCart.items = [...responseCart.items]
               userCart.totalPrice = responseCart.totalPrice;
               userCart.totalPriceWithSale = responseCart.totalPriceWithSale;
             })
@@ -58,23 +56,20 @@ export const itemsApi = storeApi.injectEndpoints({
         }
       }
     }),
-    decrementCart: builder.mutation<IUserNoPopulate, string>({
-      query: (itemId) => ({
-        body: { itemId },
+    decrementCart: builder.mutation<IUser, { itemId: string, platform: ENUM_PLATFORMS }>({
+      query: ({ itemId, platform }) => ({
+        body: { itemId, platform },
         url: '/users/cart/remove',
         method: 'POST',
       }),
-      async onCacheEntryAdded(itemId, { dispatch, cacheDataLoaded, getCacheEntry }) {
+      async onCacheEntryAdded(_, { dispatch, cacheDataLoaded, getCacheEntry }) {
         try {
           await cacheDataLoaded;
           const { cart: responseCart } = getCacheEntry().data!;
           dispatch(
             itemsApi.util.updateQueryData('getCurrentUser', null, (user) => {
               const { cart: userCart } = user!;
-              const id = userCart.items.findIndex(item => item.itemInCart._id === itemId);
-              if (userCart.items[id].amount <= 1) {
-                userCart.items.splice(id, 1);
-              } else userCart.items[id].amount--;
+              userCart.items = [...responseCart.items];
               userCart.totalPrice = responseCart.totalPrice;
               userCart.totalPriceWithSale = responseCart.totalPriceWithSale;
             })
@@ -131,12 +126,14 @@ export const itemsApi = storeApi.injectEndpoints({
       }),
       transformErrorResponse: (response) =>
         response.status === 'FETCH_ERROR' ? response.error : (response as IError).data.message,
-      async onQueryStarted(_, { dispatch, queryFulfilled }) {
-        const patchResult = dispatch(itemsApi.util.updateQueryData('getCurrentUser', null, (user) => user = null))
+      async onCacheEntryAdded(_, { dispatch }) {
         try {
-          await queryFulfilled;
-        } catch {
-          patchResult.undo();
+          dispatch(itemsApi.util.updateQueryData('getCurrentUser', null, (user) => user = null));
+          dispatch(filtersActions.resetFilters())
+          localStorage.removeItem(ENUM_LOCAL_STORAGE.TOGGLE);
+          localStorage.removeItem(ENUM_LOCAL_STORAGE.FILTER_STATE);
+        } catch (err) {
+          console.log(err)
         }
       }
     })

@@ -1,0 +1,19 @@
+.page-btns {
+  display: flex;
+  list-style: none;
+  gap: 15px;
+  padding: 0;
+
+  &__item {
+    cursor: pointer;
+    transition: opacity .3s;
+
+    &:hover {
+      opacity: .7;
+    }
+
+    &_active {
+      font-weight: 900;
+    }
+  }
+}

@@ -7,6 +7,17 @@
   &__limit {
     display: flex;
     gap: 8px;
+    color: rgb(63, 63, 63);
+    margin-left: auto;
+  }
+
+  &__label {
+    cursor: pointer;
+    transition: opacity .3s;
+
+    &:hover {
+      opacity: .7;
+    }
   }
 
   &__checkbox {
@@ -14,6 +25,11 @@
 
     &:checked+.pagination__label {
       font-weight: 500;
+      color: black;
+
+      &:hover {
+        opacity: 1;
+      }
     }
   }
 }

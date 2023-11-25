@@ -1,42 +1,45 @@
-import { MENU_ANIMATION_DELAY } from "../utils/constants";
-import { useState, useEffect } from 'react';
+import { KEYS_TO_BLOCK, MENU_ANIMATION_DELAY } from "../utils/constants";
+import { useState, useEffect, RefObject } from 'react';
 
-const useBodyBlock = (closeCB: () => void) => {
+interface IuseBodyBlockArgs {
+  closeCB: () => void;
+  scrollableItemClass: string;
+  scrollableItemParentRef: RefObject<HTMLDivElement>
+}
+
+const useBodyBlock = ({ closeCB, scrollableItemClass, scrollableItemParentRef }: IuseBodyBlockArgs) => {
   const [isOpened, setIsOpened] = useState(false);
 
   const handleClose = () => {
     setIsOpened(false);
-    document.body.classList.remove('blocked');
-    document.body.style.paddingRight = '';
     setTimeout(() => closeCB(), MENU_ANIMATION_DELAY);
   }
 
-  function getScrollBarWidth() {
-    var inner = document.createElement('p');
-    inner.style.width = "100%";
-    inner.style.height = "200px";
-    var outer = document.createElement('div');
-    outer.style.position = "absolute";
-    outer.style.top = "0px";
-    outer.style.left = "0px";
-    outer.style.visibility = "hidden";
-    outer.style.width = "200px";
-    outer.style.height = "150px";
-    outer.style.overflow = "hidden";
-    outer.appendChild(inner);
-    document.body.appendChild(outer);
-    var w1 = inner.offsetWidth;
-    outer.style.overflow = 'scroll';
-    var w2 = inner.offsetWidth;
-    if (w1 == w2) w2 = outer.clientWidth;
-    document.body.removeChild(outer);
-    return (w1 - w2);
-  };
+  const handleScroll = (e: WheelEvent | TouchEvent) => {
+    if (!Boolean((e.target as HTMLDivElement).closest('.' + scrollableItemClass)) ||
+      scrollableItemParentRef.current!.clientHeight === scrollableItemParentRef.current!.scrollHeight) {
+      e.preventDefault();
+    }
+
+  }
+
+  const handleScrollKey = (e: KeyboardEvent) => {
+    if (KEYS_TO_BLOCK.includes(e.code)) {
+      e.preventDefault()
+    }
+  }
 
   useEffect(() => {
     setIsOpened(true);
-    document.body.classList.add('blocked');
-    document.body.style.paddingRight = getScrollBarWidth() + 'px';
+    window.addEventListener('wheel', handleScroll, { passive: false })
+    window.addEventListener('touchmove', handleScroll, { passive: false })
+    window.addEventListener('keydown', handleScrollKey, { passive: false })
+
+    return () => {
+      window.removeEventListener('wheel', handleScroll)
+      window.removeEventListener('touchmove', handleScroll)
+      window.removeEventListener('keydown', handleScrollKey)
+    }
   }, [])
 
   return {

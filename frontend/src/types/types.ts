@@ -22,6 +22,16 @@ export enum ENUM_PLATFORMS {
   SWITCH = 'Switch',
 }
 
+export enum ENUM_LOCAL_STORAGE {
+  TOGGLE = 'filterToggle',
+  FILTER_STATE = 'filterState',
+}
+
+export enum ENUM_FILTER_NAMES {
+  CATEGORY = 'category',
+  PLATFORMS = 'platforms',
+}
+
 export interface IItem {
   _id: string;
   name: string;
@@ -42,7 +52,7 @@ export interface IItemInsert extends Omit<IItem, 'rating' | '_id'> { }
 
 export interface IItemData {
   data: IItem[],
-  length: number,
+  dbLength: number,
 }
 
 export interface ISingleItemData {
@@ -54,7 +64,10 @@ export interface ICart {
   totalPriceWithSale: number;
   items: {
     itemInCart: IItem;
-    amount: number;
+    orders: {
+      amount: number;
+      platform: ENUM_PLATFORMS;
+    }[]
   }[]
 }
 
@@ -145,10 +158,12 @@ export interface IInitialStateForUser {
 }
 
 export interface IFilters {
-  category: ENUM_CATEGORY[],
-  platforms: ENUM_PLATFORMS[],
-  sortItem: string,
-  sortOrder: string,
-  limit: string,
-  [key: string]: string | number | any[],
+  category: ENUM_CATEGORY[];
+  platforms: ENUM_PLATFORMS[];
+  sortItem: string;
+  sortOrder: string;
+  limit: string;
+  page: string;
+  [key: string]: string | any[];
+  resetable: ENUM_FILTER_NAMES[];
 }

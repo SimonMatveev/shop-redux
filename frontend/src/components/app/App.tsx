@@ -38,37 +38,34 @@ const App = () => {
         <Route path='/*' element={
           <>
             <Header onCheckout={onCheckout} />
-            <Routes>
-              <Route path='/items' element={
-                <Main />
-              } />
-              <Route path='/profile' element={
-                <ProtectedRoute>
-                  <Profile />
-                </ProtectedRoute>
-              } />
-              <Route path='/checkout' element={
-                <ProtectedRoute>
-                  <Checkout />
-                </ProtectedRoute>
-              } />
-              <Route path='/items/:itemId' element={
-                <ItemPage />
-              } />
-              <Route path='/' element={
-                <Navigate to='/items' />
-              } />
-              <Route path='/*' element={
-                <Navigate to='/404' />
-              } />
-            </Routes>
+            <div className='page__body'>
+              <Routes>
+                <Route path='/items' element={
+                  <Main />
+                } />
+                <Route path='/profile' element={
+                  <ProtectedRoute>
+                    <Profile />
+                  </ProtectedRoute>
+                } />
+                <Route path='/checkout' element={
+                  <ProtectedRoute>
+                    <Checkout />
+                  </ProtectedRoute>
+                } />
+                <Route path='/items/:itemId' element={
+                  <ItemPage />
+                } />
+                <Route path='/' element={
+                  <Navigate to='/items' />
+                } />
+                <Route path='/*' element={
+                  <Navigate to='/404' />
+                } />
+              </Routes>
+            </div>
             <Footer />
-            {(cartState && !onCheckout) &&
-              <>
-                <ProtectedRoute>
-                  <CartPopup />
-                </ProtectedRoute>
-              </>
+            {(cartState && !onCheckout) && <CartPopup />
             }
           </>
         } />

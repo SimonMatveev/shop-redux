@@ -8,4 +8,10 @@
   position: relative;
   width: 100%;
   box-sizing: border-box;
+
+  &__body {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
 }

@@ -1,6 +1,6 @@
 import { FC, Dispatch, SetStateAction, useEffect, FormEvent, useState, MouseEventHandler, ChangeEventHandler } from 'react'
 import { useGetItemsQuery } from '../../store/api/items.storeApi';
-import { ENUM_CATEGORY, ENUM_PLATFORMS, IFilters, IItem } from '../../types/types';
+import { ENUM_FILTER_NAMES, ENUM_LOCAL_STORAGE, IItem } from '../../types/types';
 import Container from '../container/Container';
 import { CATEGORIES, PLATFORMS } from '../../utils/constants';
 import './filters.scss'
@@ -16,27 +16,34 @@ interface IfiltersProps {
 
 const Filters: FC<IfiltersProps> = ({ setIsLoading, setItems }) => {
   const filtersState = useFiltersState();
+
   const { data, isLoading } = useGetItemsQuery(filtersState, {});
-  const { resetFilters, setSorting, setFromParams } = useActions();
+  const { resetFilters, setSorting, setFromParams, setDataLength } = useActions();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const { handleChange: handleCategoryChange, values: categoryValues, resetValues: resetCategoryValues, setFilter: setCategoryFilter } = useFilter(CATEGORIES, 'category');
-  const { handleChange: handlePlatformChange, values: platformValues, resetValues: resetPlatformValues, setFilter: setPlatformFilter } = useFilter(PLATFORMS, 'platforms');
+  const { handleChange: handleCategoryChange, values: categoryValues, resetValues: resetCategoryValues, setFilter: setCategoryFilter } = useFilter(CATEGORIES, ENUM_FILTER_NAMES.CATEGORY);
+  const { handleChange: handlePlatformChange, values: platformValues, resetValues: resetPlatformValues, setFilter: setPlatformFilter } = useFilter(PLATFORMS, ENUM_FILTER_NAMES.PLATFORMS);
 
-  const filterToggleSaved = localStorage.getItem('filterToggle');
+  const filterToggleSaved = localStorage.getItem(ENUM_LOCAL_STORAGE.TOGGLE);
   const [isActive, setIsActive] = useState<boolean>(filterToggleSaved ? JSON.parse(filterToggleSaved) : false);
-  const [isFilterOpen, setIsFilterOpen] = useState<{ [key: string]: boolean }>({ category: false, platforms: false, })
+  const [isFilterOpen, setIsFilterOpen] = useState<{ [key: string]: boolean }>({
+    [ENUM_FILTER_NAMES.CATEGORY]: false,
+    [ENUM_FILTER_NAMES.PLATFORMS]: false,
+  })
 
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     setCategoryFilter();
     setPlatformFilter();
-    setIsFilterOpen({ category: false, platforms: false, });
+    setIsFilterOpen({
+      [ENUM_FILTER_NAMES.CATEGORY]: false,
+      [ENUM_FILTER_NAMES.PLATFORMS]: false,
+    });
   }
 
   const handleFiltersToggle = () => {
-    localStorage.setItem('filterToggle', JSON.stringify(!isActive));
+    localStorage.setItem(ENUM_LOCAL_STORAGE.TOGGLE, JSON.stringify(!isActive));
     setIsActive(prev => !prev);
   }
 
@@ -44,12 +51,15 @@ const Filters: FC<IfiltersProps> = ({ setIsLoading, setItems }) => {
     resetFilters();
     resetCategoryValues();
     resetPlatformValues();
-    setIsFilterOpen({ category: false, platforms: false, });
+    setIsFilterOpen({
+      [ENUM_FILTER_NAMES.CATEGORY]: false,
+      [ENUM_FILTER_NAMES.PLATFORMS]: false,
+    });
   }
 
   const cbCreator = (selectId: string) => {
     return (e: MouseEvent) => {
-      if (!(e.target as HTMLElement).closest(`#${selectId}`)) {
+      if (!(e.target as HTMLElement).closest(`#${selectId}-wrapper`)) {
         setIsFilterOpen(prev => { return { ...prev, [selectId]: false, } });
       }
     }
@@ -73,7 +83,10 @@ const Filters: FC<IfiltersProps> = ({ setIsLoading, setItems }) => {
   }
 
   useEffect(() => {
-    if (data) setItems(data.data);
+    if (data) {
+      setItems(data.data);
+      setDataLength(data.dbLength);
+    }
     setIsLoading(isLoading);
   }, [data, isLoading])
 
@@ -82,7 +95,8 @@ const Filters: FC<IfiltersProps> = ({ setIsLoading, setItems }) => {
   }, [])
 
   useEffect(() => {
-    setSearchParams(filtersState as URLSearchParamsInit);
+    const { resetable, ...URLfiltersState } = filtersState
+    setSearchParams(URLfiltersState as URLSearchParamsInit);
   }, [filtersState])
 
   return (
@@ -90,11 +104,11 @@ const Filters: FC<IfiltersProps> = ({ setIsLoading, setItems }) => {
       <Container newClass='filters__container'>
         <button type='button' className={`filters__button filters__button_t_toggle${isActive ? ' filters__button_active' : ''}`} onClick={handleFiltersToggle}>Фильтры</button>
         <form className={`filters__form${isActive ? ' filters__form_active' : ''}`}>
-          <div className='filters__category' id='category'>
-            <button type='button' id='category'
-              className={`filters__select-title${isFilterOpen.category ? ' filters__select-title_open' : ''}`}
-              onClick={handleSelectClick}>Выберите жанры{filtersState.category.length > 0 ? ': ' + filtersState.category.length : ''}</button>
-            <div className={`filters__options${isFilterOpen.category ? ' filters__options_open' : ''}`}>
+          <div className='filters__category' id={`${ENUM_FILTER_NAMES.CATEGORY}-wrapper`}>
+            <button type='button' id={ENUM_FILTER_NAMES.CATEGORY}
+              className={`filters__select-title${isFilterOpen[ENUM_FILTER_NAMES.CATEGORY] ? ' filters__select-title_open' : ''}`}
+              onClick={handleSelectClick}>Выберите жанры{filtersState[ENUM_FILTER_NAMES.CATEGORY].length > 0 ? ': ' + filtersState[ENUM_FILTER_NAMES.CATEGORY].length : ''}</button>
+            <div className={`filters__options${isFilterOpen[ENUM_FILTER_NAMES.CATEGORY] ? ' filters__options_open' : ''}`}>
               {CATEGORIES.map((category) => (
                 <div className='filters__item' key={category.id}>
                   <input className='filters__checkbox' type='checkbox' name={category.id} id={category.id} onChange={handleCategoryChange} checked={categoryValues[category.id]} />
@@ -103,11 +117,11 @@ const Filters: FC<IfiltersProps> = ({ setIsLoading, setItems }) => {
               ))}
             </div>
           </div>
-          <div className='filters__category' id='platforms'>
-            <button type='button' id='platforms'
-              className={`filters__select-title${isFilterOpen.platforms ? ' filters__select-title_open' : ''}`}
-              onClick={handleSelectClick}>Выберите платформы{filtersState.platforms.length > 0 ? ': ' + filtersState.platforms.length : ''}</button>
-            <div className={`filters__options${isFilterOpen.platforms ? ' filters__options_open' : ''}`} >
+          <div className='filters__category' id={`${ENUM_FILTER_NAMES.PLATFORMS}-wrapper`}>
+            <button type='button' id={ENUM_FILTER_NAMES.PLATFORMS}
+              className={`filters__select-title${isFilterOpen[ENUM_FILTER_NAMES.PLATFORMS] ? ' filters__select-title_open' : ''}`}
+              onClick={handleSelectClick}>Выберите платформы{filtersState[ENUM_FILTER_NAMES.PLATFORMS].length > 0 ? ': ' + filtersState[ENUM_FILTER_NAMES.PLATFORMS].length : ''}</button>
+            <div className={`filters__options${isFilterOpen[ENUM_FILTER_NAMES.PLATFORMS] ? ' filters__options_open' : ''}`} >
               {PLATFORMS.map((platform) => (
                 <div className='filters__item' key={platform.id}>
                   <input className='filters__checkbox' type='checkbox' name={platform.id} id={platform.id} onChange={handlePlatformChange} checked={platformValues[platform.id]} />

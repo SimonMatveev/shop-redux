@@ -11,10 +11,15 @@ const CartPopup: FC = () => {
   const [clearCart, { }] = useClearCartMutation();
   const { toggleCartState } = useActions();
   const cartRef = useRef<HTMLDivElement>(null);
-  const { handleClose, isOpened } = useBodyBlock(toggleCartState);
-  const cart = currentUser!.cart;
-  const areItemsInCart = cart.items.length > 0;
-  const isWithSale = cart.totalPrice !== cart.totalPriceWithSale;
+  const cartListRef = useRef<HTMLDivElement>(null);
+  const { handleClose, isOpened } = useBodyBlock({
+    closeCB: toggleCartState,
+    scrollableItemClass: 'cart__list',
+    scrollableItemParentRef: cartListRef
+  });
+  const cart = currentUser?.cart;
+  const areItemsInCart = cart && cart.items.length > 0;
+  const isWithSale = cart && cart.totalPrice !== cart.totalPriceWithSale;
 
   const handleCartClear = () => clearCart(null);
 
@@ -41,19 +46,27 @@ const CartPopup: FC = () => {
         {
           areItemsInCart ?
             <>
-              <div className='cart__list-wrapper'>
+              <div className='cart__list-wrapper' ref={cartListRef}>
                 <ul className='cart__list'>
                   {cart.items.map(item => {
                     const { itemInCart: game } = item
                     const isOnSale = game.price !== game.priceWithSale;
+                    const totalAmount = item.orders.reduce((acc, order) => order.amount + acc, 0);
                     return (
                       <li key={game._id} className='cart__item'>
                         <p className='cart__item-title'>{game.name}</p>
                         <div className='cart__item-prices'>
-                          <p className={`cart__item-price${isOnSale ? ' cart__item-price_t_saleon' : ''}`}>{game.price * item.amount} руб.</p>
-                          {isOnSale && <p className='cart__item-price cart__item-price_t_with-sale'>{game.priceWithSale * item.amount}  руб.</p>}
+                          <p className={`cart__item-price${isOnSale ? ' cart__item-price_t_saleon' : ''}`}>{game.price * totalAmount} руб.</p>
+                          {isOnSale && <p className='cart__item-price cart__item-price_t_with-sale'>{game.priceWithSale * totalAmount}  руб.</p>}
                         </div>
-                        <AmountChanger newClass='cart__item-controller' item={game} />
+                        {
+                          item.orders.map((order, index) => (
+                            <div className='cart__amount-controls' key={index}>
+                              <p className='cart__amount-platform'>{order.platform}</p>
+                              <AmountChanger key={index} item={game} platformToChange={order.platform} newClass='cart__amount-changer'/>
+                            </div>
+                          ))
+                        }
                       </li>
                     )
                   })}

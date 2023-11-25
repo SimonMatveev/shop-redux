@@ -1,5 +1,5 @@
 import { FC, MouseEventHandler } from 'react'
-import { IItem } from '../../types/types'
+import { ENUM_PLATFORMS, IItem } from '../../types/types'
 import './card.scss'
 import { Link, useNavigate } from 'react-router-dom'
 import { useGetCurrentUserQuery, useIncrementCartMutation } from '../../store/api/users.storeApi'
@@ -20,7 +20,7 @@ const Card: FC<ICardProps> = ({ item }) => {
   const handleClick: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
     if (data) {
-      incrementCart(item._id);
+      incrementCart({ itemId: item._id, platform: ENUM_PLATFORMS.PC });
     } else {
       navigate('/signin');
     }
@@ -43,10 +43,13 @@ const Card: FC<ICardProps> = ({ item }) => {
           </div>
         </div>
         {isInCart ?
-          <AmountChanger item={item} /> :
+          <AmountChanger item={item} platformToChange={ENUM_PLATFORMS.PC} /> :
           < button type='button' className={`card__btn${upIsLoading ? ' card__btn_loading' : '  '}`} onClick={handleClick} disabled={upIsLoading}>{!upIsLoading ? 'В корзину' : 'Загрузка...'}</button>
         }
       </Link>
+      <div className='card__choose-platform'>
+        Выберите платформу
+      </div>
     </article >
   )
 }

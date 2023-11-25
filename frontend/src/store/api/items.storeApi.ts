@@ -4,10 +4,10 @@ import { storeApi } from "./storeApi";
 export const itemsApi = storeApi.injectEndpoints({
   endpoints: builder => ({
     getItems: builder.query<IItemData, IFilters>({
-      query: ({ category, platforms, sortItem, sortOrder, limit }) => {
+      query: ({ category, platforms, sortItem, sortOrder, limit, page }) => {
         return {
           url: '/items',
-          params: { category, platforms, sortItem, sortOrder, limit }
+          params: { category, platforms, sortItem, sortOrder, limit, page }
         }
       },
       providesTags: () => [{

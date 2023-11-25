@@ -1,8 +1,9 @@
 import { FC } from 'react'
+import './preloader.scss'
 
 const Preloader: FC = () => {
   return (
-    <div>Loading...</div>
+    <div className='preloader'>Loading...</div>
   )
 }
 

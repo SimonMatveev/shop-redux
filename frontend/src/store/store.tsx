@@ -4,12 +4,14 @@ import { storeApi } from "./api/storeApi";
 import { cartStateReducer } from "./cart-state/cartState.slice";
 import { userReducer } from "./user/user.slice";
 import { filtersReducer } from "./filters/filters.slice";
+import { dataLengthReducer } from "./dataLength/dataLength.slice";
 
 const reducers = combineReducers({
   [storeApi.reducerPath]: storeApi.reducer,
   cartState: cartStateReducer,
   user: userReducer,
   filters: filtersReducer,
+  dataLength: dataLengthReducer,
 });
 
 const logger = createLogger({

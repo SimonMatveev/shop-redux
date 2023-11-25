@@ -1,4 +1,4 @@
-import { ENUM_CATEGORY, ENUM_PLATFORMS } from "../types/types";
+import { ENUM_CATEGORY, ENUM_FILTER_NAMES, ENUM_PLATFORMS } from "../types/types";
 
 export const REG_EXP_EMAIL = '[\\-А-Яа-яA-Za-z0-9.]+@[\\-А-Яа-яA-Za-z0-9.]+\\.[а-яА-Яa-zA-Z]{2,}';
 export const REG_EXP_NAME = '[\\-А-Яа-яA-Za-z ]+';
@@ -10,6 +10,8 @@ export const DEFAULT_VALIDATION_MSG = 'Ошибка валидации';
 export const CHECKOUT_PATHNAME = '/checkout';
 
 export const MENU_ANIMATION_DELAY = 300;
+
+export const KEYS_TO_BLOCK = ['Space', 'ArrowDown', 'ArrowUp', 'Home', 'End'];
 
 export const CATEGORIES = [
   {

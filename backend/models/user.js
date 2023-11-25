@@ -2,9 +2,8 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const AuthError = require('../errors/AuthError');
-const { LOGIN_ERR } = require('../utils/constants');
+const { LOGIN_ERR, PLATFORM_ENUM } = require('../utils/constants');
 const NotFoundError = require('../errors/NotFoundError');
-const { calculateTotalPrice } = require('../utils/functions');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -42,11 +41,20 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.ObjectId,
         ref: 'item',
         required: true,
-      }, amount: {
-        type: Number,
-        required: true,
-        default: 1,
       },
+      orders: [
+        {
+          amount: {
+            type: Number,
+            required: true,
+            default: 1,
+          },
+          platform: {
+            type: String,
+            required: true,
+          },
+        }
+      ],
       _id: false,
     }]
   }
@@ -68,17 +76,33 @@ userSchema.statics.findUserByCredentials = function (email, password) {
     });
 };
 
-userSchema.statics.incrementCart = function (userId, itemId) {
+userSchema.statics.incrementCart = function (userId, { itemId, platform }) {
   return this.findById(userId)
     .then((user) => {
       if (!user) {
         return Promise.reject(new NotFoundError());
       }
-      const index = user.cart.items.findIndex(item => item.itemInCart.equals(itemId));
-      if (index === -1) {
-        user.cart.items.push({ itemInCart: itemId });
+      const indexOfItem = user.cart.items.findIndex(item => item.itemInCart.equals(itemId));
+      if (indexOfItem === -1) {
+        const newOrder = {
+          itemInCart: itemId,
+          orders: [{
+            platform: platform,
+            amount: 1,
+          }]
+        }
+        user.cart.items.push(newOrder);
+        console.log(user.cart.items[0].orders)
       } else {
-        user.cart.items[index].amount++;
+        const indexOfPlatform = user.cart.items[indexOfItem].orders.findIndex(item => item.platform === platform);
+        if (indexOfPlatform === -1) {
+          user.cart.items[indexOfItem].orders.push({
+            platform: platform,
+            amount: 1,
+          })
+        } else {
+          user.cart.items[indexOfItem].orders[indexOfPlatform].amount++;
+        }
       }
       return user.cart;
     })
@@ -96,19 +120,25 @@ userSchema.statics.incrementCart = function (userId, itemId) {
     }));
 };
 
-userSchema.statics.decrementCart = function (userId, itemId) {
+userSchema.statics.decrementCart = function (userId, { itemId, platform }) {
   return this.findById(userId)
     .then((user) => {
       if (!user) {
         return Promise.reject(new NotFoundError());
       }
-      const index = user.cart.items.findIndex(item => item.itemInCart.equals(itemId));
-      if (index === -1) {
+      const indexOfItem = user.cart.items.findIndex(item => item.itemInCart.equals(itemId));
+      if (indexOfItem === -1) {
         return user.cart;
-      } else if (user.cart.items[index].amount > 1) {
-        user.cart.items[index].amount--;
       } else {
-        user.cart.items.splice(index, 1);
+        const indexOfPlatform = user.cart.items[indexOfItem].orders.findIndex(item => item.platform === platform);
+        if (indexOfPlatform === -1) {
+          return user.cart;
+        } else if (user.cart.items[indexOfItem].orders[indexOfPlatform].amount > 1) {
+          user.cart.items[indexOfItem].orders[indexOfPlatform].amount--;
+        } else {
+          user.cart.items[indexOfItem].orders.splice(indexOfPlatform, 1);
+          if (user.cart.items[indexOfItem].orders.length === 0) user.cart.items.splice(indexOfItem, 1);
+        }
       }
       return user.cart;
     })

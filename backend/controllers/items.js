@@ -11,11 +11,20 @@ const {
 
 async function getItems(req, res, next) {
   try {
-    const filters = req.query;
-    const category = filters.category ? filters.category.split(',') : null;
-    const platforms = filters.platforms ? filters.platforms.split(',') : null;
-    let items = await Item.find({}).sort({ [filters.sortItem]: filters.sortOrder })
-    let resItems = items.filter(item => {
+    const {
+      category: categoryData = null,
+      platforms: platformsData = null,
+      sortItem: sortItemData = 'name',
+      sortOrder: sortOrderData = 'asc',
+      page: pageData = '1',
+      limit: limitData = '20',
+    } = req.query;
+    const category = categoryData ? categoryData.split(',') : [];
+    const platforms = platformsData ? platformsData.split(',') : [];
+    const page = !isNaN(Number(pageData)) ? Number(pageData) : 1;
+    const limit = !isNaN(Number(limitData)) ? Number(limitData) : 1;
+    const items = await Item.find({}).sort({ [sortItemData]: sortOrderData })
+    const resItems = items.filter(item => {
       let isValidCategory = true;
       let isValidPlatform = true;
       if (category) {
@@ -31,10 +40,12 @@ async function getItems(req, res, next) {
         }
       }
       return isValidCategory && isValidPlatform;
-    }).splice(0, filters.limit);
+    })
+    const lengthToSend = resItems.length;
+    const itemsToSend = resItems.splice((page - 1) * limit, limit);
     res.send({
-      data: resItems,
-      length: items.length,
+      data: itemsToSend,
+      dbLength: lengthToSend,
     })
   } catch (err) {
     next(err);

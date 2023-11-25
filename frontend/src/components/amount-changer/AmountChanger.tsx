@@ -1,27 +1,29 @@
 import { FC, MouseEventHandler } from 'react';
 import { useDecrementCartMutation, useGetCurrentUserQuery, useIncrementCartMutation } from '../../store/api/users.storeApi';
-import { IItem } from '../../types/types';
+import { ENUM_PLATFORMS, IItem } from '../../types/types';
 import './amount-changer.scss';
 
 interface IAmountChangerProps {
   item: IItem;
   newClass?: string;
+  platformToChange: ENUM_PLATFORMS;
 }
 
-const AmountChanger: FC<IAmountChangerProps> = ({ item, newClass }) => {
+const AmountChanger: FC<IAmountChangerProps> = ({ item, newClass, platformToChange }) => {
   const { data } = useGetCurrentUserQuery(null, {});
   const [incrementCart, { isLoading: upIsLoading }] = useIncrementCartMutation();
   const [decrementCart, { isLoading: downIsLoading }] = useDecrementCartMutation();
-  const thisItemInCart = data?.cart.items.find(cartItem => cartItem.itemInCart._id === item._id);
+  const thisItemInCart = data!.cart.items.find(cartItem => cartItem.itemInCart._id === item._id);
+  const thisOrderInCart = thisItemInCart!.orders.find(order => order.platform === platformToChange);
 
   const handleIncrement: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
-    incrementCart(item._id);
+    incrementCart({ itemId: item._id, platform: platformToChange });
   }
 
   const handleDecrement: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
-    decrementCart(item._id);
+    decrementCart({ itemId: item._id, platform: platformToChange });
   }
 
   return (
@@ -32,7 +34,7 @@ const AmountChanger: FC<IAmountChangerProps> = ({ item, newClass }) => {
         onClick={handleDecrement}
         disabled={downIsLoading}
       >-</button>
-      <span className='amount-changer__number'>{thisItemInCart?.amount}</span>
+      <span className='amount-changer__number'>{thisOrderInCart?.amount}</span>
       < button
         type='button'
         className={`amount-changer__btn${upIsLoading ? ' amount-changer__btn_loading' : ''}`}

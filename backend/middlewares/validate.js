@@ -69,6 +69,7 @@ const validateInStock = celebrate({
 const validateCart = celebrate({
   body: Joi.object().keys({
     itemId: Joi.string().length(24).hex().required(),
+    platform: Joi.string().required().valid(...PLATFORM_ENUM),
   }),
 });
 

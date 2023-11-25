@@ -53,6 +53,7 @@
     min-height: 50%;
     margin: auto 0;
     overflow-y: auto;
+    overscroll-behavior: contain;
   }
 
   &__list {
@@ -76,8 +77,8 @@
     @media screen and (max-width: 1024px) {
       grid-template-columns: 1fr min-content;
       grid-template-areas:
-        'title title'
-        'prices controls';
+        'title prices'
+        'controls controls';
       gap: 30px;
     }
 
@@ -89,7 +90,7 @@
     &-title {
       grid-area: title;
       margin: 0;
-      font-weight: 500;
+      font-weight: 900;
     }
 
     &-prices {
@@ -103,6 +104,7 @@
 
       @media screen and (max-width: 1024px) {
         justify-content: flex-start;
+        min-width: 80px;
       }
     }
 
@@ -237,8 +239,25 @@
     }
   }
 
+  &__amount {
+    &-controls {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    &-platform {
+      margin: 0;
+      font-weight: 500;
+    }
+  }
+
   &__no-items {
     text-align: center;
     margin: auto 0;
+  }
+
+  &__amount-changer {
+    justify-content: flex-start;
   }
 }

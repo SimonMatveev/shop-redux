@@ -127,8 +127,8 @@ function logout(req, res, next) {
 }
 
 function incrementCart(req, res, next) {
-  const { itemId } = req.body;
-  return User.incrementCart(req.user._id, itemId)
+  const { itemId, platform } = req.body;
+  return User.incrementCart(req.user._id, { itemId, platform })
     .then((user) => {
       calculateTotalPrice(user.cart);
       res.send(user);
@@ -141,8 +141,8 @@ function incrementCart(req, res, next) {
 }
 
 function decrementCart(req, res, next) {
-  const { itemId } = req.body;
-  return User.decrementCart(req.user._id, itemId)
+  const { itemId, platform } = req.body;
+  return User.decrementCart(req.user._id, { itemId, platform })
     .then((user) => {
       calculateTotalPrice(user.cart);
       res.send(user)
