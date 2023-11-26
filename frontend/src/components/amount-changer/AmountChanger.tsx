@@ -6,7 +6,7 @@ import './amount-changer.scss';
 interface IAmountChangerProps {
   item: IItem;
   newClass?: string;
-  platformToChange: ENUM_PLATFORMS;
+  platformToChange: ENUM_PLATFORMS | null;
 }
 
 const AmountChanger: FC<IAmountChangerProps> = ({ item, newClass, platformToChange }) => {
@@ -14,16 +14,17 @@ const AmountChanger: FC<IAmountChangerProps> = ({ item, newClass, platformToChan
   const [incrementCart, { isLoading: upIsLoading }] = useIncrementCartMutation();
   const [decrementCart, { isLoading: downIsLoading }] = useDecrementCartMutation();
   const thisItemInCart = data!.cart.items.find(cartItem => cartItem.itemInCart._id === item._id);
-  const thisOrderInCart = thisItemInCart!.orders.find(order => order.platform === platformToChange);
+
+  const thisOrderInCart = thisItemInCart?.orders?.find(order => order.platform === platformToChange) || { amount: 0 };
 
   const handleIncrement: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
-    incrementCart({ itemId: item._id, platform: platformToChange });
+    if (platformToChange !== null) incrementCart({ itemId: item._id, platform: platformToChange });
   }
 
   const handleDecrement: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
-    decrementCart({ itemId: item._id, platform: platformToChange });
+    if (platformToChange !== null) decrementCart({ itemId: item._id, platform: platformToChange });
   }
 
   return (
@@ -34,7 +35,7 @@ const AmountChanger: FC<IAmountChangerProps> = ({ item, newClass, platformToChan
         onClick={handleDecrement}
         disabled={downIsLoading}
       >-</button>
-      <span className='amount-changer__number'>{thisOrderInCart?.amount}</span>
+      <span className='amount-changer__number'>{thisOrderInCart.amount}</span>
       < button
         type='button'
         className={`amount-changer__btn${upIsLoading ? ' amount-changer__btn_loading' : ''}`}

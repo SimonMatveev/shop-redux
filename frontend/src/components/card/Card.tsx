@@ -1,30 +1,47 @@
-import { FC, MouseEventHandler } from 'react'
+import { FC, MouseEventHandler, useEffect, useState } from 'react'
 import { ENUM_PLATFORMS, IItem } from '../../types/types'
 import './card.scss'
 import { Link, useNavigate } from 'react-router-dom'
 import { useGetCurrentUserQuery, useIncrementCartMutation } from '../../store/api/users.storeApi'
 import AmountChanger from '../amount-changer/AmountChanger'
+import { PLATFORMS } from '../../utils/constants'
+import PromptForPlatforms from '../prompt-for-platforms/PromptForPlatforms'
 
 interface ICardProps {
   item: IItem
 }
 
 const Card: FC<ICardProps> = ({ item }) => {
-  const { data } = useGetCurrentUserQuery(null, {});
-  const [incrementCart, { isLoading: upIsLoading }] = useIncrementCartMutation();
+  const { data, isLoading } = useGetCurrentUserQuery(null, {});
+  const [_, { isLoading: upIsLoading }] = useIncrementCartMutation();
   const navigate = useNavigate();
 
-  const isInCart = data?.cart.items.some(cartItem => cartItem.itemInCart._id === item._id) || false;
+  const [inCartIndex, setInCartIndex] = useState(-1);
+  const [platform, setPlatform] = useState<ENUM_PLATFORMS | null>(null);
+
+  const [promptIsOpen, setPromptIsOpen] = useState(false);
+
   const isOnSale = item.price !== item.priceWithSale;
 
-  const handleClick: MouseEventHandler<HTMLButtonElement> = (e) => {
-    e.preventDefault();
+  const handleAddToCartClick: MouseEventHandler = (e) => {
+    e.preventDefault()
     if (data) {
-      incrementCart({ itemId: item._id, platform: ENUM_PLATFORMS.PC });
+      setPromptIsOpen(true);
     } else {
       navigate('/signin');
     }
   }
+
+  const getPlatformNameFromData = () =>
+    PLATFORMS.find(platform => platform.id === data!.cart.items[inCartIndex]?.orders[0].platform)?.name || '';
+
+  useEffect(() => {
+    if (data) setInCartIndex(data.cart.items.findIndex(cartItem => cartItem.itemInCart._id === item._id))
+  }, [data])
+
+  useEffect(() => {
+    if (inCartIndex !== -1) setPlatform(data!.cart.items[inCartIndex]?.orders[0].platform || null);
+  }, [inCartIndex])
 
   return (
     <article className='card' >
@@ -42,14 +59,23 @@ const Card: FC<ICardProps> = ({ item }) => {
             }
           </div>
         </div>
-        {isInCart ?
-          <AmountChanger item={item} platformToChange={ENUM_PLATFORMS.PC} /> :
-          < button type='button' className={`card__btn${upIsLoading ? ' card__btn_loading' : '  '}`} onClick={handleClick} disabled={upIsLoading}>{!upIsLoading ? 'В корзину' : 'Загрузка...'}</button>
+        {!isLoading && inCartIndex !== -1 ?
+          <>
+            <AmountChanger item={item} platformToChange={platform} />
+            <span className='card__platform-first'>
+              {getPlatformNameFromData()}
+            </span>
+          </> :
+          < button
+            type='button'
+            className={`card__btn${upIsLoading ? ' card__btn_loading' : '  '}`}
+            onClick={handleAddToCartClick}
+            disabled={upIsLoading}>
+            {!upIsLoading ? 'В корзину' : 'Загрузка...'}
+          </button>
         }
       </Link>
-      <div className='card__choose-platform'>
-        Выберите платформу
-      </div>
+      {promptIsOpen && <PromptForPlatforms item={item} setPromptIsOpen={setPromptIsOpen} />}
     </article >
   )
 }

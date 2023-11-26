@@ -59,16 +59,18 @@ export interface ISingleItemData {
   data: IItem
 }
 
+export interface ICartItem {
+  itemInCart: IItem;
+  orders: {
+    amount: number;
+    platform: ENUM_PLATFORMS;
+  }[]
+}
+
 export interface ICart {
   totalPrice: number;
   totalPriceWithSale: number;
-  items: {
-    itemInCart: IItem;
-    orders: {
-      amount: number;
-      platform: ENUM_PLATFORMS;
-    }[]
-  }[]
+  items: ICartItem[];
 }
 
 export interface IUser {

@@ -92,7 +92,6 @@ userSchema.statics.incrementCart = function (userId, { itemId, platform }) {
           }]
         }
         user.cart.items.push(newOrder);
-        console.log(user.cart.items[0].orders)
       } else {
         const indexOfPlatform = user.cart.items[indexOfItem].orders.findIndex(item => item.platform === platform);
         if (indexOfPlatform === -1) {

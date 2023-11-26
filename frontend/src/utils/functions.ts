@@ -8,3 +8,7 @@ export const toCapitalCase = (string: string) => {
 export function mapFilter<T>(values: {}) {
   return Object.entries(values).filter(entry => entry[1]).map(entry => entry[0] as T)
 }
+
+export function getNameFromId<T>(DATA: { id: T, name: string }[], platformToFind: T) {
+  return DATA.find(platform => platform.id === platformToFind)!.name || '';
+}
