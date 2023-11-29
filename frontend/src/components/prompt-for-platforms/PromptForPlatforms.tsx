@@ -1,7 +1,7 @@
-import { FC, Dispatch, SetStateAction, MouseEventHandler } from 'react'
+import { FC, Dispatch, SetStateAction, MouseEventHandler, useEffect, useState } from 'react'
 import { getNameFromId } from '../../utils/functions'
-import { ENUM_PLATFORMS, IItem } from '../../types/types'
-import { useIncrementCartMutation } from '../../store/api/users.storeApi'
+import { ENUM_PLATFORMS, ICartItem, IItem } from '../../types/types'
+import { useGetCurrentUserQuery, useIncrementCartMutation } from '../../store/api/users.storeApi'
 import './prompt-for-platforms.scss'
 import { PLATFORMS } from '../../utils/constants'
 
@@ -13,6 +13,9 @@ interface IPromptForPlatformsProps {
 
 const PromptForPlatforms: FC<IPromptForPlatformsProps> = ({ item, setPromptIsOpen, newClass }) => {
   const [incrementCart] = useIncrementCartMutation();
+  const { data: currentUser } = useGetCurrentUserQuery(null, {});
+  const [inCartItem, setInCartItem] = useState<ICartItem | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleChoosePlatformClick: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
@@ -21,19 +24,32 @@ const PromptForPlatforms: FC<IPromptForPlatformsProps> = ({ item, setPromptIsOpe
     setPromptIsOpen(false);
   }
 
+  useEffect(() => {
+    if (currentUser) {
+      const inCartItem = currentUser.cart.items.find(i => i.itemInCart._id === item._id);
+      setInCartItem(inCartItem || null)
+    }
+    setIsLoading(false);
+  }, [currentUser])
+
   return (
     <div className={`choose${newClass ? ' ' + newClass : ''}`}>
       <button type='button' className='choose__close' onClick={() => setPromptIsOpen(false)} />
       <p className='choose__header'>Выберите платформу</p>
-      <ul className='choose__platforms'>
-        {item.platforms.map((platform, index) => (
+      {!isLoading && <ul className='choose__platforms'>
+        {item.platforms.filter(platform => {
+          if (inCartItem) {
+            return inCartItem.orders.every(order => order.platform !== platform);
+          }
+          return true;
+        }).map((platform, index) => (
           <li className='choose__platform' key={index} >
             <button type='button' className='choose__btn' id={`${platform}--option`} onClick={handleChoosePlatformClick}>
               {getNameFromId<ENUM_PLATFORMS>(PLATFORMS, platform)}
             </button>
           </li>))
         }
-      </ul>
+      </ul>}
     </div>
   )
 }

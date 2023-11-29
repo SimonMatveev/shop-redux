@@ -5,6 +5,8 @@ import AmountChanger from '../amount-changer/AmountChanger';
 import './cart-popup.scss';
 import useActions from '../../hooks/useActions';
 import useBodyBlock from '../../hooks/useBodyBlock';
+import { getNameFromId } from '../../utils/functions';
+import { PLATFORMS } from '../../utils/constants';
 
 const CartPopup: FC = () => {
   const { data: currentUser } = useGetCurrentUserQuery(null, {});
@@ -59,14 +61,16 @@ const CartPopup: FC = () => {
                           <p className={`cart__item-price${isOnSale ? ' cart__item-price_t_saleon' : ''}`}>{game.price * totalAmount} руб.</p>
                           {isOnSale && <p className='cart__item-price cart__item-price_t_with-sale'>{game.priceWithSale * totalAmount}  руб.</p>}
                         </div>
-                        {
-                          item.orders.map((order, index) => (
-                            <div className='cart__amount-controls' key={index}>
-                              <p className='cart__amount-platform'>{order.platform}</p>
-                              <AmountChanger key={index} item={game} platformToChange={order.platform} newClass='cart__amount-changer'/>
-                            </div>
-                          ))
-                        }
+                        <div className='cart__amounts'>
+                          {
+                            item.orders.map((order, index) => (
+                              <div className='cart__amount-controls' key={index}>
+                                <p className='cart__amount-platform'>{getNameFromId(PLATFORMS, order.platform)}</p>
+                                <AmountChanger key={index} item={game} platformToChange={order.platform} newClass='cart__amount-changer' />
+                              </div>
+                            ))
+                          }
+                        </div>
                       </li>
                     )
                   })}
