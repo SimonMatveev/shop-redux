@@ -1,6 +1,6 @@
-import { FC, MouseEventHandler } from 'react';
+import { FC, MouseEventHandler, useEffect, useState } from 'react';
 import { useDecrementCartMutation, useGetCurrentUserQuery, useIncrementCartMutation } from '../../store/api/users.storeApi';
-import { ENUM_PLATFORMS, IItem } from '../../types/types';
+import { ENUM_PLATFORMS, ICartItem, IItem } from '../../types/types';
 import './amount-changer.scss';
 
 interface IAmountChangerProps {
@@ -13,7 +13,7 @@ const AmountChanger: FC<IAmountChangerProps> = ({ item, newClass, platformToChan
   const { data } = useGetCurrentUserQuery(null, {});
   const [incrementCart, { isLoading: upIsLoading }] = useIncrementCartMutation();
   const [decrementCart, { isLoading: downIsLoading }] = useDecrementCartMutation();
-  const thisItemInCart = data!.cart.items.find(cartItem => cartItem.itemInCart._id === item._id);
+  const thisItemInCart = data!.cart.items.find(cartItem => cartItem.itemInCart._id === item._id) || null;
 
   const thisOrderInCart = thisItemInCart?.orders?.find(order => order.platform === platformToChange) || { amount: 0 };
 

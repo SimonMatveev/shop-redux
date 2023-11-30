@@ -6,7 +6,7 @@ const initialStateDefault: IFilters = {
   [ENUM_FILTER_NAMES.PLATFORMS]: [],
   sortItem: 'name',
   sortOrder: 'asc',
-  limit: '8',
+  limit: '12',
   page: '1',
   resetable: [ENUM_FILTER_NAMES.CATEGORY, ENUM_FILTER_NAMES.PLATFORMS],
 };

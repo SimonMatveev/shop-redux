@@ -1,4 +1,4 @@
-import { IFilters, IItem, IItemData, IItemInsert, ISingleItemData } from "../../types/types";
+import { IFilters, IItem, IItemData, IItemInsert, IListItem, ISingleItemData } from "../../types/types";
 import { storeApi } from "./storeApi";
 
 export const itemsApi = storeApi.injectEndpoints({
@@ -18,6 +18,14 @@ export const itemsApi = storeApi.injectEndpoints({
       query: (itemId) => `/items/${itemId}`,
       transformResponse: (response: ISingleItemData) => response.data
     }),
+    getSeries: builder.query<IItem[], string>({
+      query: (seriesName) => `/items/series/${seriesName}`,
+      transformResponse: (response: { data: IItem[] }) => response.data
+    }),
+    getSeriesList: builder.query<IListItem[], null>({
+      query: () => `/items/series/list`,
+      transformResponse: (response: { data: IListItem[] }) => response.data
+    }),
     addItem: builder.mutation<IItemData, IItemInsert>({
       query: (data) => ({
         body: data,
@@ -35,4 +43,6 @@ export const {
   useGetItemsQuery,
   useGetItemQuery,
   useAddItemMutation,
+  useGetSeriesQuery,
+  useGetSeriesListQuery,
 } = itemsApi;

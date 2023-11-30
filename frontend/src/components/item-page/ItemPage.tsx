@@ -1,6 +1,6 @@
 import { FC, useEffect, useState, MouseEventHandler } from "react"
-import { useGetItemQuery } from "../../store/api/items.storeApi"
-import { useParams } from "react-router"
+import { useGetItemQuery, useGetSeriesListQuery } from "../../store/api/items.storeApi"
+import { Navigate, useParams } from "react-router"
 import Container from "../container/Container";
 import Preloader from "../preloader/Preloader";
 import { Link } from 'react-router-dom';
@@ -11,94 +11,21 @@ import PromptForPlatforms from '../prompt-for-platforms/PromptForPlatforms';
 import { getNameFromId } from '../../utils/functions';
 import { CATEGORIES, PLATFORMS } from '../../utils/constants';
 import AmountChanger from '../amount-changer/AmountChanger';
+import Gallery from '../gallery/Gallery';
+import useActions from '../../hooks/useActions';
 
 
 const ItemPage: FC = () => {
   const { itemId } = useParams();
   const { data: itemData, isLoading } = useGetItemQuery(itemId as string, {});
+  const { data: seriesList } = useGetSeriesListQuery(null, {});
   const { data: currentUser } = useGetCurrentUserQuery(null, {});
   const [inCartItem, setInCartItem] = useState<ICartItem | null>(null);
-  const [mainImgSrc, setMainImgSrc] = useState<string | null>(null);
-  const [galleryConfig, setGalleryConfig] = useState({ index: 0, size: 5, });
   const [promptIsOpen, setPromptIsOpen] = useState(false);
   const item = itemData!;
+  const { resetFilters } = useActions();
 
-  const handleImageClick: MouseEventHandler<HTMLImageElement> = (e) => {
-    setMainImgSrc((e.target as HTMLImageElement).src)
-  }
-
-  const getCurrentImageIndex = () => item.images.findIndex(image => mainImgSrc === image)
-
-  const handleArrowClickLeft = () => {
-    const index = getCurrentImageIndex();
-    const newImage = item.images[index - 1] || item.images[item.images.length - 1];
-    setMainImgSrc(newImage)
-  }
-
-  const handleArrowClickRight = () => {
-    const index = getCurrentImageIndex();
-    const newImage = item.images[index + 1] || item.images[0]
-    setMainImgSrc(newImage)
-  }
-
-  const handleSmallArrowClickLeft = () => setGalleryConfig(prev => {
-    return {
-      ...prev,
-      index: prev.index - prev.size
-    }
-  })
-
-  const handleSmallArrowClickRight = () => setGalleryConfig(prev => {
-    return {
-      ...prev,
-      index: prev.index + prev.size
-    }
-  })
-
-  useEffect(() => {
-    if (itemData) {
-      setMainImgSrc(itemData.images[0])
-      setGalleryConfig({
-        index: 0,
-        size: itemData.images.length <= 5 ? 5 : 4,
-      })
-    }
-  }, [itemData])
-
-  useEffect(() => {
-    if (!itemData) {
-      setGalleryConfig({ index: 0, size: 5 })
-    } else {
-      let newSize: number;
-      if (itemData.images.length <= 5) {
-        newSize = 5;
-      } else if (galleryConfig.index === 0 || galleryConfig.index + galleryConfig.size >= itemData.images.length) {
-        newSize = 4;
-      } else {
-        newSize = 3;
-      }
-      setGalleryConfig(prev => {
-        return {
-          ...prev,
-          size: newSize,
-        }
-      })
-    }
-
-  }, [galleryConfig.index])
-
-  useEffect(() => {
-    if (item) {
-      const index = getCurrentImageIndex();
-      if (item.images.slice(galleryConfig.index, galleryConfig.index + galleryConfig.size).every(image => image !== mainImgSrc) && index !== -1) {
-        if (index >= galleryConfig.index + galleryConfig.size) {
-          handleSmallArrowClickRight()
-        } else {
-          handleSmallArrowClickLeft()
-        }
-      }
-    }
-  }, [mainImgSrc])
+  const getIdFromSeries = (series: string) => seriesList?.find(item => item.name === series)!.id || 0;
 
   useEffect(() => {
     if (currentUser) {
@@ -107,48 +34,22 @@ const ItemPage: FC = () => {
     }
   }, [currentUser])
 
-  useEffect(() => {
-    console.log(galleryConfig)
-  }, [galleryConfig])
-
   return (
     <section className='item-page'>
       <Container newClass={item ? 'item-page__container' : ''}>
         {!isLoading ?
           item ?
             <>
+              <Link className='item-page__back' to='/items' >&lt; На главную</Link>
               <h1 className='item-page__title'>{item.name}</h1>
               <ul className='item-page__categories'>
                 {item.category.map((category, index) => (
-                  <li key={index} className='item-page__category'>
+                  <li key={index} className='item-page__category' onClick={() => resetFilters()}>
                     <Link to={`/items?category=${category}`} className='item-page__category-link'>{getNameFromId<ENUM_CATEGORY>(CATEGORIES, category)}</Link>
                   </li>))
                 }
               </ul>
-              <div className='item-page__gallery'>
-                <div className='item-page__gallery-main-image-container'>
-                  <img className='item-page__gallery-image item-page__gallery-image_t_main' src={mainImgSrc!} />
-                  <button type='button' className='item-page__gallery-arrow item-page__gallery-arrow_left' onClick={handleArrowClickLeft} />
-                  <button type='button' className='item-page__gallery-arrow item-page__gallery-arrow_right' onClick={handleArrowClickRight} />
-                </div>
-                <ul className='item-page__gallery-container'>
-                  {(galleryConfig.index !== 0) &&
-                    < button type='button'
-                      className='item-page__gallery-arrow-small item-page__gallery-arrow-small_left'
-                      onClick={handleSmallArrowClickLeft} />}
-                  {item.images.slice(galleryConfig.index, galleryConfig.index + galleryConfig.size).map((image, index) =>
-                  (<li className='item-page__gallery-item' key={index} >
-                    <img
-                      className={`item-page__gallery-image item-page__gallery-image_t_def${mainImgSrc === image ? ' item-page__gallery-image_active' : ''}`}
-                      src={image} onClick={handleImageClick} />
-                  </li>))
-                  }
-                  {(item.images.length > galleryConfig.index + galleryConfig.size) &&
-                    < button type='button'
-                      className='item-page__gallery-arrow-small item-page__gallery-arrow-small_right'
-                      onClick={handleSmallArrowClickRight} />}
-                </ul>
-              </div>
+              {itemData && <Gallery item={item} />}
               <div className='item-page__rating'>
                 &#9734;&#9734;&#9734;&#9734;&#9734;
               </div>
@@ -156,7 +57,7 @@ const ItemPage: FC = () => {
                 <div className={`item-page__instock${item.inStockAmount > 0 ? ' item-page__instock_active' : ''}`}>{item.inStockAmount > 0 ? 'В наличии' : 'Товар закончился'}</div>
                 <ul className='item-page__platforms'> {
                   item.platforms.map((platform, index) =>
-                  (<li key={index} className='item-page__platform'>
+                  (<li key={index} className='item-page__platform' onClick={() => resetFilters()}>
                     <Link to={`/items?platforms=${platform}`} className='item-page__platform-link'>{getNameFromId<ENUM_PLATFORMS>(PLATFORMS, platform)}</Link>
                   </li>))
                 }</ul>
@@ -183,10 +84,10 @@ const ItemPage: FC = () => {
                 <p className='item-page__release'>Дата выхода: <span>{item.releaseDate}</span></p>
 
                 <p className='item-page__description'>{item.description}</p>
-                {item.series && <p className='item-page__series'>Эта игра входит в серию: <span>{item.series}</span></p>}
+                {item.series && <p className='item-page__series'>Эта игра входит в серию: <Link className='item-page__series-link' to={`/items/series/${getIdFromSeries(item.series)}`}>{item.series}</Link></p>}
               </div>
             </> :
-            <div className='item-page__error'>Упс! Ничего не найдено</div> :
+            <Navigate to='/items' /> :
           <Preloader />}
       </Container>
     </section >

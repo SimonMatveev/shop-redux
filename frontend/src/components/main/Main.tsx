@@ -18,14 +18,14 @@ const Main: FC = () => {
       <Container newClass='main__container'>
         {isLoading ?
           <Preloader /> :
-          dataLength>0?
-          <>
-            <div className='main__cards'>
-              {items && items.map(item => (<Card key={item._id} item={item} />))}
-            </div>
-            <Pagination />
-          </>:
-          <div className='main__no-result'>Упс! Ничего не найдено!</div>
+          dataLength > 0 ?
+            <>
+              <div className='main__cards'>
+                {items && items.map(item => (<Card key={item._id} item={item} />))}
+              </div>
+              <Pagination />
+            </> :
+            <div className='main__no-result'>Упс! Ничего не найдено!</div>
         }
       </Container>
     </section>

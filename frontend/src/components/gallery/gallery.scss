@@ -1,0 +1,98 @@
+.gallery {
+  position: relative;
+
+  @media screen and (max-width:768px) {
+    max-width: 280px;
+    margin: 0 auto;
+  }
+
+  &__main-image-container {
+    position: relative;
+    width: 100%;
+  }
+
+  &__image {
+    width: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    cursor: pointer;
+    border-radius: 5px;
+
+    &_t {
+      &_main {
+        margin-bottom: 10px;
+        background-color: black;
+      }
+    }
+
+    &_active {
+      outline: 3px solid red;
+    }
+  }
+
+  &__container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-height: 150px;
+    gap: 10px;
+  }
+
+  &__arrow {
+    position: absolute;
+    width: 35px;
+    height: 35px;
+    top: 0;
+    padding: 0;
+    background-color: transparent;
+    border: none;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    height: 100%;
+    opacity: 0;
+    transition: opacity .3s;
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.1);
+
+    .gallery__main-image-container:hover & {
+      opacity: 1;
+    }
+
+    &_left {
+      background-image: url(../../images/arrow-big-l.svg);
+      left: 0;
+    }
+
+    &_right {
+      background-image: url(../../images/arrow-big-r.svg);
+      right: 0;
+    }
+  }
+
+  &__arrow-small {
+    border: none;
+    border-radius: 5px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    background-color: red;
+    cursor: pointer;transition: background-color .3s;
+
+    &:hover {
+      background-color: rgb(204, 3, 3);
+    }
+
+    &_left {
+      background-image: url(../../images/arrow-big-l-white.svg);
+    }
+
+    &_right {
+      background-image: url(../../images/arrow-big-r-white.svg);
+    }
+
+  }
+}

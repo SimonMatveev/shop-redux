@@ -16,12 +16,12 @@ const Pagination: FC = () => {
     <div className='pagination'>
       {(dataLength > Number(filterState.limit)) && <PagesButtons />}
       <div className='pagination__limit'>Товаров на странице:
-        <input type='radio' name='pages' id='4' className='pagination__checkbox' checked={+filterState.limit === 4} onChange={handleLimitClick} />
-        <label htmlFor='4' className='pagination__label'>4</label>
         <input type='radio' name='pages' id='8' className='pagination__checkbox' checked={+filterState.limit === 8} onChange={handleLimitClick} />
         <label htmlFor='8' className='pagination__label'>8</label>
-        <input type='radio' name='pages' id='10' className='pagination__checkbox' checked={+filterState.limit === 10} onChange={handleLimitClick} />
-        <label htmlFor='10' className='pagination__label'>10</label>
+        <input type='radio' name='pages' id='12' className='pagination__checkbox' checked={+filterState.limit === 12} onChange={handleLimitClick} />
+        <label htmlFor='12' className='pagination__label'>12</label>
+        <input type='radio' name='pages' id='20' className='pagination__checkbox' checked={+filterState.limit === 20} onChange={handleLimitClick} />
+        <label htmlFor='20' className='pagination__label'>20</label>
       </div>
     </div>
   )

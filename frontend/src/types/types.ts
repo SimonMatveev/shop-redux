@@ -169,3 +169,8 @@ export interface IFilters {
   [key: string]: string | any[];
   resetable: ENUM_FILTER_NAMES[];
 }
+
+export interface IListItem {
+  id: number;
+  name: string;
+}

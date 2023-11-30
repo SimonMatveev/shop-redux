@@ -1,11 +1,12 @@
 const Item = require('../models/item');
+const Series = require('../models/series');
 const NotFoundError = require('../errors/NotFoundError');
 const DataError = require('../errors/DataError');
 const {
-  ADD_MOVIE_ERR,
-  DEL_MOVIE_NOT_FOUND_ERR,
-  DEL_MOVIE_VALIDATION_ERR,
-  DEL_MOVIE_WRONG_ID_ERR,
+  ADD_ITEM_ERR,
+  DEL_ITEM_NOT_FOUND_ERR,
+  DEL_ITEM_VALIDATION_ERR,
+  DEL_ITEM_WRONG_ID_ERR,
   GET_USER_ERR,
 } = require('../utils/constants');
 
@@ -65,22 +66,52 @@ async function getItem(req, res, next) {
   }
 }
 
-function addItem(req, res, next) {
-  Item.create({ ...req.body })
-    .then((item) => res.status(201).send(item))
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        next(new DataError(ADD_MOVIE_ERR));
-      } else {
-        next(err);
+async function getSeriesList(res, res, next) {
+  try {
+    const seriesList = await Series.find({});
+    res.send({ data: seriesList })
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function getSeries(req, res, next) {
+  try {
+    const { seriesId } = req.params;
+    const series = await Series.findOne({ id: seriesId });
+    if (!series) throw new NotFoundError();
+    const items = await Item.find({ series: series.name }).sort({ 'releaseDate': 'asc' });
+    res.send({ data: items })
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function addItem(req, res, next) {
+  try {
+    const item = await Item.create({ ...req.body });
+    const { series } = req.body;
+    if (series) {
+      const seriesInDB = await Series.findOne({ name: series });
+      if (!seriesInDB) {
+        const allSeries = await Series.find({});
+        Series.create({ name: series, id: allSeries.length + 1 });
       }
-    });
+    }
+    res.status(201).send(item);
+  } catch (err) {
+    if (err.name === 'ValidationError') {
+      next(new DataError(ADD_ITEM_ERR));
+    } else {
+      next(err);
+    }
+  }
 }
 
 function deleteItem(req, res, next) {
   Item.findById(req.params.itemId)
     .then((item) => {
-      if (!item) throw new NotFoundError(DEL_MOVIE_NOT_FOUND_ERR);
+      if (!item) throw new NotFoundError(DEL_ITEM_NOT_FOUND_ERR);
       return Item.deleteOne(item)
         .then(() => {
           res.send({ data: item });
@@ -88,9 +119,9 @@ function deleteItem(req, res, next) {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new DataError(DEL_MOVIE_VALIDATION_ERR));
+        next(new DataError(DEL_ITEM_VALIDATION_ERR));
       } else if (err.name === 'CastError') {
-        next(new DataError(DEL_MOVIE_WRONG_ID_ERR));
+        next(new DataError(DEL_ITEM_WRONG_ID_ERR));
       } else next(err);
     });
 }
@@ -99,7 +130,7 @@ function changePrice(req, res, next) {
   const { price, priceWithSale } = req.body;
   Item.findById(req.params.itemId)
     .then((item) => {
-      if (!item) throw new NotFoundError(DEL_MOVIE_NOT_FOUND_ERR);
+      if (!item) throw new NotFoundError(DEL_ITEM_NOT_FOUND_ERR);
       return Item.findByIdAndUpdate(req.params.itemId, { price, priceWithSale }, {
         new: true,
         runValidators: true,
@@ -110,9 +141,9 @@ function changePrice(req, res, next) {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new DataError(DEL_MOVIE_VALIDATION_ERR));
+        next(new DataError(DEL_ITEM_VALIDATION_ERR));
       } else if (err.name === 'CastError') {
-        next(new DataError(DEL_MOVIE_WRONG_ID_ERR));
+        next(new DataError(DEL_ITEM_WRONG_ID_ERR));
       } else next(err);
     });
 }
@@ -121,7 +152,7 @@ function changeInStock(req, res, next) {
   const { inStockAmount } = req.body;
   Item.findById(req.params.itemId)
     .then((item) => {
-      if (!item) throw new NotFoundError(DEL_MOVIE_NOT_FOUND_ERR);
+      if (!item) throw new NotFoundError(DEL_ITEM_NOT_FOUND_ERR);
       return Item.findByIdAndUpdate(req.params.itemId, { inStockAmount }, {
         new: true,
         runValidators: true,
@@ -132,9 +163,9 @@ function changeInStock(req, res, next) {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new DataError(DEL_MOVIE_VALIDATION_ERR));
+        next(new DataError(DEL_ITEM_VALIDATION_ERR));
       } else if (err.name === 'CastError') {
-        next(new DataError(DEL_MOVIE_WRONG_ID_ERR));
+        next(new DataError(DEL_ITEM_WRONG_ID_ERR));
       } else next(err);
     });
 }
@@ -146,4 +177,6 @@ module.exports = {
   deleteItem,
   changePrice,
   changeInStock,
+  getSeries,
+  getSeriesList,
 };

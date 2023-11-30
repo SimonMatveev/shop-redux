@@ -13,6 +13,7 @@ import useCartState from '../../hooks/useCartState'
 import CartPopup from '../cart-popup/CartPopup'
 import Checkout from '../checkout/Checkout'
 import { CHECKOUT_PATHNAME } from '../../utils/constants'
+import SeriesPage from '../series-page/SeriesPage'
 
 const App = () => {
   const cartState = useCartState();
@@ -52,6 +53,9 @@ const App = () => {
                   <ProtectedRoute>
                     <Checkout />
                   </ProtectedRoute>
+                } />
+                <Route path='/items/series/:seriesId' element={
+                  <SeriesPage />
                 } />
                 <Route path='/items/:itemId' element={
                   <ItemPage />

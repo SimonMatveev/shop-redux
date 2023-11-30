@@ -41,7 +41,7 @@ const Card: FC<ICardProps> = ({ item }) => {
 
   useEffect(() => {
     if (inCartIndex !== -1) setPlatform(data!.cart.items[inCartIndex]?.orders[0].platform || null);
-  }, [inCartIndex])
+  }, [inCartIndex, data])
 
   return (
     <article className='card' >

@@ -79,6 +79,12 @@ const validateGetItem = celebrate({
   }),
 });
 
+const validateGetSeries = celebrate({
+  params: Joi.object().keys({
+    seriesId: Joi.number().required(),
+  }),
+});
+
 
 module.exports = {
   validateSignUp,
@@ -90,4 +96,5 @@ module.exports = {
   validateInStock,
   validateCart,
   validateGetItem,
+  validateGetSeries,
 };
