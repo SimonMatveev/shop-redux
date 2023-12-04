@@ -22,7 +22,7 @@
 
 ## Стек технологий
 
-* **Фронтенд** - HTML, CSS, TS, React, Redux Toolkit, RTK Query.
+* **Фронтенд** - HTML, TypeScript, CSS, React, Redux Toolkit, RTK Query.
 * **Бэкенд** - Node, JS, Express.js, Mongo DB.
   
 ## Запуск проекта 
