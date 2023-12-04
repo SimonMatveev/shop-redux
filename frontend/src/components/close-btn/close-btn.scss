@@ -1,0 +1,16 @@
+.close {
+  width: 35px;
+  height: 35px;
+  background-image: url(../../images/close.svg);
+  background-color: transparent;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  border: none;
+  cursor: pointer;
+  transition: opacity .3s;
+
+  &:hover {
+    opacity: .7;
+  }
+}

@@ -4,6 +4,7 @@ import './header.scss';
 import Container from '../container/Container';
 import { useGetCurrentUserQuery } from '../../store/api/users.storeApi';
 import useActions from '../../hooks/useActions';
+import { calculateTotalAmount } from '../../utils/functions';
 
 interface IHeaderProps {
   onCheckout: boolean;
@@ -26,7 +27,13 @@ const Header: FC<IHeaderProps> = ({ onCheckout }) => {
             {
               currentUser ?
                 <>
-                  {!onCheckout && <button className='header__btn' type='button' aria-label='Корзина' onClick={handleCartClick}></button>}
+                  {!onCheckout &&
+                    <button type='button' className='header__btns' onClick={handleCartClick} >
+                      <div
+                        className='header__btn'
+                        aria-label='Корзина' />
+                      <div className='header__btn-amount'>{calculateTotalAmount(currentUser.cart)}</div>
+                    </button>}
                   <NavLink className={({ isActive }) => `header__link ${isActive ? ' header__link_active' : ''}`} to='/profile'>Профиль</NavLink>
                 </> :
                 <>

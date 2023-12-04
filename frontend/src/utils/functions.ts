@@ -1,3 +1,5 @@
+import { ICart } from '../types/types';
+
 export const toCapitalCase = (string: string) => {
   string = string.replace(/\-/g, ' ')
   const first = string[0].toUpperCase()
@@ -12,3 +14,8 @@ export function mapFilter<T>(values: {}) {
 export function getNameFromId<T>(DATA: { id: T, name: string }[], platformToFind: T) {
   return DATA.find(platform => platform.id === platformToFind)!.name || '';
 }
+
+export const calculateTotalAmount = (cart: ICart) =>
+  cart.items.reduce((acc, item) =>
+    item.orders.reduce((acc2, order) =>
+      order.amount + acc2, 0) + acc, 0);

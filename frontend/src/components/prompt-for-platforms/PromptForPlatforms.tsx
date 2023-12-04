@@ -4,6 +4,7 @@ import { ENUM_PLATFORMS, ICartItem, IItem } from '../../types/types'
 import { useGetCurrentUserQuery, useIncrementCartMutation } from '../../store/api/users.storeApi'
 import './prompt-for-platforms.scss'
 import { PLATFORMS } from '../../utils/constants'
+import CloseBtn from '../close-btn/CloseBtn'
 
 interface IPromptForPlatformsProps {
   item: IItem;
@@ -34,7 +35,7 @@ const PromptForPlatforms: FC<IPromptForPlatformsProps> = ({ item, setPromptIsOpe
 
   return (
     <div className={`choose${newClass ? ' ' + newClass : ''}`}>
-      <button type='button' className='choose__close' onClick={() => setPromptIsOpen(false)} />
+      <CloseBtn setIsOpen={setPromptIsOpen} newClass='choose__close' />
       <p className='choose__header'>Выберите платформу</p>
       {!isLoading && <ul className='choose__platforms'>
         {item.platforms.filter(platform => {

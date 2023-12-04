@@ -67,6 +67,7 @@
     padding: 10px;
     border-radius: 5px;
     cursor: pointer;
+    transition: background-color .3s;
 
     &:hover {
       background-color: rgb(204, 3, 3);
