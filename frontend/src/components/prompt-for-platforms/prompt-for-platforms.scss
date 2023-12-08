@@ -1,3 +1,5 @@
+@import '../../utils/variables.scss';
+
 .choose {
   position: absolute;
   bottom: 0;
@@ -7,7 +9,7 @@
   padding: 20px 20px;
   border-radius: 5px;
   box-sizing: border-box;
-  box-shadow: 0 0 10px rgb(109, 109, 109);
+  box-shadow: 0 0 10px $grey-medium;
 
   &__close {
     position: absolute;
@@ -31,7 +33,7 @@
 
   &__btn {
     border: none;
-    background-color: red;
+    background-color: $red-default;
     border-radius: 10px;
     padding: 5px 10px;
     color: white;
@@ -40,7 +42,7 @@
     transition: background-color .3s;
 
     &:hover {
-      background-color: rgb(204, 3, 3);
+      background-color: $red-hover;
     }
   }
 }

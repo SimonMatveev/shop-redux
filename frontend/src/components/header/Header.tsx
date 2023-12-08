@@ -38,7 +38,7 @@ const Header: FC<IHeaderProps> = ({ onCheckout }) => {
                 </> :
                 <>
                   <Link className='header__link' to='/signin'>Войти</Link>
-                  <Link className='header__link' to='/signup'>Зарегистрироваться</Link>
+                  <Link className='header__link header__link_t_signup' to='/signup'>Зарегистрироваться</Link>
                 </>
             }
           </nav>

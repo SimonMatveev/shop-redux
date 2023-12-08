@@ -1,3 +1,5 @@
+@import '../../utils/variables.scss';
+
 .cart {
   position: fixed;
   top: 0;
@@ -140,7 +142,7 @@
         }
 
         &_with-sale {
-          color: red;
+          color: $red-default;
         }
       }
     }
@@ -209,14 +211,14 @@
       }
 
       &_with-sale {
-        color: red;
+        color: $red-default;
       }
     }
   }
 
   &__button {
     border: none;
-    background-color: red;
+    background-color: $red-default;
     border-radius: 5px;
     padding: 10px 15px;
     min-width: 100px;
@@ -229,7 +231,7 @@
     cursor: pointer;
 
     &:hover {
-      background-color: rgb(204, 3, 3);
+      background-color: $red-hover;
     }
 
     @media screen and (max-width:768px) {
@@ -247,8 +249,8 @@
 
       &_clear {
         background-color: transparent;
-        border: 3px solid red;
-        color: red;
+        border: 3px solid $red-default;
+        color: $red-default;
         font-weight: 500;
         transition: opacity .3s;
 
@@ -274,7 +276,7 @@
 
         &:not(:last-of-type) {
           padding-bottom: 10px;
-          border-bottom: 2px solid #747474;
+          border-bottom: 2px solid $grey-medium;
         }
       }
     }
@@ -301,7 +303,7 @@
     flex-direction: column;
     gap: 15px;
     align-items: flex-end;
-    border-left: 2px solid #747474;
+    border-left: 2px solid $grey-medium;
     padding-left: 20px;
     width: 302px;
     box-sizing: border-box;

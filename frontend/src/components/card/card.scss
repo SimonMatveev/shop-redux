@@ -1,3 +1,5 @@
+@import '../../utils/variables.scss';
+
 .card {
   width: 100%;
   position: relative;
@@ -56,12 +58,12 @@
   }
 
   &__price_withsale {
-    color: red;
+    color: $red-default;
     padding-top: 0;
   }
 
   &__btn {
-    background-color: rgb(255, 0, 0);
+    background-color: $red-default;
     border: none;
     color: white;
     padding: 10px;
@@ -70,7 +72,7 @@
     transition: background-color .3s;
 
     &:hover {
-      background-color: rgb(204, 3, 3);
+      background-color: $red-hover;
     }
 
     &_loading {

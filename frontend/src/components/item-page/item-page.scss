@@ -1,5 +1,7 @@
+@import '../../utils/variables.scss';
+
 .item-page {
-  background-color: rgb(255, 180, 211);
+  background-color: $background-pink;
   padding-top: 100px;
   padding-bottom: 50px;
   flex-grow: 1;
@@ -75,7 +77,7 @@
 
   &__category-link {
     padding: 5px 10px;
-    background-color: red;
+    background-color: $red-default;
     border-radius: 5px;
     color: white;
     font-weight: 500;
@@ -85,7 +87,7 @@
     box-sizing: border-box;
 
     &:hover {
-      background-color: rgb(204, 3, 3);
+      background-color: $red-hover;
     }
   }
 
@@ -202,7 +204,7 @@
   &__btn {
     max-width: 400px;
     width: 100%;
-    background-color: rgb(255, 0, 0);
+    background-color: $red-default;
     border: none;
     color: white;
     padding: 10px;
@@ -210,7 +212,7 @@
     cursor: pointer;
 
     &:hover {
-      background-color: rgb(204, 3, 3);
+      background-color: $red-hover;
     }
   }
 

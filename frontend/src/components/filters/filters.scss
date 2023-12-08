@@ -1,9 +1,11 @@
+@import '../../utils/variables.scss';
+
 .filters {
   padding-bottom: 30px;
 
   &__button {
     border: none;
-    background-color: red;
+    background-color: $red-default;
     border-radius: 5px;
     padding: 7px;
     color: white;
@@ -16,12 +18,12 @@
     }
 
     &:hover {
-      background-color: rgb(204, 3, 3);
+      background-color: $red-hover;
     }
 
     &_active {
       background-color: transparent;
-      border: 3px solid red;
+      border: 3px solid $red-default;
       color: red;
       &:hover {
         background-color: transparent;
@@ -62,7 +64,7 @@
   &__select-title {
     padding: 10px 40px 10px 10px;
     border-radius: 5px;
-    background-color: red;
+    background-color: $red-default;
     color: white;
     border: none;
     position: relative;
@@ -74,7 +76,7 @@
     }
 
     &:hover {
-      background-color: rgb(204, 3, 3);
+      background-color: $red-hover;
     }
 
     &::after {
@@ -147,7 +149,7 @@
       position: absolute;
       width: 8px;
       height: 8px;
-      background-color: red;
+      background-color: $red-default;
       border-radius: 2px;
       top: 5px;
       left: -18px;
@@ -161,7 +163,7 @@
     transition: background-color .3s;
 
     &:hover {
-      background-color: #c5c5c5;
+      background-color: $grey-light;
     }
   }
 

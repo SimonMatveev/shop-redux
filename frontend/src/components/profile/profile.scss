@@ -1,6 +1,8 @@
+@import '../../utils/variables.scss';
+
 .profile {
   flex-grow: 1;
-  background-color: rgb(255, 180, 211);
+  background-color: $background-pink;
   padding: 100px 0;
 
   &__container {
@@ -26,7 +28,7 @@
   }
 
   &__fieldset {
-    border: 1px solid #747474;
+    border: 1px solid $grey-medium;
     border-radius: 5px;
     padding: 10px 10px 35px;
     box-sizing: border-box;
@@ -42,7 +44,7 @@
     display: block;
     text-align: center;
     margin-bottom: 10px;
-    border-bottom: 1px solid #747474;
+    border-bottom: 1px solid $grey-medium;
     padding-bottom: 10px;
   }
 
@@ -65,11 +67,11 @@
     }
 
     &:focus {
-      outline: 1px solid #747474;
+      outline: 1px solid $grey-medium;
     }
 
     &:invalid {
-      outline: 1px solid red;
+      outline: 1px solid $red-default;
     }
   }
 
@@ -103,14 +105,14 @@
       bottom: 38px;
       width: 100%;
       text-align: center;
-      color: red;
+      color: $red-default;
       font-weight: 500;
       left: 0;
     }
   }
 
   &__submit {
-    background-color: red;
+    background-color: $red-default;
     border-radius: 5px;
     border: none;
     padding: 15px 10px;
@@ -129,7 +131,7 @@
   }
 
   &__edit {
-    background-color: red;
+    background-color: $red-default;
     border-radius: 5px;
     border: none;
     padding: 15px 10px;
@@ -150,7 +152,7 @@
     padding: 15px 10px;
     border-radius: 5px;
     border: 1px solid;
-    color: red;
+    color: $red-default;
     width: 100%;
     max-width: 600px;
     cursor: pointer;
@@ -162,7 +164,7 @@
   }
 
   &__exit {
-    background-color: rgb(63, 63, 63);
+    background-color: $grey-dark;
     padding: 15px 10px;
     border-radius: 5px;
     border: none;

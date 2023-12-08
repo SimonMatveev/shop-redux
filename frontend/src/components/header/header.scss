@@ -1,3 +1,5 @@
+@import '../../utils/variables.scss';
+
 .header {
   width: 100%;
   position: absolute;
@@ -18,7 +20,7 @@
   }
 
   &__logo {
-    font-family: Inter, sans-serif;
+    font-family: $font-stack;
     font-size: 20px;
     margin: 0;
     color: black;
@@ -34,7 +36,7 @@
   }
 
   &__link {
-    font-family: Inter;
+    font-family: $font-stack;
     font-size: 14px;
     text-decoration: none;
     color: black;
@@ -48,6 +50,14 @@
 
     &_active {
       text-decoration: underline;
+    }
+
+    &_t {
+      &_signup {
+        @media screen and (max-width: 425px) {
+          display: none;
+        }
+      }
     }
   }
 
@@ -80,7 +90,7 @@
       min-width: 21px;
       color: white;
       z-index: 300;
-      background-color: red;
+      background-color: $red-default;
       padding: 4px;
       box-sizing: border-box;
       border-radius: 50%;

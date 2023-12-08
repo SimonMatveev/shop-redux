@@ -1,3 +1,5 @@
+@import '../../utils/variables.scss';
+
 .footer {
   display: flex;
   flex-direction: column;
@@ -5,7 +7,7 @@
   align-items: center;
   justify-content: center;
   padding: 40px 20px;
-  background-color: rgb(63, 63, 63);
+  background-color: $grey-dark;
   
   &__text {
     margin: 0;

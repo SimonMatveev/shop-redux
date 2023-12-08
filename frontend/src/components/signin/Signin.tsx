@@ -38,6 +38,7 @@ const Signin: FC = () => {
       questionText='Ещё нет аккаунта?'
       title='Мы по вам соскучились'
       inputs={inputs}
+      passwordCheck={false}
     />
   )
 }

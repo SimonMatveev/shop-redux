@@ -1,9 +1,11 @@
+@import '../../utils/variables.scss';
+
 .amount-changer {
   display: flex;
   justify-content: center;
 
   &__btn {
-    background-color: rgb(255, 0, 0);
+    background-color: $red-default;
     border: none;
     color: white;
     padding: 10px;
@@ -13,7 +15,7 @@
     transition: background-color .3s;
 
     &:not(:disabled):hover {
-      background-color: rgb(204, 3, 3);
+      background-color: $red-hover;
     }
 
     &_loading {

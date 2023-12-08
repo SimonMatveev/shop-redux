@@ -1,9 +1,11 @@
+@import '../../utils/variables.scss';
+
 .page {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   min-width: 320px;
-  font-family: Inter, sans-serif;
+  font-family: $font-stack;
   overflow: hidden;
   position: relative;
   width: 100%;

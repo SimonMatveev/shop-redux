@@ -32,6 +32,13 @@ const inputs = [
       maxLength: '30',
       autoComplete: 'new-password'
     },
+  }, {
+    name: 'password_2',
+    nameText: 'Введите пароль повторно',
+    type: EInputType.PASSWORD,
+    options: {
+      autoComplete: 'new-password'
+    },
   },
 ];
 
@@ -56,6 +63,7 @@ const Signup: FC = () => {
       questionText='Уже зарегистрированы?'
       title='Добро пожаловать'
       inputs={inputs}
+      passwordCheck={true}
     />
   )
 }

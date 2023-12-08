@@ -1,3 +1,5 @@
+@import '../../utils/variables.scss';
+
 .pagination {
   padding-top: 40px;
   width: 100%;
@@ -7,7 +9,7 @@
   &__limit {
     display: flex;
     gap: 8px;
-    color: rgb(63, 63, 63);
+    color: $grey-dark;
     margin-left: auto;
   }
 

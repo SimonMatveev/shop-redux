@@ -4,11 +4,10 @@ import './profile.scss'
 import useFormAndValidation from '../../hooks/useFormAndValidation';
 import { useGetCurrentUserQuery, useSignOutMutation, useUpdateUserMutation } from '../../store/api/users.storeApi';
 import { REG_EXP_EMAIL, REG_EXP_NAME, REG_EXP_PASSWORD } from '../../utils/constants';
-import { useDispatch } from 'react-redux';
 
 const Profile: FC = () => {
   const [isEditing, setEditing] = useState(false);
-  const { resetForm, values, handleChange, errors, isValid, setErrors, setIsValid } = useFormAndValidation();
+  const { resetForm, values, handleChange, errors, isValid, } = useFormAndValidation({ passwordCheck: true });
   const { data } = useGetCurrentUserQuery(null, {});
   const [updateUser, { error: serverError, isSuccess: isSubmitSuccess }] = useUpdateUserMutation();
   const [signOut] = useSignOutMutation();
@@ -42,27 +41,6 @@ const Profile: FC = () => {
   useEffect(() => {
     if (isSubmitSuccess) setEditing(false)
   }, [isSubmitSuccess])
-
-  useEffect(() => {
-    if (values.password !== values.password_2) {
-      setIsValid(false);
-      if (values.password_2 !== '') {
-        setErrors(prev => {
-          return {
-            ...prev,
-            password_2: 'Пароли должны совпадать'
-          }
-        })
-      } else {
-        setErrors(prev => {
-          return {
-            ...prev,
-            password_2: ''
-          }
-        })
-      }
-    }
-  }, [values])
 
   return (
     <section className='profile'>

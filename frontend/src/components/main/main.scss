@@ -1,5 +1,7 @@
+@import '../../utils/variables.scss';
+
 .main {
-  background-color: rgb(255, 180, 211);
+  background-color: $background-pink;
   flex-grow: 1;
   width: 100%;
   padding-top: 100px;
