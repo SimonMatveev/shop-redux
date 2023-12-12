@@ -2,7 +2,7 @@ import { IPatchMe, IUser, IUserNoPopulate, ISignin, ISignup, IError, IUserData, 
 import { filtersActions } from "../filters/filters.slice";
 import { storeApi } from "./storeApi";
 
-export const itemsApi = storeApi.injectEndpoints({
+export const userApi = storeApi.injectEndpoints({
   endpoints: builder => ({
     getCurrentUser: builder.query<IUser | null, null>({
       query: () => '/users/me',
@@ -21,7 +21,7 @@ export const itemsApi = storeApi.injectEndpoints({
         response.status === 'FETCH_ERROR' ? response.error : (response as IError).data.message,
       async onQueryStarted({ name, email }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
-          itemsApi.util.updateQueryData('getCurrentUser', null, (user) => {
+          userApi.util.updateQueryData('getCurrentUser', null, (user) => {
             if (name) user!.name = name;
             if (email) user!.email = email;
           })
@@ -44,7 +44,7 @@ export const itemsApi = storeApi.injectEndpoints({
           await cacheDataLoaded;
           const { cart: responseCart } = getCacheEntry().data!;
           dispatch(
-            itemsApi.util.updateQueryData('getCurrentUser', null, (user) => {
+            userApi.util.updateQueryData('getCurrentUser', null, (user) => {
               const { cart: userCart } = user!;
               userCart.items = [...responseCart.items]
               userCart.totalPrice = responseCart.totalPrice;
@@ -67,7 +67,7 @@ export const itemsApi = storeApi.injectEndpoints({
           await cacheDataLoaded;
           const { cart: responseCart } = getCacheEntry().data!;
           dispatch(
-            itemsApi.util.updateQueryData('getCurrentUser', null, (user) => {
+            userApi.util.updateQueryData('getCurrentUser', null, (user) => {
               const { cart: userCart } = user!;
               userCart.items = [...responseCart.items];
               userCart.totalPrice = responseCart.totalPrice;
@@ -86,7 +86,7 @@ export const itemsApi = storeApi.injectEndpoints({
       }),
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
-          itemsApi.util.updateQueryData('getCurrentUser', null, (user) => {
+          userApi.util.updateQueryData('getCurrentUser', null, (user) => {
             const { cart: userCart } = user!;
             userCart.items = [];
             userCart.totalPrice = 0;
@@ -128,7 +128,7 @@ export const itemsApi = storeApi.injectEndpoints({
         response.status === 'FETCH_ERROR' ? response.error : (response as IError).data.message,
       async onCacheEntryAdded(_, { dispatch }) {
         try {
-          dispatch(itemsApi.util.updateQueryData('getCurrentUser', null, (user) => user = null));
+          dispatch(userApi.util.updateQueryData('getCurrentUser', null, (user) => user = null));
           dispatch(filtersActions.resetFilters())
           localStorage.removeItem(ENUM_LOCAL_STORAGE.TOGGLE);
           localStorage.removeItem(ENUM_LOCAL_STORAGE.FILTER_STATE);
@@ -149,4 +149,4 @@ export const {
   useSignUpMutation,
   useClearCartMutation,
   useSignOutMutation,
-} = itemsApi;
+} = userApi;

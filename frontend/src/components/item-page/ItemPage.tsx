@@ -1,4 +1,4 @@
-import { FC, useEffect, useState, MouseEventHandler } from "react"
+import { FC, useEffect, useState } from "react"
 import { useGetItemQuery, useGetSeriesListQuery } from "../../store/api/items.storeApi"
 import { Navigate, useParams } from "react-router"
 import Container from "../container/Container";
@@ -13,6 +13,7 @@ import { CATEGORIES, PLATFORMS } from '../../utils/constants';
 import AmountChanger from '../amount-changer/AmountChanger';
 import Gallery from '../gallery/Gallery';
 import useActions from '../../hooks/useActions';
+import Rating from '../rating/Rating';
 
 
 const ItemPage: FC = () => {
@@ -50,9 +51,7 @@ const ItemPage: FC = () => {
                 }
               </ul>
               {itemData && <Gallery item={item} />}
-              <div className='item-page__rating'>
-                &#9734;&#9734;&#9734;&#9734;&#9734;
-              </div>
+              <Rating newClass='item-page__rating' item={item} />
               <div className='item-page__content'>
                 <div className={`item-page__instock${item.inStockAmount > 0 ? ' item-page__instock_active' : ''}`}>{item.inStockAmount > 0 ? 'В наличии' : 'Товар закончился'}</div>
                 <ul className='item-page__platforms'> {

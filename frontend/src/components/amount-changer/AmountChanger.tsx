@@ -1,6 +1,6 @@
-import { FC, MouseEventHandler, useEffect, useState } from 'react';
+import { FC, MouseEventHandler } from 'react';
 import { useDecrementCartMutation, useGetCurrentUserQuery, useIncrementCartMutation } from '../../store/api/users.storeApi';
-import { ENUM_PLATFORMS, ICartItem, IItem } from '../../types/types';
+import { ENUM_PLATFORMS, IItem } from '../../types/types';
 import './amount-changer.scss';
 
 interface IAmountChangerProps {

@@ -36,6 +36,11 @@ const itemSchema = new mongoose.Schema({
     required: true,
     default: -1,
   },
+  ratingAmount: {
+    type: Number,
+    required: true,
+    default: 0,
+  },
   inStockAmount: {
     type: Number,
     required: true,

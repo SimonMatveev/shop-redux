@@ -10,6 +10,7 @@ router.post('/signup', validateSignUp, createUser);
 router.post('/signout', auth, logout);
 router.use('/users', auth, require('./users'));
 router.use('/items', require('./items'));
+router.use('/ratings', auth, require('./ratings'));
 
 router.all('/*', auth, (req, res, next) => next(new NotFoundError(NOT_FOUND_ERR)));
 

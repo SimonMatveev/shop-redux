@@ -1,0 +1,40 @@
+.rating {
+  &__value {
+    display: flex;
+  }
+
+  &__stars {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    cursor: pointer;
+    flex-direction: row-reverse;
+  }
+
+  &__star {
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    &:hover, &:hover~& {
+      background-image: url('../../images/rating-full.svg');
+    }
+
+    &_t {
+      &_full {
+        background-image: url('../../images/rating-full.svg');
+      }
+
+      &_half {
+        background-image: url('../../images/rating-half.svg');
+      }
+
+      &_empty {
+        background-image: url('../../images/rating-empty.svg');
+      }
+    }
+  }
+}

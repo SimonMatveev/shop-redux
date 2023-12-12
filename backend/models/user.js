@@ -25,6 +25,16 @@ const userSchema = new mongoose.Schema({
     required: true,
     select: false,
   },
+  ratings: [{
+    id: {
+      type: mongoose.Schema.ObjectId,
+      required: true,
+    },
+    value: {
+      type: Number,
+      required: true,
+    }
+  }],
   cart: {
     totalPrice: {
       type: Number,
@@ -91,7 +101,7 @@ userSchema.statics.incrementCart = function (userId, { itemId, platform }) {
             amount: 1,
           }]
         }
-        user.cart.items.push(newOrder); 
+        user.cart.items.push(newOrder);
       } else {
         const indexOfPlatform = user.cart.items[indexOfItem].orders.findIndex(item => item.platform === platform);
         if (indexOfPlatform === -1) {

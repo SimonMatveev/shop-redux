@@ -41,6 +41,7 @@ export interface IItem {
   priceWithSale: number;
   category: ENUM_CATEGORY[];
   rating: number;
+  ratingAmount: number;
   inStockAmount: number;
   releaseDate: string;
   platforms: ENUM_PLATFORMS[];
@@ -78,6 +79,7 @@ export interface IUser {
   name: string;
   email: string;
   cart: ICart;
+  ratings: IRating[];
 }
 
 export interface IUserData {
@@ -173,4 +175,18 @@ export interface IFilters {
 export interface IListItem {
   id: number;
   name: string;
+}
+
+export interface IRatingsResponse {
+  rating: number;
+  amount: number;
+}
+
+export interface IRating {
+  value: number;
+  id: string;
+}
+
+export interface IResetRatingReqest {
+  id: string;
 }

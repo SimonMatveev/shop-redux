@@ -85,6 +85,19 @@ const validateGetSeries = celebrate({
   }),
 });
 
+const validateSetRating = celebrate({
+  body: Joi.object().keys({
+    id: Joi.string().length(24).hex().required(),
+    value: Joi.number().required(),
+  }),
+});
+
+const validateResetRating = celebrate({
+  body: Joi.object().keys({
+    id: Joi.string().length(24).hex().required(),
+  }),
+});
+
 
 module.exports = {
   validateSignUp,
@@ -97,4 +110,6 @@ module.exports = {
   validateCart,
   validateGetItem,
   validateGetSeries,
+  validateSetRating,
+  validateResetRating,
 };
