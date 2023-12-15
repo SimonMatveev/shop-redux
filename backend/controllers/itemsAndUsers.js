@@ -11,17 +11,23 @@ async function setRating(req, res, next) {
     if (!user || !item) {
       throw new NotFoundError();
     }
-    const userIndex = user.ratings.findIndex(rating => rating.id === id);
+    let userRatings = user.ratings;
+    let ratingAmount = item.ratingAmount;
+    let rating = item.rating;
+    const userIndex = userRatings.findIndex(rating => rating.id.equals(id));
     if (userIndex === -1) {
-      user.ratings.push({ id, value });
-      item.ratingAmount++;
+      userRatings.push({ id, value });
+      ratingAmount++;
     } else {
-      user.ratings[userIndex].value = value;
+      rating = (rating*(ratingAmount) - userRatings[userIndex].value) /( ratingAmount-1);
+      userRatings[userIndex].value = value;
     }
-    item.rating = item.rating === -1 ? value : (item.rating + value) / 2;
+    rating = rating === -1 ? value : (rating*(ratingAmount-1) + value) / ratingAmount;
+    await User.findByIdAndUpdate(req.user._id, { ratings: userRatings });
+    await Item.findByIdAndUpdate(id, { ratingAmount, rating });
     res.send({
-      rating: item.rating,
-      amount: item.ratingAmount,
+      rating: rating,
+      amount: ratingAmount,
     })
   } catch (err) {
     next(err);
@@ -37,7 +43,7 @@ async function resetRating(req, res, next) {
     if (!user || !item) {
       throw new NotFoundError();
     }
-    const userIndex = user.ratings.findIndex(rating => rating.id === id);
+    const userIndex = user.ratings.findIndex(rating => rating.id.equals(id));
     if (userIndex === -1) {
       throw new DataError();
     } else {
