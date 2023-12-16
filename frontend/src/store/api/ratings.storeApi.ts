@@ -42,7 +42,7 @@ export const ratingsApi = storeApi.injectEndpoints({
       query: ({ id }) => {
         return {
           url: '/ratings',
-          method: 'POST',
+          method: 'DELETE',
           body: { id }
         }
       },

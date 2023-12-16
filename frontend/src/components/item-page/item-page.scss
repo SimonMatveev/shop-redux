@@ -28,8 +28,8 @@
         'back'
         'title'
         'categories'
-        'rating'
         'imgs'
+        'rating'
         'content';
     }
   }
@@ -194,7 +194,7 @@
     text-align: center;
     line-height: 1;
     grid-area: rating;
-    margin-top: 10px;
+    margin-top: 20px;
   }
 
   &__add-block {

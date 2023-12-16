@@ -19,10 +19,10 @@ async function setRating(req, res, next) {
       userRatings.push({ id, value });
       ratingAmount++;
     } else {
-      rating = (rating*(ratingAmount) - userRatings[userIndex].value) /( ratingAmount-1);
+      rating = ratingAmount === 1 ? -1 : (rating * (ratingAmount) - userRatings[userIndex].value) / (ratingAmount - 1);
       userRatings[userIndex].value = value;
     }
-    rating = rating === -1 ? value : (rating*(ratingAmount-1) + value) / ratingAmount;
+    rating = rating === -1 ? value : (rating * (ratingAmount - 1) + value) / ratingAmount;
     await User.findByIdAndUpdate(req.user._id, { ratings: userRatings });
     await Item.findByIdAndUpdate(id, { ratingAmount, rating });
     res.send({
