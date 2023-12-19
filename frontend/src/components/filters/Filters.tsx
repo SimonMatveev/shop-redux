@@ -150,6 +150,12 @@ const Filters: FC<IfiltersProps> = ({ setIsLoading, setItems }) => {
             <option className='sort__option' value='priceWithSale-desc'>
               цене: убывание
             </option>
+            <option className='sort__option' value='rating-asc'>
+              рейтингу: возрастание
+            </option>
+            <option className='sort__option' value='rating-desc'>
+              рейтингу: убывание
+            </option>
           </select>
         </div>
       </Container>
