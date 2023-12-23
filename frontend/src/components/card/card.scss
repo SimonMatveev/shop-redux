@@ -71,12 +71,12 @@
     cursor: pointer;
     transition: background-color .3s;
 
-    &:hover {
+    &:not(:disabled):hover {
       background-color: $red-hover;
     }
 
     &_loading {
-      opacity: .8;
+      opacity: .5;
     }
   }
 
@@ -90,5 +90,38 @@
     color: white;
     padding: 5px;
     border-radius: 5px;
+  }
+
+  &__rating {
+    position: absolute;
+    top: 8px;
+    left: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+
+    &_color {
+      &_green {
+        background-color: $overlay-green;
+      }
+
+      &_lightgreen {
+        background-color: $overlay-lightgreen;
+      }
+
+      &_yellow {
+        background-color: $overlay-yellow;
+      }
+      
+      &_orange {
+        background-color: $overlay-orange;
+      }
+
+      &_red {
+        background-color: $overlay-red;
+      }
+    }
   }
 }

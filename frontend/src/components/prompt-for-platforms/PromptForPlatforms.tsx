@@ -10,19 +10,22 @@ interface IPromptForPlatformsProps {
   item: IItem;
   setPromptIsOpen: Dispatch<SetStateAction<boolean>>;
   newClass?: string;
+  setUpIsLoading: Dispatch<SetStateAction<boolean>>
 }
 
-const PromptForPlatforms: FC<IPromptForPlatformsProps> = ({ item, setPromptIsOpen, newClass }) => {
+const PromptForPlatforms: FC<IPromptForPlatformsProps> = ({ item, setPromptIsOpen, newClass, setUpIsLoading }) => {
   const [incrementCart] = useIncrementCartMutation();
   const { data: currentUser } = useGetCurrentUserQuery(null, {});
   const [inCartItem, setInCartItem] = useState<ICartItem | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const handleChoosePlatformClick: MouseEventHandler<HTMLButtonElement> = (e) => {
+  const handleChoosePlatformClick: MouseEventHandler<HTMLButtonElement> = async (e) => {
     e.preventDefault();
-    const platformToSend = (e.target as HTMLButtonElement).id.split('--')[0]
-    incrementCart({ itemId: item._id, platform: platformToSend as ENUM_PLATFORMS });
+    setUpIsLoading(true);
+    const platformToSend = (e.target as HTMLButtonElement).id.split('--')[0];
     setPromptIsOpen(false);
+    await incrementCart({ itemId: item._id, platform: platformToSend as ENUM_PLATFORMS });
+    setUpIsLoading(false);
   }
 
   useEffect(() => {

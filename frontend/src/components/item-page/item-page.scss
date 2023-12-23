@@ -210,9 +210,14 @@
     padding: 10px;
     border-radius: 5px;
     cursor: pointer;
+    transition: opacity .3s;
 
-    &:hover {
+    &:not(:disabled):hover {
       background-color: $red-hover;
+    }
+
+    &_loading {
+      opacity: .5;
     }
   }
 

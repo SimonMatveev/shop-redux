@@ -23,10 +23,11 @@ const ItemPage: FC = () => {
   const { data: currentUser } = useGetCurrentUserQuery(null, {});
   const [inCartItem, setInCartItem] = useState<ICartItem | null>(null);
   const [promptIsOpen, setPromptIsOpen] = useState(false);
+  const [upIsLoading, setUpIsLoading] = useState(false);
   const item = itemData!;
   const { resetFilters } = useActions();
 
-  const getIdFromSeries = (series: string) => seriesList?.find(item => item.name === series)!.id || 0;
+  const getIdFromSeries = (series: string) => seriesList?.find(item => item.name === series)?.id || 0;
 
   useEffect(() => {
     if (currentUser) {
@@ -73,10 +74,10 @@ const ItemPage: FC = () => {
                   }
                   <div className='item-page__add-block'>
                     {((inCartItem && inCartItem.orders.length < item.platforms.length) || !inCartItem) &&
-                      <button className='item-page__btn' onClick={() => setPromptIsOpen(true)}>
-                        {inCartItem ? 'Приобрести для других платформ' : 'Добавить в корзину'}
+                      <button className={`item-page__btn${upIsLoading ? ' item-page__btn_loading' : ''}`} onClick={() => setPromptIsOpen(true)} disabled={upIsLoading}>
+                        {upIsLoading ? 'Загрузка...' : inCartItem ? 'Приобрести для других платформ' : 'Добавить в корзину'}
                       </button>}
-                    {promptIsOpen && <PromptForPlatforms newClass='item-page__prompt' item={item} setPromptIsOpen={setPromptIsOpen} />}
+                    {promptIsOpen && <PromptForPlatforms setUpIsLoading={setUpIsLoading} newClass='item-page__prompt' item={item} setPromptIsOpen={setPromptIsOpen} />}
                   </div>
                 </div>
                 <p className='item-page__studio'>Студия: <span>{item.studio}</span></p>

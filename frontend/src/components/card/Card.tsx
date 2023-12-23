@@ -2,10 +2,11 @@ import { FC, MouseEventHandler, useEffect, useState } from 'react'
 import { ENUM_PLATFORMS, IItem } from '../../types/types'
 import './card.scss'
 import { Link, useNavigate } from 'react-router-dom'
-import { useGetCurrentUserQuery, useIncrementCartMutation } from '../../store/api/users.storeApi'
+import { useGetCurrentUserQuery } from '../../store/api/users.storeApi'
 import AmountChanger from '../amount-changer/AmountChanger'
 import { PLATFORMS } from '../../utils/constants'
 import PromptForPlatforms from '../prompt-for-platforms/PromptForPlatforms'
+import { getRating } from '../../utils/functions'
 
 interface ICardProps {
   item: IItem
@@ -13,15 +14,15 @@ interface ICardProps {
 
 const Card: FC<ICardProps> = ({ item }) => {
   const { data, isLoading } = useGetCurrentUserQuery(null, {});
-  const [_, { isLoading: upIsLoading }] = useIncrementCartMutation();
+  const [upIsLoading, setUpIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const [inCartIndex, setInCartIndex] = useState(-1);
   const [platform, setPlatform] = useState<ENUM_PLATFORMS | null>(null);
-
   const [promptIsOpen, setPromptIsOpen] = useState(false);
 
   const isOnSale = item.price !== item.priceWithSale;
+  const ratingColor = getRating(item.rating);
 
   const handleAddToCartClick: MouseEventHandler = (e) => {
     e.preventDefault()
@@ -47,6 +48,9 @@ const Card: FC<ICardProps> = ({ item }) => {
     <article className='card' >
       <Link className='card__wrapper' to={`/items/${item._id}`}>
         <img className='card__img' src={item.images[0]} />
+        {item.rating !== -1 &&
+          <div className={`card__rating card__rating_color_${ratingColor}`}>&#9733; {item.rating.toFixed(2)}</div>
+        }
         <div className='card__text'>
           <h2 className='card__title'>{item.name}</h2>
           <div className='card__prices'>
@@ -75,7 +79,7 @@ const Card: FC<ICardProps> = ({ item }) => {
           </button>
         }
       </Link>
-      {promptIsOpen && <PromptForPlatforms item={item} setPromptIsOpen={setPromptIsOpen} />}
+      {promptIsOpen && <PromptForPlatforms item={item} setPromptIsOpen={setPromptIsOpen} setUpIsLoading={setUpIsLoading} />}
     </article >
   )
 }
