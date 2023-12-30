@@ -7,6 +7,7 @@ import { IItem } from '../../types/types'
 import Filters from '../filters/Filters'
 import Pagination from '../pagination/Pagination'
 import useDataLength from '../../hooks/useDataLength'
+import Prizes from '../prizes/Prizes'
 
 const Main: FC = () => {
   const [items, setItems] = useState<IItem[] | undefined>([]);
@@ -28,6 +29,7 @@ const Main: FC = () => {
             <div className='main__no-result'>Упс! Ничего не найдено!</div>
         }
       </Container>
+      <Prizes />
     </section>
   )
 }
