@@ -1,6 +1,7 @@
 import { FC, useState } from 'react'
 import './prizes.scss'
 import CloseBtn from '../close-btn/CloseBtn';
+import { PRIZE_SPIN_ANIMATION_DELAY } from '../../utils/constants';
 
 const Prizes: FC = () => {
     const [isSpin, setIsSpin] = useState(false);
@@ -8,7 +9,7 @@ const Prizes: FC = () => {
 
     const handleBtn = () => {
         setIsSpin(true)
-        setTimeout(() => setIsSpin(false), 2000);
+        setTimeout(() => setIsSpin(false), PRIZE_SPIN_ANIMATION_DELAY);
     }
 
     return (
