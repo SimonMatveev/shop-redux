@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import './main.scss'
 import Container from '../container/Container'
 import Preloader from '../preloader/Preloader'
@@ -12,7 +12,9 @@ import Prizes from '../prizes/Prizes'
 const Main: FC = () => {
   const [items, setItems] = useState<IItem[] | undefined>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isPrizesOpen, setIsPrizesOpen] = useState(localStorage.getItem('PrizesClosed') !== 'true');
   const dataLength = useDataLength();
+
   return (
     <section className='main'>
       <Filters setItems={setItems} setIsLoading={setIsLoading} />
@@ -29,7 +31,7 @@ const Main: FC = () => {
             <div className='main__no-result'>Упс! Ничего не найдено!</div>
         }
       </Container>
-      <Prizes />
+      {isPrizesOpen && <Prizes setIsOpen={setIsPrizesOpen} />}
     </section>
   )
 }

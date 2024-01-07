@@ -19,16 +19,12 @@ interface IAuthFormProps {
 }
 
 const AuthForm: FC<IAuthFormProps> = ({ title, inputs, buttonText, questionText, linkText, link, handleSubmit, apiError, isFormLoading, passwordCheck }) => {
-  const { resetForm, values, handleChange, errors, isValid } = useFormAndValidation({ passwordCheck });
+  const { values, handleChange, errors, isValid } = useFormAndValidation({ passwordCheck });
 
   const handleForm: FormEventHandler = (e) => {
     e.preventDefault();
     handleSubmit(values);
   }
-
-  useEffect(() => {
-    resetForm();
-  }, []);
 
   return (
     <div className='auth'>

@@ -1,11 +1,14 @@
-import { FC, useState } from 'react'
+import { Dispatch, FC, SetStateAction, useState } from 'react'
 import './prizes.scss'
 import CloseBtn from '../close-btn/CloseBtn';
 import { PRIZE_SPIN_ANIMATION_DELAY } from '../../utils/constants';
 
-const Prizes: FC = () => {
+interface IPrizesProps {
+    setIsOpen: Dispatch<SetStateAction<boolean>>
+}
+
+const Prizes: FC<IPrizesProps> = ({ setIsOpen }) => {
     const [isSpin, setIsSpin] = useState(false);
-    const [isOpen, setIsOpen] = useState(true);
 
     const handleBtn = () => {
         setIsSpin(true)
@@ -13,13 +16,13 @@ const Prizes: FC = () => {
     }
 
     return (
-        <article className={`prizes${isOpen ? ' prizes_open' : ''}`}>
+        <article className='prizes'>
             <div className='prizes__container'>
-                <CloseBtn setIsOpen={setIsOpen} newClass='prizes__close'/>
+                <CloseBtn setIsOpen={setIsOpen} newClass='prizes__close' newFunc={() => localStorage.setItem('PrizesClosed', 'true')} />
                 <div className={`prizes__spinner${isSpin ? ' prizes__spinner_animation' : ''}`}></div>
                 <button className='prizes__btn' onClick={handleBtn}>Нажми, чтобы испытать удачу!</button>
             </div>
-        </article>
+        </article >
     )
 }
 

@@ -30,7 +30,7 @@ const Profile: FC = () => {
   }
 
   useEffect(() => {
-    resetForm({
+    !isEditing &&resetForm({
       name: data?.name,
       email: data?.email,
       password: '',

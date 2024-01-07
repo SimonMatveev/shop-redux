@@ -1,6 +1,6 @@
-import { FC, Dispatch, SetStateAction, MouseEventHandler, useEffect, useState } from 'react'
+import { FC, Dispatch, SetStateAction, MouseEventHandler, useMemo } from 'react'
 import { getNameFromId } from '../../utils/functions'
-import { ENUM_PLATFORMS, ICartItem, IItem } from '../../types/types'
+import { ENUM_PLATFORMS, IItem } from '../../types/types'
 import { useGetCurrentUserQuery, useIncrementCartMutation } from '../../store/api/users.storeApi'
 import './prompt-for-platforms.scss'
 import { PLATFORMS } from '../../utils/constants'
@@ -15,9 +15,9 @@ interface IPromptForPlatformsProps {
 
 const PromptForPlatforms: FC<IPromptForPlatformsProps> = ({ item, setPromptIsOpen, newClass, setUpIsLoading }) => {
   const [incrementCart] = useIncrementCartMutation();
-  const { data: currentUser } = useGetCurrentUserQuery(null, {});
-  const [inCartItem, setInCartItem] = useState<ICartItem | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const { data: currentUser, isLoading } = useGetCurrentUserQuery(null, {});
+
+  let inCartItem = useMemo(() => currentUser ? currentUser.cart.items.find(i => i.itemInCart._id === item._id) || null : null, [currentUser])
 
   const handleChoosePlatformClick: MouseEventHandler<HTMLButtonElement> = async (e) => {
     e.preventDefault();
@@ -27,14 +27,6 @@ const PromptForPlatforms: FC<IPromptForPlatformsProps> = ({ item, setPromptIsOpe
     await incrementCart({ itemId: item._id, platform: platformToSend as ENUM_PLATFORMS });
     setUpIsLoading(false);
   }
-
-  useEffect(() => {
-    if (currentUser) {
-      const inCartItem = currentUser.cart.items.find(i => i.itemInCart._id === item._id);
-      setInCartItem(inCartItem || null)
-    }
-    setIsLoading(false);
-  }, [currentUser])
 
   return (
     <div className={`choose${newClass ? ' ' + newClass : ''}`}>

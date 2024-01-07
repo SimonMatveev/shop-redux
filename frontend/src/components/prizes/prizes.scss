@@ -19,12 +19,7 @@
     background-color: rgba(0, 0, 0, 0.3);
     align-items: center;
     z-index: 2000;
-    display: none;
-
-    &_open {
-        display: flex;
-    }
-
+    display: flex;
 
     &__container {
         max-width: 700px;

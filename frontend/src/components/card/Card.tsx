@@ -1,5 +1,5 @@
-import { FC, MouseEventHandler, useEffect, useState } from 'react'
-import { ENUM_PLATFORMS, IItem } from '../../types/types'
+import { FC, MouseEventHandler, useMemo, useState } from 'react'
+import { IItem } from '../../types/types'
 import './card.scss'
 import { Link, useNavigate } from 'react-router-dom'
 import { useGetCurrentUserQuery } from '../../store/api/users.storeApi'
@@ -16,13 +16,18 @@ const Card: FC<ICardProps> = ({ item }) => {
   const { data, isLoading } = useGetCurrentUserQuery(null, {});
   const [upIsLoading, setUpIsLoading] = useState(false);
   const navigate = useNavigate();
-
-  const [inCartIndex, setInCartIndex] = useState(-1);
-  const [platform, setPlatform] = useState<ENUM_PLATFORMS | null>(null);
   const [promptIsOpen, setPromptIsOpen] = useState(false);
 
   const isOnSale = item.price !== item.priceWithSale;
   const ratingColor = getRating(item.rating);
+
+  let inCartIndex = useMemo(() => {
+    return data ? data.cart.items.findIndex(cartItem => cartItem.itemInCart._id === item._id) : -1
+  }, [data]);
+
+  let platform = useMemo(() => {
+    return inCartIndex !== -1 ? data!.cart.items[inCartIndex]?.orders[0].platform : null
+  }, [inCartIndex]);
 
   const handleAddToCartClick: MouseEventHandler = (e) => {
     e.preventDefault()
@@ -35,14 +40,6 @@ const Card: FC<ICardProps> = ({ item }) => {
 
   const getPlatformNameFromData = () =>
     PLATFORMS.find(platform => platform.id === data!.cart.items[inCartIndex]?.orders[0].platform)?.name || '';
-
-  useEffect(() => {
-    if (data) setInCartIndex(data.cart.items.findIndex(cartItem => cartItem.itemInCart._id === item._id))
-  }, [data])
-
-  useEffect(() => {
-    if (inCartIndex !== -1) setPlatform(data!.cart.items[inCartIndex]?.orders[0].platform || null);
-  }, [inCartIndex, data])
 
   return (
     <article className='card' >

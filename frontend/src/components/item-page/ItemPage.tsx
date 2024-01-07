@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react"
+import { FC, useEffect, useMemo, useState } from "react"
 import { useGetItemQuery, useGetSeriesListQuery } from "../../store/api/items.storeApi"
 import { Navigate, useParams } from "react-router"
 import Container from "../container/Container";
@@ -21,20 +21,13 @@ const ItemPage: FC = () => {
   const { data: itemData, isLoading } = useGetItemQuery(itemId as string, {});
   const { data: seriesList } = useGetSeriesListQuery(null, {});
   const { data: currentUser } = useGetCurrentUserQuery(null, {});
-  const [inCartItem, setInCartItem] = useState<ICartItem | null>(null);
   const [promptIsOpen, setPromptIsOpen] = useState(false);
   const [upIsLoading, setUpIsLoading] = useState(false);
   const item = itemData!;
   const { resetFilters } = useActions();
 
   const getIdFromSeries = (series: string) => seriesList?.find(item => item.name === series)?.id || 0;
-
-  useEffect(() => {
-    if (currentUser) {
-      const inCartItem = currentUser.cart.items.find(item => item.itemInCart._id === itemId);
-      setInCartItem(inCartItem || null)
-    }
-  }, [currentUser])
+  let inCartItem = useMemo(() => currentUser ? currentUser.cart.items.find(item => item.itemInCart._id === itemId) || null : null, [currentUser]);
 
   return (
     <section className='item-page'>
