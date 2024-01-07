@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useState } from "react"
+import { FC, useMemo, useState } from "react"
 import { useGetItemQuery, useGetSeriesListQuery } from "../../store/api/items.storeApi"
 import { Navigate, useParams } from "react-router"
 import Container from "../container/Container";
@@ -6,7 +6,7 @@ import Preloader from "../preloader/Preloader";
 import { Link } from 'react-router-dom';
 import './item-page.scss';
 import { useGetCurrentUserQuery } from '../../store/api/users.storeApi';
-import { ENUM_CATEGORY, ENUM_PLATFORMS, ICartItem } from '../../types/types';
+import { ENUM_CATEGORY, ENUM_PLATFORMS } from '../../types/types';
 import PromptForPlatforms from '../prompt-for-platforms/PromptForPlatforms';
 import { getNameFromId } from '../../utils/functions';
 import { CATEGORIES, PLATFORMS } from '../../utils/constants';
