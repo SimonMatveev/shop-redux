@@ -1,0 +1,65 @@
+@import '../../utils/variables.scss';
+
+.welcome {
+    background-color: $background-pink;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    padding-top: 100px;
+    padding-bottom: 100px;
+
+    &__container {
+        margin: auto;
+        max-width: 1000px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+    }
+
+    &__title {
+        margin: 0;
+        font-size: 30px;
+
+        @media screen and (max-width: 520px) {
+            font-size: 20px;
+        }
+    }
+
+    &__promo-container {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    &__text {
+        margin: 0;
+        text-align: center;
+        font-weight: 500;
+    }
+
+    &__cards {
+        list-style: none;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        margin: 0;
+        padding: 0;
+
+        @media screen and (max-width: 1000px) {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        @media screen and (max-width: 520px) {
+            grid-template-columns: repeat(1, 1fr);
+        }
+    }
+
+    &__to-items {
+        color: black;
+        transition: opacity .3s;
+        &:hover {
+            opacity: .7;
+        }
+    }
+}

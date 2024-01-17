@@ -10,9 +10,15 @@ export const itemsApi = storeApi.injectEndpoints({
           params: { category, platforms, sortItem, sortOrder, limit, page }
         }
       },
-      providesTags: () => [{
-        type: 'Item',
-      }],
+      providesTags: ['Item'],
+    }),
+    getDiscountedItems: builder.query<IItem[], null>({
+      query: () => {
+        return {
+          url: '/items/disc',
+        }
+      },
+      transformResponse: (res: { data: IItem[] }) => res.data,
     }),
     getItem: builder.query<IItem, string>({
       query: (itemId) => `/items/${itemId}`,
@@ -32,15 +38,14 @@ export const itemsApi = storeApi.injectEndpoints({
         url: '/items',
         method: 'POST',
       }),
-      invalidatesTags: () => [{
-        type: 'Item',
-      }]
+      invalidatesTags: ['Item']
     }),
   })
 })
 
 export const {
   useGetItemsQuery,
+  useGetDiscountedItemsQuery,
   useGetItemQuery,
   useAddItemMutation,
   useGetSeriesQuery,

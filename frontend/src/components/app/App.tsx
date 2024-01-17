@@ -14,6 +14,7 @@ import CartPopup from '../cart-popup/CartPopup'
 import Checkout from '../checkout/Checkout'
 import { CHECKOUT_PATHNAME } from '../../utils/constants'
 import SeriesPage from '../series-page/SeriesPage'
+import WelcomeScreen from '../welcome-screen/WelcomeScreen'
 
 const App = () => {
   const cartState = useCartState();
@@ -61,7 +62,7 @@ const App = () => {
                   <ItemPage />
                 } />
                 <Route path='/' element={
-                  <Navigate to='/items' />
+                  <WelcomeScreen/>
                 } />
                 <Route path='/*' element={
                   <Navigate to='/404' />

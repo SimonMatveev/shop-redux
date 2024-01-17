@@ -1,4 +1,4 @@
-import { ICart } from '../types/types';
+import { ICart, IItem } from '../types/types';
 
 export const toCapitalCase = (string: string) => {
   string = string.replace(/\-/g, ' ')
@@ -34,4 +34,19 @@ export const getRating = (rating: number) => {
     ratingColor = 'red';
   }
   return ratingColor;
+}
+
+export const getRandomEntries = (arr: any[], n: number) => {
+  if (arr.length === 0 || n>arr.length) return [];
+  let res = [];
+  let usedN: number[] = [];
+  for (let i = 0; i < n; i++) {
+    let randomN: number;
+    do {
+      randomN = Math.floor(Math.random() * arr.length);
+    } while (usedN.includes(randomN))
+    res.push(arr[randomN]);
+    usedN.push(randomN);
+  }
+  return res;
 }

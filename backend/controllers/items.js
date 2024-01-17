@@ -53,6 +53,18 @@ async function getItems(req, res, next) {
   }
 }
 
+async function getDiscountedItems(req, res, next) {
+  try {
+    const items = await Item.find({});
+    const itemsToSend = items.filter(item => item.price !== item.priceWithSale);
+    res.send({
+      data: itemsToSend,
+    })
+  } catch (err) {
+    next(err);
+  }
+}
+
 async function getItem(req, res, next) {
   try {
     const { itemId } = req.params
@@ -172,6 +184,7 @@ function changeInStock(req, res, next) {
 
 module.exports = {
   getItems,
+  getDiscountedItems,
   getItem,
   addItem,
   deleteItem,
