@@ -1,4 +1,4 @@
-import { ICart, IItem } from '../types/types';
+import { ICart } from '../types/types';
 
 export const toCapitalCase = (string: string) => {
   string = string.replace(/\-/g, ' ')

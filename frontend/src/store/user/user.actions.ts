@@ -1,6 +1,6 @@
 import { createAsyncThunk, } from "@reduxjs/toolkit";
-import { BASE_URL_API } from "../../utils/config";
 import { IPatchMe, ISignup, IUser } from "../../types/types";
+import { BASE_URL_API } from "../../utils/config";
 
 export const getCurrentUser = createAsyncThunk<IUser, undefined>(
   'user/get',
@@ -14,7 +14,7 @@ export const getCurrentUser = createAsyncThunk<IUser, undefined>(
         return thunkApi.rejectWithValue(res.message)
       }
       return res.data;
-    } catch (err) {
+    } catch (err:any) {
       return thunkApi.rejectWithValue(err.message)
     }
   }
@@ -35,7 +35,7 @@ export const patchUser = createAsyncThunk<IUser, IPatchMe>(
         return thunkApi.rejectWithValue(res.message)
       }
       return res.data;
-    } catch (err) {
+    } catch (err:any) {
       return thunkApi.rejectWithValue(err.message)
     }
   }
@@ -55,7 +55,7 @@ export const decrementCart = createAsyncThunk<IUser, string>(
         return thunkApi.rejectWithValue(res.message)
       }
       return res.data;
-    } catch (err) {
+    } catch (err:any) {
       return thunkApi.rejectWithValue(err.message)
     }
   }
@@ -75,7 +75,7 @@ export const incrementCart = createAsyncThunk<IUser, string>(
         return thunkApi.rejectWithValue(res.message)
       }
       return res.data;
-    } catch (err) {
+    } catch (err:any) {
       return thunkApi.rejectWithValue(err.message)
     }
   }
@@ -94,7 +94,7 @@ export const clearCart = createAsyncThunk<IUser, undefined>(
         return thunkApi.rejectWithValue(res.message)
       }
       return res.data;
-    } catch (err) {
+    } catch (err:any) {
       return thunkApi.rejectWithValue(err.message)
     }
   }
@@ -122,7 +122,7 @@ export const signupUser = createAsyncThunk<IUser, ISignup>(
         return thunkApi.rejectWithValue(signinRes.message)
       }
       return signinRes.data;
-    } catch (err) {
+    } catch (err:any) {
       return thunkApi.rejectWithValue(err.message)
     }
   }
@@ -142,7 +142,7 @@ export const signinUser = createAsyncThunk<IUser, ISignup>(
         return thunkApi.rejectWithValue(res.message)
       }
       return res.data;
-    } catch (err) {
+    } catch (err:any) {
       return thunkApi.rejectWithValue(err.message)
     }
   }
@@ -162,7 +162,7 @@ export const signoutUser = createAsyncThunk<IUser, undefined>(
         return thunkApi.rejectWithValue(res.message)
       }
       return res;
-    } catch (err) {
+    } catch (err:any) {
       return thunkApi.rejectWithValue(err.message)
     }
   }

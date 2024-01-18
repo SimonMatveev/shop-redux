@@ -1,4 +1,4 @@
-import { FC, useEffect, useState, MouseEventHandler } from 'react';
+import { FC, MouseEventHandler, useEffect, useState } from 'react';
 import { IItem } from '../../types/types';
 import './gallery.scss';
 

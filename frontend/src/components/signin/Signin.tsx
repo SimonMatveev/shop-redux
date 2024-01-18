@@ -1,8 +1,8 @@
-import { FC } from 'react'
-import AuthForm from '../auth-form/AuthForm'
-import { useSignInMutation } from '../../store/api/users.storeApi'
+import { FC } from 'react';
+import { useSignInMutation } from '../../store/api/users.storeApi';
 import { EInputType } from '../../types/types';
 import { REG_EXP_EMAIL } from '../../utils/constants';
+import AuthForm from '../auth-form/AuthForm';
 
 const inputs = [
   {

@@ -1,9 +1,9 @@
-import { FC, FormEvent, useState, useEffect } from 'react'
-import Container from '../container/Container'
-import './profile.scss'
+import { FC, FormEvent, useEffect, useState } from 'react';
 import useFormAndValidation from '../../hooks/useFormAndValidation';
 import { useGetCurrentUserQuery, useSignOutMutation, useUpdateUserMutation } from '../../store/api/users.storeApi';
 import { REG_EXP_EMAIL, REG_EXP_NAME, REG_EXP_PASSWORD } from '../../utils/constants';
+import Container from '../container/Container';
+import './profile.scss';
 
 const Profile: FC = () => {
   const [isEditing, setEditing] = useState(false);

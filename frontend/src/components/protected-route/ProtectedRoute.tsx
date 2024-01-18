@@ -1,7 +1,7 @@
 import { FC, PropsWithChildren } from 'react';
 import { Navigate } from 'react-router';
-import Preloader from '../preloader/Preloader';
 import { useGetCurrentUserQuery } from '../../store/api/users.storeApi';
+import Preloader from '../preloader/Preloader';
 
 interface IProtectedRouteProps {
   onlyUnauth?: boolean

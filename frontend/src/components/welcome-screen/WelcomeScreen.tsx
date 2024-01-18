@@ -1,11 +1,11 @@
 import { FC, } from 'react'
-import Container from '../container/Container'
-import './welcome-screen.scss'
-import { useGetDiscountedItemsQuery } from '../../store/api/items.storeApi'
-import Preloader from '../preloader/Preloader'
-import CardPromo from '../card-promo/CardPromo'
-import { getRandomEntries } from '../../utils/functions'
 import { Link } from 'react-router-dom'
+import { useGetDiscountedItemsQuery } from '../../store/api/items.storeApi'
+import { getRandomEntries } from '../../utils/functions'
+import CardPromo from '../card-promo/CardPromo'
+import Container from '../container/Container'
+import Preloader from '../preloader/Preloader'
+import './welcome-screen.scss'
 
 const WelcomeScreen: FC = () => {
     const { data: items = [], isFetching, } = useGetDiscountedItemsQuery(null, {})

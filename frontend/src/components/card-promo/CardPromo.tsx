@@ -1,6 +1,6 @@
 import { FC } from 'react'
-import { IItem } from '../../types/types'
 import { Link } from 'react-router-dom'
+import { IItem } from '../../types/types'
 import './card-promo.scss'
 
 interface ICardPromoProps {

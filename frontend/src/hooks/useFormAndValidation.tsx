@@ -1,4 +1,4 @@
-import { useState, useCallback, ChangeEvent, useEffect } from 'react';
+import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { DEFAULT_VALIDATION_MSG, EMAIL_VALIDATION_MSG, NAME_VALIDATION_MSG, REG_EXP_EMAIL, REG_EXP_NAME } from '../utils/constants';
 
 export default function useFormAndValidation({ passwordCheck }: { passwordCheck: boolean }) {

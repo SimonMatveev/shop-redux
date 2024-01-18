@@ -1,8 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { clearCart, decrementCart, getCurrentUser, incrementCart, patchUser, signinUser, signoutUser, signupUser, } from "./user.actions";
 import { IInitialStateForUser, } from "../../types/types";
-
-
+import { clearCart, decrementCart, getCurrentUser, incrementCart, patchUser, signinUser, signoutUser, signupUser, } from "./user.actions";
 
 const initialState: IInitialStateForUser = {
   isLoading: {
@@ -61,7 +59,7 @@ export const userSlice = createSlice({
         state.isLoading.patchUser = false;
         state.error.patchUser = action.payload as string;
       })
-      .addCase(decrementCart.pending, (state, action) => {
+      .addCase(decrementCart.pending, (state, _) => {
         state.isLoading.decrementCart = true;
         state.error.decrementCart = null;
       })
@@ -74,7 +72,7 @@ export const userSlice = createSlice({
         state.isLoading.decrementCart = false;
         state.error.decrementCart = action.payload as string;
       })
-      .addCase(incrementCart.pending, (state, action) => {
+      .addCase(incrementCart.pending, (state, _) => {
         state.isLoading.incrementCart = true;
         state.error.incrementCart = null;
       })
@@ -87,7 +85,7 @@ export const userSlice = createSlice({
         state.isLoading.incrementCart = false;
         state.error.incrementCart = action.payload as string;
       })
-      .addCase(clearCart.pending, (state, action) => {
+      .addCase(clearCart.pending, (state, _) => {
         state.isLoading.clearCart = true;
         state.error.clearCart = null;
       })
@@ -100,7 +98,7 @@ export const userSlice = createSlice({
         state.isLoading.clearCart = false;
         state.error.clearCart = action.payload as string;
       })
-      .addCase(signinUser.pending, (state, action) => {
+      .addCase(signinUser.pending, (state, _) => {
         state.isLoading.signinUser = true;
         state.error.signinUser = null;
         state.user = null;
@@ -115,7 +113,7 @@ export const userSlice = createSlice({
         state.user = null;
         state.error.signinUser = action.payload as string;
       })
-      .addCase(signupUser.pending, (state, action) => {
+      .addCase(signupUser.pending, (state, _) => {
         state.isLoading.signupUser = true;
         state.error.signupUser = null;
         state.user = null;
@@ -130,11 +128,11 @@ export const userSlice = createSlice({
         state.user = null;
         state.error.signupUser = action.payload as string;
       })
-      .addCase(signoutUser.pending, (state, action) => {
+      .addCase(signoutUser.pending, (state, _) => {
         state.isLoading.signoutUser = true;
         state.error.signupUser = null;
       })
-      .addCase(signoutUser.fulfilled, (state, action) => {
+      .addCase(signoutUser.fulfilled, (state, _) => {
         state.isLoading.signoutUser = false;
         state.user = null;
         state.error.signupUser = null;

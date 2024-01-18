@@ -1,8 +1,8 @@
-import { FC } from 'react'
-import { IItem } from '../../types/types';
-import './rating.scss'
+import { FC } from 'react';
 import { useResetRatingMutation, useSetRatingMutation } from '../../store/api/ratings.storeApi';
 import { useGetCurrentUserQuery } from '../../store/api/users.storeApi';
+import { IItem } from '../../types/types';
+import './rating.scss';
 
 interface IRatingProps {
   newClass?: string;

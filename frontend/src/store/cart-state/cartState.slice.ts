@@ -1,13 +1,14 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit'
 
-const initialState = false;
+const initialState = false
 
 export const cartStateSlice = createSlice({
   name: 'cartState',
   initialState,
   reducers: {
-    toggleCartState: (state) => state = !state,
-  }
+    toggleCartState: (state) => (state = !state),
+  },
 })
 
-export const { actions: cartStateActions, reducer: cartStateReducer } = cartStateSlice;
+export const { actions: cartStateActions, reducer: cartStateReducer } =
+  cartStateSlice

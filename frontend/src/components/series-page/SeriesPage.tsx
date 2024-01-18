@@ -1,11 +1,11 @@
-import { FC } from 'react'
-import { Navigate, useParams } from 'react-router'
+import { FC } from 'react';
+import { Navigate, useParams } from 'react-router';
+import { Link } from 'react-router-dom';
 import { useGetSeriesListQuery, useGetSeriesQuery } from '../../store/api/items.storeApi';
+import Card from '../card/Card';
 import Container from '../container/Container';
 import Preloader from '../preloader/Preloader';
 import './series-page.scss';
-import Card from '../card/Card';
-import { Link } from 'react-router-dom';
 
 const SeriesPage: FC = () => {
   const { seriesId } = useParams();

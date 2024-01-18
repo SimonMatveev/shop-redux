@@ -1,4 +1,4 @@
-import { IPatchMe, IUser, IUserNoPopulate, ISignin, ISignup, IError, IUserData, IClearResponse, ENUM_LOCAL_STORAGE, ENUM_PLATFORMS, } from "../../types/types";
+import { ENUM_LOCAL_STORAGE, ENUM_PLATFORMS, IClearResponse, IError, IPatchMe, ISignin, ISignup, IUser, IUserData, IUserNoPopulate, } from "../../types/types";
 import { filtersActions } from "../filters/filters.slice";
 import { storeApi } from "./storeApi";
 

@@ -1,13 +1,13 @@
-import { FC, useEffect, useState } from 'react'
-import './main.scss'
-import Container from '../container/Container'
-import Preloader from '../preloader/Preloader'
-import Card from '../card/Card'
+import { FC, useState } from 'react'
+import useDataLength from '../../hooks/useDataLength'
 import { IItem } from '../../types/types'
+import Card from '../card/Card'
+import Container from '../container/Container'
 import Filters from '../filters/Filters'
 import Pagination from '../pagination/Pagination'
-import useDataLength from '../../hooks/useDataLength'
+import Preloader from '../preloader/Preloader'
 import Prizes from '../prizes/Prizes'
+import './main.scss'
 
 const Main: FC = () => {
   const [items, setItems] = useState<IItem[] | undefined>([]);

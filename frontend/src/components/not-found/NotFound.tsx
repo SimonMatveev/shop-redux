@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { Link } from 'react-router-dom'
-import './not-found.scss'
 import Container from '../container/Container'
+import './not-found.scss'
 
 const NotFound: FC = () => {
   return (

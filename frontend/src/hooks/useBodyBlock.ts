@@ -1,5 +1,5 @@
+import { RefObject, useEffect, useState } from 'react';
 import { KEYS_TO_BLOCK, MENU_ANIMATION_DELAY } from "../utils/constants";
-import { useState, useEffect, RefObject } from 'react';
 
 interface IuseBodyBlockArgs {
   closeCB: () => void;

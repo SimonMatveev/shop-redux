@@ -1,12 +1,12 @@
 import { FC, MouseEventHandler, useMemo, useState } from 'react'
-import { IItem } from '../../types/types'
-import './card.scss'
 import { Link, useNavigate } from 'react-router-dom'
 import { useGetCurrentUserQuery } from '../../store/api/users.storeApi'
-import AmountChanger from '../amount-changer/AmountChanger'
+import { IItem } from '../../types/types'
 import { PLATFORMS } from '../../utils/constants'
-import PromptForPlatforms from '../prompt-for-platforms/PromptForPlatforms'
 import { getRating } from '../../utils/functions'
+import AmountChanger from '../amount-changer/AmountChanger'
+import PromptForPlatforms from '../prompt-for-platforms/PromptForPlatforms'
+import './card.scss'
 
 interface ICardProps {
   item: IItem

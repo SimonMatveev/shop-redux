@@ -1,23 +1,30 @@
-import { FC, Dispatch, SetStateAction, useState, useEffect, useRef } from 'react'
-import './checkout-modal.scss'
+import {
+  Dispatch,
+  FC,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
+import { useClearCartMutation } from '../../store/api/users.storeApi'
 import CloseBtn from '../close-btn/CloseBtn'
-import { useClearCartMutation } from '../../store/api/users.storeApi';
+import './checkout-modal.scss'
 
 interface ICheckoutModalProps {
-  setIsOpen: Dispatch<SetStateAction<boolean>>;
+  setIsOpen: Dispatch<SetStateAction<boolean>>
 }
 
 const CheckoutModal: FC<ICheckoutModalProps> = ({ setIsOpen }) => {
-  const [clearCart] = useClearCartMutation();
-  const [text, setText] = useState('Имитируем осуществление оплаты');
-  const [isDisabled, setIsDisabled] = useState(false);
+  const [clearCart] = useClearCartMutation()
+  const [text, setText] = useState('Имитируем осуществление оплаты')
+  const [isDisabled, setIsDisabled] = useState(false)
   const modalRef = useRef<HTMLDivElement>(null)
 
   const handleClick = () => {
-    setIsDisabled(true);
+    setIsDisabled(true)
     setText('Оплачиваем...')
-    setTimeout(() => setText('Оплачено успешно!'), 1000);
-    setTimeout(() => clearCart(null), 1500);
+    setTimeout(() => setText('Оплачено успешно!'), 1000)
+    setTimeout(() => clearCart(null), 1500)
   }
 
   const handleCloseClickCB = (e: MouseEvent) => {
@@ -29,11 +36,11 @@ const CheckoutModal: FC<ICheckoutModalProps> = ({ setIsOpen }) => {
   }
 
   useEffect(() => {
-    window.addEventListener('click', handleCloseClickCB);
-    window.addEventListener('keydown', handleCloseKeyCB);
+    window.addEventListener('click', handleCloseClickCB)
+    window.addEventListener('keydown', handleCloseKeyCB)
     return () => {
-      window.removeEventListener('click', handleCloseClickCB);
-      window.removeEventListener('keydown', handleCloseKeyCB);
+      window.removeEventListener('click', handleCloseClickCB)
+      window.removeEventListener('keydown', handleCloseKeyCB)
     }
   }, [])
 
@@ -42,7 +49,14 @@ const CheckoutModal: FC<ICheckoutModalProps> = ({ setIsOpen }) => {
       <div className='modal__container'>
         <CloseBtn newClass='modal__close' setIsOpen={setIsOpen} />
         <p className='modal__text'>{text}</p>
-        <button type='button' className='modal__btn' onClick={handleClick} disabled={isDisabled}>Оплатить</button>
+        <button
+          type='button'
+          className='modal__btn'
+          onClick={handleClick}
+          disabled={isDisabled}
+        >
+          Оплатить
+        </button>
       </div>
     </div>
   )

@@ -1,13 +1,13 @@
-import { FC, Dispatch, SetStateAction, useEffect, FormEvent, useState, MouseEventHandler, ChangeEventHandler } from 'react'
-import { useGetItemsQuery } from '../../store/api/items.storeApi';
-import { ENUM_FILTER_NAMES, ENUM_LOCAL_STORAGE, IItem } from '../../types/types';
-import Container from '../container/Container';
-import { CATEGORIES, PLATFORMS } from '../../utils/constants';
-import './filters.scss'
+import { ChangeEventHandler, Dispatch, FC, FormEvent, MouseEventHandler, SetStateAction, useEffect, useState } from 'react';
 import { URLSearchParamsInit, useSearchParams } from 'react-router-dom';
-import useFiltersState from '../../hooks/useFiltersState';
 import useActions from '../../hooks/useActions';
 import useFilter from '../../hooks/useFilter';
+import useFiltersState from '../../hooks/useFiltersState';
+import { useGetItemsQuery } from '../../store/api/items.storeApi';
+import { ENUM_FILTER_NAMES, ENUM_LOCAL_STORAGE, IItem } from '../../types/types';
+import { CATEGORIES, PLATFORMS } from '../../utils/constants';
+import Container from '../container/Container';
+import './filters.scss';
 
 interface IfiltersProps {
   setItems: Dispatch<SetStateAction<IItem[] | undefined>>

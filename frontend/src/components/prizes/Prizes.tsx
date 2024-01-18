@@ -1,7 +1,7 @@
-import { Dispatch, FC, SetStateAction, useState } from 'react'
-import './prizes.scss'
-import CloseBtn from '../close-btn/CloseBtn';
+import { Dispatch, FC, SetStateAction, useState } from 'react';
 import { PRIZE_SPIN_ANIMATION_DELAY } from '../../utils/constants';
+import CloseBtn from '../close-btn/CloseBtn';
+import './prizes.scss';
 
 interface IPrizesProps {
     setIsOpen: Dispatch<SetStateAction<boolean>>

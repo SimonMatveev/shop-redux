@@ -1,12 +1,12 @@
-import { FC, useState } from 'react'
-import './checkout.scss'
-import { useGetCurrentUserQuery } from '../../store/api/users.storeApi'
+import { FC, useState } from 'react';
+import { Navigate } from 'react-router';
+import { useGetCurrentUserQuery } from '../../store/api/users.storeApi';
+import { PLATFORMS } from '../../utils/constants';
+import { calculateTotalAmount, getNameFromId } from '../../utils/functions';
+import CheckoutModal from '../checkout-modal/CheckoutModal';
 import Container from '../container/Container';
 import Preloader from '../preloader/Preloader';
-import { Navigate } from 'react-router';
-import { calculateTotalAmount, getNameFromId } from '../../utils/functions';
-import { PLATFORMS } from '../../utils/constants';
-import CheckoutModal from '../checkout-modal/CheckoutModal';
+import './checkout.scss';
 
 const Checkout: FC = () => {
   const { data: currentUser, isLoading } = useGetCurrentUserQuery(null, {});

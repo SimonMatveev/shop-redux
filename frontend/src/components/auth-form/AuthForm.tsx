@@ -1,9 +1,9 @@
+import { FC, FormEventHandler } from 'react';
 import { Link } from 'react-router-dom';
 import useFormAndValidation from '../../hooks/useFormAndValidation';
-import { FC, FormEventHandler } from 'react';
 import { IAuthInput } from '../../types/types';
-import './auth-form.scss';
 import Container from '../container/Container';
+import './auth-form.scss';
 
 interface IAuthFormProps {
   title: string;

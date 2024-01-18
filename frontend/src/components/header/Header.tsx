@@ -1,10 +1,10 @@
 import { FC } from 'react';
-import { NavLink, Link, } from 'react-router-dom';
-import './header.scss';
-import Container from '../container/Container';
-import { useGetCurrentUserQuery } from '../../store/api/users.storeApi';
+import { Link, NavLink, } from 'react-router-dom';
 import useActions from '../../hooks/useActions';
+import { useGetCurrentUserQuery } from '../../store/api/users.storeApi';
 import { calculateTotalAmount } from '../../utils/functions';
+import Container from '../container/Container';
+import './header.scss';
 
 interface IHeaderProps {
   onCheckout: boolean;

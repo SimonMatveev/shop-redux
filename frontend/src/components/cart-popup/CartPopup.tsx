@@ -1,12 +1,12 @@
 import { FC, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { useClearCartMutation, useGetCurrentUserQuery } from '../../store/api/users.storeApi';
-import AmountChanger from '../amount-changer/AmountChanger';
-import './cart-popup.scss';
 import useActions from '../../hooks/useActions';
 import useBodyBlock from '../../hooks/useBodyBlock';
-import { getNameFromId } from '../../utils/functions';
+import { useClearCartMutation, useGetCurrentUserQuery } from '../../store/api/users.storeApi';
 import { PLATFORMS } from '../../utils/constants';
+import { getNameFromId } from '../../utils/functions';
+import AmountChanger from '../amount-changer/AmountChanger';
+import './cart-popup.scss';
 
 const CartPopup: FC = () => {
   const { data: currentUser } = useGetCurrentUserQuery(null, {});

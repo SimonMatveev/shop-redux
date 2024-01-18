@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { ENUM_FILTER_NAMES } from '../types/types';
 import { mapFilter } from "../utils/functions";
 import useActions from "./useActions";
 import useFiltersState from "./useFiltersState";
@@ -9,7 +10,7 @@ interface Iname {
   name: string;
 };
 
-function useFilter<T>(nameList: Iname[], alias: string,) {
+function useFilter<T>(nameList: Iname[], alias: ENUM_FILTER_NAMES,) {
   const filtersState = useFiltersState();
   const { values, handleChange, setValues, } = useForm(updateValues());
   const { setCategory } = useActions();

@@ -1,10 +1,10 @@
-import { FC, Dispatch, SetStateAction, MouseEventHandler, useMemo } from 'react'
-import { getNameFromId } from '../../utils/functions'
-import { ENUM_PLATFORMS, IItem } from '../../types/types'
+import { Dispatch, FC, MouseEventHandler, SetStateAction, useMemo } from 'react'
 import { useGetCurrentUserQuery, useIncrementCartMutation } from '../../store/api/users.storeApi'
-import './prompt-for-platforms.scss'
+import { ENUM_PLATFORMS, IItem } from '../../types/types'
 import { PLATFORMS } from '../../utils/constants'
+import { getNameFromId } from '../../utils/functions'
 import CloseBtn from '../close-btn/CloseBtn'
+import './prompt-for-platforms.scss'
 
 interface IPromptForPlatformsProps {
   item: IItem;

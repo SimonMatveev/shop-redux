@@ -1,5 +1,5 @@
-import { FC, Dispatch, SetStateAction } from 'react'
-import './close-btn.scss'
+import { Dispatch, FC, SetStateAction } from 'react';
+import './close-btn.scss';
 
 interface ICloseBtnProps {
   setIsOpen: Dispatch<SetStateAction<boolean>>;

@@ -1,9 +1,9 @@
-import { FC, ChangeEventHandler } from 'react'
-import useFiltersState from '../../hooks/useFiltersState'
+import { ChangeEventHandler, FC } from 'react'
 import useActions from '../../hooks/useActions'
-import './pagination.scss'
 import useDataLength from '../../hooks/useDataLength'
+import useFiltersState from '../../hooks/useFiltersState'
 import PagesButtons from '../pagesButtons/PagesButtons'
+import './pagination.scss'
 
 const Pagination: FC = () => {
   const filterState = useFiltersState();

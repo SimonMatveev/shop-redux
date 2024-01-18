@@ -1,7 +1,7 @@
-import { FC, MouseEventHandler } from 'react'
+import { FC, MouseEventHandler } from 'react';
 import useActions from '../../hooks/useActions';
-import useFiltersState from '../../hooks/useFiltersState';
 import useDataLength from '../../hooks/useDataLength';
+import useFiltersState from '../../hooks/useFiltersState';
 import './page-buttons.scss';
 
 const PagesButtons: FC = () => {
