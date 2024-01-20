@@ -36,7 +36,7 @@ export const getRating = (rating: number) => {
   return ratingColor;
 }
 
-export const getRandomEntries = (arr: any[], n: number) => {
+export function getRandomEntries<T> (arr: T[], n: number)  {
   if (arr.length === 0 || n>arr.length) return [];
   let res = [];
   let usedN: number[] = [];

@@ -24,7 +24,7 @@ const AmountChanger: FC<IAmountChangerProps> = ({ item, newClass, platformToChan
 
   const handleDecrement: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
-    if (platformToChange !== null) decrementCart({ itemId: item._id, platform: platformToChange });
+    if (platformToChange!==null) decrementCart({ itemId: item._id, platform: platformToChange });
   }
 
   return (
