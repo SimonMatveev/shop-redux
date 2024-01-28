@@ -46,14 +46,14 @@
     font-weight: 500;
     border: none;
     cursor: pointer;
-    transition: background-color .3s;
+    transition: background-color 0.3s;
 
     &:not(:disabled):hover {
       background-color: $red-hover;
     }
 
     &:disabled {
-      opacity: .3;
+      opacity: 0.3;
     }
   }
 }

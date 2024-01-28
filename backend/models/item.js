@@ -22,15 +22,17 @@ const itemSchema = new mongoose.Schema({
   priceWithSale: {
     type: Number,
     required: true,
-    default: function() {
-      return this.price
+    default: function () {
+      return this.price;
     },
   },
-  category: [{
-    type: String,
-    required: true,
-    enum: CATEGORY_ENUM,
-  }],
+  category: [
+    {
+      type: String,
+      required: true,
+      enum: CATEGORY_ENUM,
+    },
+  ],
   rating: {
     type: Number,
     required: true,
@@ -49,21 +51,25 @@ const itemSchema = new mongoose.Schema({
     type: String,
     reqired: true,
   },
-  platforms: [{
-    type: String,
-    enum: PLATFORM_ENUM,
-    required: true,
-  }],
+  platforms: [
+    {
+      type: String,
+      enum: PLATFORM_ENUM,
+      required: true,
+    },
+  ],
   series: {
     type: String,
   },
-  images: [{
-    type: String,
-    required: true,
-    validate: {
-      validator: (v) => REG_EXP_URL.test(v),
+  images: [
+    {
+      type: String,
+      required: true,
+      validate: {
+        validator: (v) => REG_EXP_URL.test(v),
+      },
     },
-  }],
+  ],
 });
 
 module.exports = mongoose.model('item', itemSchema);

@@ -1,25 +1,24 @@
-import { createAsyncThunk, } from "@reduxjs/toolkit";
-import { IPatchMe, ISignup, IUser } from "../../types/types";
-import { BASE_URL_API } from "../../utils/config";
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { IPatchMe, ISignup, IUser } from '../../types/types';
+import { BASE_URL_API } from '../../utils/config';
 
 export const getCurrentUser = createAsyncThunk<IUser, undefined>(
   'user/get',
   async (_, thunkApi) => {
     try {
       const data = await fetch(`${BASE_URL_API}/users/me`, {
-        credentials: 'include'
-      })
+        credentials: 'include',
+      });
       const res = await data.json();
       if (data.status < 200 || data.status >= 300 || !data) {
-        return thunkApi.rejectWithValue(res.message)
+        return thunkApi.rejectWithValue(res.message);
       }
       return res.data;
-    } catch (err:any) {
-      return thunkApi.rejectWithValue(err.message)
+    } catch (err: any) {
+      return thunkApi.rejectWithValue(err.message);
     }
   }
-
-)
+);
 
 export const patchUser = createAsyncThunk<IUser, IPatchMe>(
   'user/patch',
@@ -29,17 +28,17 @@ export const patchUser = createAsyncThunk<IUser, IPatchMe>(
         credentials: 'include',
         method: 'PATCH',
         body: JSON.stringify({ email, name, password }),
-      })
+      });
       const res = await data.json();
       if (data.status < 200 || data.status >= 300 || !data) {
-        return thunkApi.rejectWithValue(res.message)
+        return thunkApi.rejectWithValue(res.message);
       }
       return res.data;
-    } catch (err:any) {
-      return thunkApi.rejectWithValue(err.message)
+    } catch (err: any) {
+      return thunkApi.rejectWithValue(err.message);
     }
   }
-)
+);
 
 export const decrementCart = createAsyncThunk<IUser, string>(
   'user/cart/remove',
@@ -48,18 +47,18 @@ export const decrementCart = createAsyncThunk<IUser, string>(
       const data = await fetch(`${BASE_URL_API}/users/cart/remove`, {
         credentials: 'include',
         method: 'POST',
-        body: JSON.stringify(itemId)
-      })
+        body: JSON.stringify(itemId),
+      });
       const res = await data.json();
       if (data.status < 200 || data.status >= 300 || !data) {
-        return thunkApi.rejectWithValue(res.message)
+        return thunkApi.rejectWithValue(res.message);
       }
       return res.data;
-    } catch (err:any) {
-      return thunkApi.rejectWithValue(err.message)
+    } catch (err: any) {
+      return thunkApi.rejectWithValue(err.message);
     }
   }
-)
+);
 
 export const incrementCart = createAsyncThunk<IUser, string>(
   'user/cart/add',
@@ -68,18 +67,18 @@ export const incrementCart = createAsyncThunk<IUser, string>(
       const data = await fetch(`${BASE_URL_API}/users/cart/add`, {
         credentials: 'include',
         method: 'POST',
-        body: JSON.stringify(itemId)
-      })
+        body: JSON.stringify(itemId),
+      });
       const res = await data.json();
       if (data.status < 200 || data.status >= 300 || !data) {
-        return thunkApi.rejectWithValue(res.message)
+        return thunkApi.rejectWithValue(res.message);
       }
       return res.data;
-    } catch (err:any) {
-      return thunkApi.rejectWithValue(err.message)
+    } catch (err: any) {
+      return thunkApi.rejectWithValue(err.message);
     }
   }
-)
+);
 
 export const clearCart = createAsyncThunk<IUser, undefined>(
   'user/cart/clear',
@@ -88,17 +87,17 @@ export const clearCart = createAsyncThunk<IUser, undefined>(
       const data = await fetch(`${BASE_URL_API}/users/cart/clear`, {
         credentials: 'include',
         method: 'POST',
-      })
+      });
       const res = await data.json();
       if (data.status < 200 || data.status >= 300 || !data) {
-        return thunkApi.rejectWithValue(res.message)
+        return thunkApi.rejectWithValue(res.message);
       }
       return res.data;
-    } catch (err:any) {
-      return thunkApi.rejectWithValue(err.message)
+    } catch (err: any) {
+      return thunkApi.rejectWithValue(err.message);
     }
   }
-)
+);
 
 export const signupUser = createAsyncThunk<IUser, ISignup>(
   'user/signup',
@@ -106,27 +105,27 @@ export const signupUser = createAsyncThunk<IUser, ISignup>(
     try {
       const data = await fetch(`${BASE_URL_API}/signup`, {
         method: 'POST',
-        body: JSON.stringify({ name, email, password })
+        body: JSON.stringify({ name, email, password }),
       });
       const res = await data.json();
       if (data.status < 200 || data.status >= 300 || !data) {
-        return thunkApi.rejectWithValue(res.message)
+        return thunkApi.rejectWithValue(res.message);
       }
       const signinData = await fetch(`${BASE_URL_API}/signin`, {
         method: 'POST',
         body: JSON.stringify({ email, password }),
         credentials: 'include',
-      })
+      });
       const signinRes = await signinData.json();
       if (signinData.status < 200 || signinData.status >= 300 || !signinData) {
-        return thunkApi.rejectWithValue(signinRes.message)
+        return thunkApi.rejectWithValue(signinRes.message);
       }
       return signinRes.data;
-    } catch (err:any) {
-      return thunkApi.rejectWithValue(err.message)
+    } catch (err: any) {
+      return thunkApi.rejectWithValue(err.message);
     }
   }
-)
+);
 
 export const signinUser = createAsyncThunk<IUser, ISignup>(
   'user/signin',
@@ -136,17 +135,17 @@ export const signinUser = createAsyncThunk<IUser, ISignup>(
         method: 'POST',
         credentials: 'include',
         body: JSON.stringify({ name, email, password }),
-      })
+      });
       const res = await data.json();
       if (data.status < 200 || data.status >= 300 || !data) {
-        return thunkApi.rejectWithValue(res.message)
+        return thunkApi.rejectWithValue(res.message);
       }
       return res.data;
-    } catch (err:any) {
-      return thunkApi.rejectWithValue(err.message)
+    } catch (err: any) {
+      return thunkApi.rejectWithValue(err.message);
     }
   }
-)
+);
 
 export const signoutUser = createAsyncThunk<IUser, undefined>(
   'user/signout',
@@ -155,15 +154,14 @@ export const signoutUser = createAsyncThunk<IUser, undefined>(
       const data = await fetch(`${BASE_URL_API}/signout`, {
         method: 'POST',
         credentials: 'include',
-        
-      })
+      });
       const res = await data.json();
       if (data.status < 200 || data.status >= 300 || !data) {
-        return thunkApi.rejectWithValue(res.message)
+        return thunkApi.rejectWithValue(res.message);
       }
       return res;
-    } catch (err:any) {
-      return thunkApi.rejectWithValue(err.message)
+    } catch (err: any) {
+      return thunkApi.rejectWithValue(err.message);
     }
   }
-)
+);

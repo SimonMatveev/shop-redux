@@ -1,67 +1,67 @@
 @import '../../utils/variables.scss';
 
 @keyframes wheel-spin {
-    0% {
-        transform: rotate(0);
-    }
+  0% {
+    transform: rotate(0);
+  }
 
-    100% {
-        transform:  rotate(360deg);
-    }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .prizes {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.3);
-    align-items: center;
-    z-index: 2000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.3);
+  align-items: center;
+  z-index: 2000;
+  display: flex;
+
+  &__container {
+    max-width: 700px;
+    margin: 0 auto;
     display: flex;
+    flex-direction: column;
+  }
 
-    &__container {
-        max-width: 700px;
-        margin: 0 auto;
-        display: flex;
-        flex-direction: column;
+  &__spinner {
+    background-color: red;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    margin-bottom: 40px;
+    background-image: url(../../images/prizes-wheel.png);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+
+  &__spinner_animation {
+    animation: wheel-spin 2s;
+  }
+
+  &__btn {
+    width: 100%;
+    background-color: $red-default;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: $red-hover;
     }
+  }
 
-    &__spinner {
-        background-color: red;
-        width: 400px;
-        height: 400px;
-        border-radius: 50%;
-        margin-bottom: 40px;
-        background-image: url(../../images/prizes-wheel.png);
-        background-position: center;
-        background-size: cover;
-        background-repeat: no-repeat;
-    }
-
-    &__spinner_animation {
-        animation: wheel-spin 2s;
-    }
-
-    &__btn {
-        width: 100%;
-        background-color: $red-default;
-        border: none;
-        padding: 10px;
-        border-radius: 5px;
-        color: white;
-        cursor: pointer;
-        transition: background-color .3s;
-
-        &:hover {
-            background-color: $red-hover;
-        }
-    }
-
-    &__close {
-        margin-left: auto;
-        background-color: white;
-        border-radius: 50%;
-    }
+  &__close {
+    margin-left: auto;
+    background-color: white;
+    border-radius: 50%;
+  }
 }

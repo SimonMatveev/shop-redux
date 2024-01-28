@@ -25,18 +25,21 @@ const userSchema = new mongoose.Schema({
     required: true,
     select: false,
   },
-  ratings: [{
-    id: {
-      type: mongoose.Schema.ObjectId,
-      required: true,
+  ratings: [
+    {
+      id: {
+        type: mongoose.Schema.ObjectId,
+        required: true,
+      },
+      value: {
+        type: Number,
+        required: true,
+      },
     },
-    value: {
-      type: Number,
-      required: true,
+    {
+      _id: false,
     },
-  }, {
-    _id: false,
-  }],
+  ],
   cart: {
     totalPrice: {
       type: Number,
@@ -48,43 +51,45 @@ const userSchema = new mongoose.Schema({
       required: true,
       default: 0,
     },
-    items: [{
-      itemInCart: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'item',
-        required: true,
+    items: [
+      {
+        itemInCart: {
+          type: mongoose.Schema.ObjectId,
+          ref: 'item',
+          required: true,
+        },
+        orders: [
+          {
+            amount: {
+              type: Number,
+              required: true,
+              default: 1,
+            },
+            platform: {
+              type: String,
+              required: true,
+            },
+          },
+        ],
+        _id: false,
       },
-      orders: [
-        {
-          amount: {
-            type: Number,
-            required: true,
-            default: 1,
-          },
-          platform: {
-            type: String,
-            required: true,
-          },
-        }
-      ],
-      _id: false,
-    }]
-  }
+    ],
+  },
 });
 
 userSchema.statics.findUserByCredentials = function (email, password) {
-  return this.findOne({ email }).select('+password')
+  return this.findOne({ email })
+    .select('+password')
     .then((user) => {
       if (!user) {
         return Promise.reject(new AuthError(LOGIN_ERR));
       }
-      return bcrypt.compare(password, user.password)
-        .then((matched) => {
-          if (!matched) {
-            return Promise.reject(new AuthError(LOGIN_ERR));
-          }
-          return user;
-        });
+      return bcrypt.compare(password, user.password).then((matched) => {
+        if (!matched) {
+          return Promise.reject(new AuthError(LOGIN_ERR));
+        }
+        return user;
+      });
     });
 };
 
@@ -94,41 +99,53 @@ userSchema.statics.incrementCart = function (userId, { itemId, platform }) {
       if (!user) {
         return Promise.reject(new NotFoundError());
       }
-      const indexOfItem = user.cart.items.findIndex(item => item.itemInCart.equals(itemId));
+      const indexOfItem = user.cart.items.findIndex((item) =>
+        item.itemInCart.equals(itemId)
+      );
       if (indexOfItem === -1) {
         const newOrder = {
           itemInCart: itemId,
-          orders: [{
-            platform: platform,
-            amount: 1,
-          }]
-        }
+          orders: [
+            {
+              platform: platform,
+              amount: 1,
+            },
+          ],
+        };
         user.cart.items.push(newOrder);
       } else {
-        const indexOfPlatform = user.cart.items[indexOfItem].orders.findIndex(item => item.platform === platform);
+        const indexOfPlatform = user.cart.items[indexOfItem].orders.findIndex(
+          (item) => item.platform === platform
+        );
         if (indexOfPlatform === -1) {
           user.cart.items[indexOfItem].orders.push({
             platform: platform,
             amount: 1,
-          })
+          });
         } else {
           user.cart.items[indexOfItem].orders[indexOfPlatform].amount++;
         }
       }
       return user.cart;
     })
-    .then(cart => this.findByIdAndUpdate(userId, { cart }, {
-      new: true,
-      runValidators: true,
-    }).populate({
-      path: 'cart',
-      populate: {
-        path: 'items',
-        populate: {
-          path: 'itemInCart'
+    .then((cart) =>
+      this.findByIdAndUpdate(
+        userId,
+        { cart },
+        {
+          new: true,
+          runValidators: true,
         }
-      }
-    }));
+      ).populate({
+        path: 'cart',
+        populate: {
+          path: 'items',
+          populate: {
+            path: 'itemInCart',
+          },
+        },
+      })
+    );
 };
 
 userSchema.statics.decrementCart = function (userId, { itemId, platform }) {
@@ -137,35 +154,45 @@ userSchema.statics.decrementCart = function (userId, { itemId, platform }) {
       if (!user) {
         return Promise.reject(new NotFoundError());
       }
-      const indexOfItem = user.cart.items.findIndex(item => item.itemInCart.equals(itemId));
+      const indexOfItem = user.cart.items.findIndex((item) =>
+        item.itemInCart.equals(itemId)
+      );
       if (indexOfItem === -1) {
         return user.cart;
       } else {
-        const indexOfPlatform = user.cart.items[indexOfItem].orders.findIndex(item => item.platform === platform);
+        const indexOfPlatform = user.cart.items[indexOfItem].orders.findIndex(
+          (item) => item.platform === platform
+        );
         if (indexOfPlatform === -1) {
           return user.cart;
         } else if (user.cart.items[indexOfItem].orders[indexOfPlatform].amount > 1) {
           user.cart.items[indexOfItem].orders[indexOfPlatform].amount--;
         } else {
           user.cart.items[indexOfItem].orders.splice(indexOfPlatform, 1);
-          if (user.cart.items[indexOfItem].orders.length === 0) user.cart.items.splice(indexOfItem, 1);
+          if (user.cart.items[indexOfItem].orders.length === 0)
+            user.cart.items.splice(indexOfItem, 1);
         }
       }
       return user.cart;
     })
-    .then(cart => this.findByIdAndUpdate(userId, { cart }, {
-      new: true,
-      runValidators: true,
-    }).populate({
-      path: 'cart',
-      populate: {
-        path: 'items',
-        populate: {
-          path: 'itemInCart'
+    .then((cart) =>
+      this.findByIdAndUpdate(
+        userId,
+        { cart },
+        {
+          new: true,
+          runValidators: true,
         }
-      }
-    }))
-    ;
+      ).populate({
+        path: 'cart',
+        populate: {
+          path: 'items',
+          populate: {
+            path: 'itemInCart',
+          },
+        },
+      })
+    );
 };
 
 module.exports = mongoose.model('user', userSchema);

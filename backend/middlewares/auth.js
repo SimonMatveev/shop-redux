@@ -16,7 +16,10 @@ function auth(req, res, next) {
   let payload;
 
   try {
-    payload = jsonwebtoken.verify(jwt, NODE_ENV === 'production' ? JWT_SECRET : JWT_SECRET_DEV);
+    payload = jsonwebtoken.verify(
+      jwt,
+      NODE_ENV === 'production' ? JWT_SECRET : JWT_SECRET_DEV
+    );
   } catch (err) {
     return next(new AuthError(TOKEN_ERR));
   }

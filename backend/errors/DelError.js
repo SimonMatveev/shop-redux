@@ -1,4 +1,4 @@
-const { DEL_ERR_STATUS } = require("../utils/constants");
+const { DEL_ERR_STATUS } = require('../utils/constants');
 
 class DelError extends Error {
   constructor(message) {

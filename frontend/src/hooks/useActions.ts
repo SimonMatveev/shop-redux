@@ -7,7 +7,7 @@ import { rootActions } from '../store/rootActions';
 const useActions = () => {
   const dispatch = useDispatch();
 
-  return useMemo(() => bindActionCreators(rootActions, dispatch), [dispatch])
-}
+  return useMemo(() => bindActionCreators(rootActions, dispatch), [dispatch]);
+};
 
 export default useActions;

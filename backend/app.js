@@ -16,10 +16,12 @@ const { PORT = 3000, NODE_ENV, DB_URL } = process.env;
 
 const app = express();
 app.use(requestLogger);
-app.use(cors({
-  origin: ORIGINS,
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: ORIGINS,
+    credentials: true,
+  })
+);
 app.use(helmet());
 app.use(limiter);
 app.use(express.json());

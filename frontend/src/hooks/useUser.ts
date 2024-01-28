@@ -1,8 +1,8 @@
-import { useTypedSelector } from "./useTypedSelector";
+import { useTypedSelector } from './useTypedSelector';
 
 const useUser = () => {
-  const user = useTypedSelector(state => state.user);
+  const user = useTypedSelector((state) => state.user);
   return user;
-}
+};
 
-export default useUser
+export default useUser;

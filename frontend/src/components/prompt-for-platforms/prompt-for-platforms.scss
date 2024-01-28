@@ -39,7 +39,7 @@
     color: white;
     min-width: 80px;
     cursor: pointer;
-    transition: background-color .3s;
+    transition: background-color 0.3s;
 
     &:hover {
       background-color: $red-hover;

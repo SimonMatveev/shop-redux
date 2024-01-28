@@ -4,18 +4,21 @@ import { useGetCurrentUserQuery } from '../../store/api/users.storeApi';
 import Preloader from '../preloader/Preloader';
 
 interface IProtectedRouteProps {
-  onlyUnauth?: boolean
+  onlyUnauth?: boolean;
 }
 
-const ProtectedRoute: FC<PropsWithChildren<IProtectedRouteProps>> = ({ children, onlyUnauth }) => {
+const ProtectedRoute: FC<PropsWithChildren<IProtectedRouteProps>> = ({
+  children,
+  onlyUnauth,
+}) => {
   const { isLoading, data: currentUser } = useGetCurrentUserQuery(null, {});
 
-  if (isLoading) return (<Preloader />);
+  if (isLoading) return <Preloader />;
   if ((onlyUnauth && !currentUser) || (!onlyUnauth && currentUser)) {
-    return (<>{children}</>);
+    return <>{children}</>;
   } else {
-    return (<Navigate to='/items' />);
+    return <Navigate to='/items' />;
   }
-}
+};
 
-export default ProtectedRoute
+export default ProtectedRoute;

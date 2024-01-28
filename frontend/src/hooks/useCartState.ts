@@ -1,8 +1,8 @@
-import { useTypedSelector } from "./useTypedSelector";
+import { useTypedSelector } from './useTypedSelector';
 
 const useCartState = () => {
-  const cartState = useTypedSelector(state => state.cartState);
+  const cartState = useTypedSelector((state) => state.cartState);
   return cartState;
-}
+};
 
-export default useCartState
+export default useCartState;

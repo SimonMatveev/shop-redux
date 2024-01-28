@@ -28,15 +28,16 @@ function getUsers(req, res, next) {
 }
 
 function getCurrentUser(req, res, next) {
-  User.findById(req.user._id).populate({
-    path: 'cart',
-    populate: {
-      path: 'items',
+  User.findById(req.user._id)
+    .populate({
+      path: 'cart',
       populate: {
-        path: 'itemInCart'
-      }
-    }
-  })
+        path: 'items',
+        populate: {
+          path: 'itemInCart',
+        },
+      },
+    })
     .then((user) => {
       if (!user) {
         throw new NotFoundError();
@@ -52,21 +53,26 @@ function getCurrentUser(req, res, next) {
 }
 
 function createUser(req, res, next) {
-  const {
-    name, email, password,
-  } = req.body;
-  bcrypt.hash(password, 10)
-    .then((hash) => User.create({
-      name, email, password: hash,
-    }))
-    .then((user) => res.status(201).send({
-      data: {
-        name: user.name,
-        email: user.email,
-        _id: user._id,
-        cart: user.cart,
-      },
-    }))
+  const { name, email, password } = req.body;
+  bcrypt
+    .hash(password, 10)
+    .then((hash) =>
+      User.create({
+        name,
+        email,
+        password: hash,
+      })
+    )
+    .then((user) =>
+      res.status(201).send({
+        data: {
+          name: user.name,
+          email: user.email,
+          _id: user._id,
+          cart: user.cart,
+        },
+      })
+    )
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new DataError(CREATE_USER_ERR));
@@ -79,16 +85,26 @@ async function updateUser(req, res, next) {
     const { name, email, password } = req.body;
     let hash;
     if (password) {
-      hash = await bcrypt.hash(password, 10)
+      hash = await bcrypt.hash(password, 10);
     }
-    const user = password ? await User.findByIdAndUpdate(req.user._id, { name, email, password: hash }, {
-      new: true,
-      runValidators: true,
-    }) : await User.findByIdAndUpdate(req.user._id, { name, email }, {
-      new: true,
-      runValidators: true,
-    })
-    res.send(user)
+    const user = password
+      ? await User.findByIdAndUpdate(
+          req.user._id,
+          { name, email, password: hash },
+          {
+            new: true,
+            runValidators: true,
+          }
+        )
+      : await User.findByIdAndUpdate(
+          req.user._id,
+          { name, email },
+          {
+            new: true,
+            runValidators: true,
+          }
+        );
+    res.send(user);
   } catch (err) {
     if (err.name === 'ValidationError') {
       next(new DataError(PATCH_USER_ERR));
@@ -101,7 +117,10 @@ function login(req, res, next) {
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : JWT_SECRET_DEV);
+      const token = jwt.sign(
+        { _id: user._id },
+        NODE_ENV === 'production' ? JWT_SECRET : JWT_SECRET_DEV
+      );
       res.cookie('jwt', token, {
         maxAge: 3600000 * 24 * 7,
         httpOnly: true,
@@ -111,7 +130,7 @@ function login(req, res, next) {
           name: user.name,
           email: user.email,
           _id: user._id,
-        }
+        },
       });
     })
     .catch(next);
@@ -145,7 +164,7 @@ function decrementCart(req, res, next) {
   return User.decrementCart(req.user._id, { itemId, platform })
     .then((user) => {
       calculateTotalPrice(user.cart);
-      res.send(user)
+      res.send(user);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -155,16 +174,20 @@ function decrementCart(req, res, next) {
 }
 
 function clearCart(req, res, next) {
-  User.findByIdAndUpdate(req.user._id, {
-    cart: {
-      items: [],
-      totalPrice: 0,
-      totalPriceWithSale: 0,
+  User.findByIdAndUpdate(
+    req.user._id,
+    {
+      cart: {
+        items: [],
+        totalPrice: 0,
+        totalPriceWithSale: 0,
+      },
+    },
+    {
+      new: true,
+      runValidators: true,
     }
-  }, {
-    new: true,
-    runValidators: true,
-  })
+  )
     .then((user) => res.send(user))
     .catch(next);
 }

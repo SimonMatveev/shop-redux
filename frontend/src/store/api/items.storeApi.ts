@@ -1,5 +1,12 @@
-import { IFilters, IItem, IItemData, IItemInsert, IListItem, ISingleItemData, } from '../../types/types'
-import { storeApi } from './storeApi'
+import {
+  IFilters,
+  IItem,
+  IItemData,
+  IItemInsert,
+  IListItem,
+  ISingleItemData,
+} from '../../types/types';
+import { storeApi } from './storeApi';
 
 export const itemsApi = storeApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -15,7 +22,7 @@ export const itemsApi = storeApi.injectEndpoints({
             limit,
             page,
           },
-        }
+        };
       },
       providesTags: ['Item'],
     }),
@@ -23,7 +30,7 @@ export const itemsApi = storeApi.injectEndpoints({
       query: () => {
         return {
           url: '/items/disc',
-        }
+        };
       },
       transformResponse: (res: { data: IItem[] }) => res.data,
     }),
@@ -48,7 +55,7 @@ export const itemsApi = storeApi.injectEndpoints({
       invalidatesTags: ['Item'],
     }),
   }),
-})
+});
 
 export const {
   useGetItemsQuery,
@@ -57,4 +64,4 @@ export const {
   useAddItemMutation,
   useGetSeriesQuery,
   useGetSeriesListQuery,
-} = itemsApi
+} = itemsApi;

@@ -1,6 +1,15 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { IInitialStateForUser, } from "../../types/types";
-import { clearCart, decrementCart, getCurrentUser, incrementCart, patchUser, signinUser, signoutUser, signupUser, } from "./user.actions";
+import { createSlice } from '@reduxjs/toolkit';
+import { IInitialStateForUser } from '../../types/types';
+import {
+  clearCart,
+  decrementCart,
+  getCurrentUser,
+  incrementCart,
+  patchUser,
+  signinUser,
+  signoutUser,
+  signupUser,
+} from './user.actions';
 
 const initialState: IInitialStateForUser = {
   isLoading: {
@@ -30,9 +39,9 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {},
-  extraReducers: builder => {
+  extraReducers: (builder) => {
     builder
-      .addCase(getCurrentUser.pending, state => {
+      .addCase(getCurrentUser.pending, (state) => {
         state.isLoading.getUser = true;
         state.error.getUser = null;
       })
@@ -46,7 +55,7 @@ export const userSlice = createSlice({
         state.user = null;
         state.error.getUser = action.payload as string;
       })
-      .addCase(patchUser.pending, state => {
+      .addCase(patchUser.pending, (state) => {
         state.isLoading.patchUser = true;
         state.error.patchUser = null;
       })
@@ -140,8 +149,8 @@ export const userSlice = createSlice({
       .addCase(signoutUser.rejected, (state, action) => {
         state.isLoading.signoutUser = false;
         state.error.signupUser = action.payload as string;
-      })
-  }
-})
+      });
+  },
+});
 
 export const { actions: userActions, reducer: userReducer } = userSlice;

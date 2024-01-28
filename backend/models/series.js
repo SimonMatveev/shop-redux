@@ -10,7 +10,7 @@ const seriesSchema = new mongoose.Schema({
     type: Number,
     required: true,
     unique: true,
-  }
+  },
 });
 
 module.exports = mongoose.model('series', seriesSchema);

@@ -12,19 +12,32 @@ interface IAuthFormProps {
   questionText: string;
   linkText: string;
   link: string;
-  handleSubmit: (({ }: any) => void);
+  handleSubmit: ({}: any) => void;
   apiError: string;
   isFormLoading: boolean;
   passwordCheck: boolean;
 }
 
-const AuthForm: FC<IAuthFormProps> = ({ title, inputs, buttonText, questionText, linkText, link, handleSubmit, apiError, isFormLoading, passwordCheck }) => {
-  const { values, handleChange, errors, isValid } = useFormAndValidation({ passwordCheck });
+const AuthForm: FC<IAuthFormProps> = ({
+  title,
+  inputs,
+  buttonText,
+  questionText,
+  linkText,
+  link,
+  handleSubmit,
+  apiError,
+  isFormLoading,
+  passwordCheck,
+}) => {
+  const { values, handleChange, errors, isValid } = useFormAndValidation({
+    passwordCheck,
+  });
 
   const handleForm: FormEventHandler = (e) => {
     e.preventDefault();
     handleSubmit(values);
-  }
+  };
 
   return (
     <div className='auth'>
@@ -32,7 +45,7 @@ const AuthForm: FC<IAuthFormProps> = ({ title, inputs, buttonText, questionText,
         <h1 className='auth__title'>{title}</h1>
         <form className='auth__form' onSubmit={handleForm}>
           {inputs.map((input, i) => (
-            <fieldset key={i} className="auth__row">
+            <fieldset key={i} className='auth__row'>
               <input
                 type={input.type}
                 name={input.name}
@@ -44,20 +57,32 @@ const AuthForm: FC<IAuthFormProps> = ({ title, inputs, buttonText, questionText,
                 placeholder={input.nameText}
                 {...input.options}
               />
-              {errors[input.name] && <span className="auth__error">{errors[input.name]}</span>}
+              {errors[input.name] && (
+                <span className='auth__error'>{errors[input.name]}</span>
+              )}
             </fieldset>
           ))}
           {apiError && <p className='auth__api-error'>{apiError}</p>}
-          <button className={`auth__btn${!isValid || isFormLoading ? ' auth__btn_disabled' : ''}`} type="submit" disabled={!isValid || isFormLoading}>{isFormLoading ? 'Загрузка...' : buttonText}</button>
+          <button
+            className={`auth__btn${!isValid || isFormLoading ? ' auth__btn_disabled' : ''}`}
+            type='submit'
+            disabled={!isValid || isFormLoading}
+          >
+            {isFormLoading ? 'Загрузка...' : buttonText}
+          </button>
         </form>
         <div className='auth__subtext'>
           <p className='auth__subtext-question'>{questionText}</p>
-          <Link className='auth__subtext-link' to={link}>{linkText}</Link>
-          <Link className='auth__subtext-to-main' to='/items'>На главную</Link>
+          <Link className='auth__subtext-link' to={link}>
+            {linkText}
+          </Link>
+          <Link className='auth__subtext-to-main' to='/items'>
+            На главную
+          </Link>
         </div>
       </Container>
     </div>
   );
-}
+};
 
 export default AuthForm;

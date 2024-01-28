@@ -11,7 +11,7 @@ const CloseBtn: FC<ICloseBtnProps> = ({ setIsOpen, newClass, newFunc }) => {
   const clickHandler = () => {
     setIsOpen(false);
     newFunc && newFunc();
-  }
+  };
 
   return (
     <button
@@ -20,7 +20,7 @@ const CloseBtn: FC<ICloseBtnProps> = ({ setIsOpen, newClass, newFunc }) => {
       onClick={clickHandler}
       aria-label='Закрыть'
     />
-  )
-}
+  );
+};
 
-export default CloseBtn
+export default CloseBtn;

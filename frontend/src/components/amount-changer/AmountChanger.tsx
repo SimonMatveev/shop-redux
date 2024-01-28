@@ -1,5 +1,9 @@
 import { FC, MouseEventHandler } from 'react';
-import { useDecrementCartMutation, useGetCurrentUserQuery, useIncrementCartMutation } from '../../store/api/users.storeApi';
+import {
+  useDecrementCartMutation,
+  useGetCurrentUserQuery,
+  useIncrementCartMutation,
+} from '../../store/api/users.storeApi';
 import { ENUM_PLATFORMS, IItem } from '../../types/types';
 import './amount-changer.scss';
 
@@ -13,37 +17,46 @@ const AmountChanger: FC<IAmountChangerProps> = ({ item, newClass, platformToChan
   const { data } = useGetCurrentUserQuery(null, {});
   const [incrementCart, { isLoading: upIsLoading }] = useIncrementCartMutation();
   const [decrementCart, { isLoading: downIsLoading }] = useDecrementCartMutation();
-  const thisItemInCart = data!.cart.items.find(cartItem => cartItem.itemInCart._id === item._id) || null;
+  const thisItemInCart =
+    data!.cart.items.find((cartItem) => cartItem.itemInCart._id === item._id) || null;
 
-  const thisOrderInCart = thisItemInCart?.orders?.find(order => order.platform === platformToChange) || { amount: 0 };
+  const thisOrderInCart = thisItemInCart?.orders?.find(
+    (order) => order.platform === platformToChange
+  ) || { amount: 0 };
 
   const handleIncrement: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
-    if (platformToChange !== null) incrementCart({ itemId: item._id, platform: platformToChange });
-  }
+    if (platformToChange !== null)
+      incrementCart({ itemId: item._id, platform: platformToChange });
+  };
 
   const handleDecrement: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
-    if (platformToChange!==null) decrementCart({ itemId: item._id, platform: platformToChange });
-  }
+    if (platformToChange !== null)
+      decrementCart({ itemId: item._id, platform: platformToChange });
+  };
 
   return (
     <div className={`amount-changer${newClass ? ' ' + newClass : ''}`}>
-      < button
+      <button
         type='button'
         className={`amount-changer__btn${downIsLoading ? ' amount-changer__btn_loading' : ''}`}
         onClick={handleDecrement}
         disabled={downIsLoading}
-      >-</button>
+      >
+        -
+      </button>
       <span className='amount-changer__number'>{thisOrderInCart.amount}</span>
-      < button
+      <button
         type='button'
         className={`amount-changer__btn${upIsLoading ? ' amount-changer__btn_loading' : ''}`}
         onClick={handleIncrement}
         disabled={upIsLoading}
-      >+</button>
+      >
+        +
+      </button>
     </div>
-  )
-}
+  );
+};
 
-export default AmountChanger
+export default AmountChanger;

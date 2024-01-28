@@ -1,7 +1,17 @@
 import { ChangeEvent, useCallback, useEffect, useState } from 'react';
-import { DEFAULT_VALIDATION_MSG, EMAIL_VALIDATION_MSG, NAME_VALIDATION_MSG, REG_EXP_EMAIL, REG_EXP_NAME } from '../utils/constants';
+import {
+  DEFAULT_VALIDATION_MSG,
+  EMAIL_VALIDATION_MSG,
+  NAME_VALIDATION_MSG,
+  REG_EXP_EMAIL,
+  REG_EXP_NAME,
+} from '../utils/constants';
 
-export default function useFormAndValidation({ passwordCheck }: { passwordCheck: boolean }) {
+export default function useFormAndValidation({
+  passwordCheck,
+}: {
+  passwordCheck: boolean;
+}) {
   const [values, setValues] = useState<{ [key: string]: string }>({});
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isValid, setIsValid] = useState(true);
@@ -20,41 +30,53 @@ export default function useFormAndValidation({ passwordCheck }: { passwordCheck:
     setIsValid(e.target.closest('form')!.checkValidity());
   };
 
-  const resetForm = useCallback((newValues = {}, newErrors = {}, newIsValid = false) => {
-    setValues(newValues);
-    setErrors(newErrors);
-    setIsValid(newIsValid);
-  }, [setValues, setErrors, setIsValid]);
+  const resetForm = useCallback(
+    (newValues = {}, newErrors = {}, newIsValid = false) => {
+      setValues(newValues);
+      setErrors(newErrors);
+      setIsValid(newIsValid);
+    },
+    [setValues, setErrors, setIsValid]
+  );
 
   useEffect(() => {
     if (passwordCheck) {
       if (values.password !== values.password_2) {
         setIsValid(false);
         if (values.password_2 !== '' && values.password_2 !== undefined) {
-          setErrors(prev => {
+          setErrors((prev) => {
             return {
               ...prev,
-              password_2: 'Пароли должны совпадать'
-            }
-          })
+              password_2: 'Пароли должны совпадать',
+            };
+          });
         } else {
-          setErrors(prev => {
+          setErrors((prev) => {
             return {
               ...prev,
-              password_2: ''
-            }
-          })
+              password_2: '',
+            };
+          });
         }
       } else {
-        setErrors(prev => {
+        setErrors((prev) => {
           return {
             ...prev,
-            password_2: ''
-          }
-        })
+            password_2: '',
+          };
+        });
       }
     }
-  }, [values])
+  }, [values]);
 
-  return { values, handleChange, errors, isValid, resetForm, setValues, setIsValid, setErrors, };
+  return {
+    values,
+    handleChange,
+    errors,
+    isValid,
+    resetForm,
+    setValues,
+    setIsValid,
+    setErrors,
+  };
 }

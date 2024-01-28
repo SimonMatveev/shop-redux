@@ -3,10 +3,10 @@ import { BASE_URL_API } from '../../utils/config';
 
 export const storeApi = createApi({
   reducerPath: 'storeApi',
-  tagTypes: ['Item', 'User',],
+  tagTypes: ['Item', 'User'],
   baseQuery: fetchBaseQuery({
     baseUrl: BASE_URL_API,
-    credentials: 'include'
+    credentials: 'include',
   }),
-  endpoints: () => ({})
+  endpoints: () => ({}),
 });

@@ -15,7 +15,8 @@ const inputs = [
       maxLength: '30',
       autoComplete: 'name',
     },
-  }, {
+  },
+  {
     name: 'email',
     nameText: 'E-mail',
     type: EInputType.EMAIL,
@@ -23,34 +24,38 @@ const inputs = [
       pattern: REG_EXP_EMAIL,
       autoComplete: 'email',
     },
-  }, {
+  },
+  {
     name: 'password',
     nameText: 'Пароль',
     type: EInputType.PASSWORD,
     options: {
       minLength: '2',
       maxLength: '30',
-      autoComplete: 'new-password'
+      autoComplete: 'new-password',
     },
-  }, {
+  },
+  {
     name: 'password_2',
     nameText: 'Введите пароль повторно',
     type: EInputType.PASSWORD,
     options: {
-      autoComplete: 'new-password'
+      autoComplete: 'new-password',
     },
   },
 ];
 
 const Signup: FC = () => {
-  const [signUp, { error: signUpError, isLoading: signUpIsLoading }] = useSignUpMutation();
+  const [signUp, { error: signUpError, isLoading: signUpIsLoading }] =
+    useSignUpMutation();
   const [signIn, { isLoading: signInIsLoading }] = useSignInMutation();
 
   const handleSignup = ({ name, email, password }: ISignup) => {
-    signUp({ name, email, password }).unwrap()
+    signUp({ name, email, password })
+      .unwrap()
       .then(() => signIn({ email, password }))
-      .catch(err => console.log(err))
-  }
+      .catch((err) => console.log(err));
+  };
 
   return (
     <AuthForm
@@ -65,7 +70,7 @@ const Signup: FC = () => {
       inputs={inputs}
       passwordCheck={true}
     />
-  )
-}
+  );
+};
 
-export default Signup
+export default Signup;

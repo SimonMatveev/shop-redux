@@ -1,9 +1,24 @@
 const router = require('express').Router();
 const {
-  getItems, addItem, deleteItem, changePrice, changeInStock, getItem, getSeries, getSeriesList, getDiscountedItems,
+  getItems,
+  addItem,
+  deleteItem,
+  changePrice,
+  changeInStock,
+  getItem,
+  getSeries,
+  getSeriesList,
+  getDiscountedItems,
 } = require('../controllers/items');
 const auth = require('../middlewares/auth');
-const { validateAddItem, validateDeleteItem, validateChangePrice, validateInStock, validateGetItem, validateGetSeries } = require('../middlewares/validate');
+const {
+  validateAddItem,
+  validateDeleteItem,
+  validateChangePrice,
+  validateInStock,
+  validateGetItem,
+  validateGetSeries,
+} = require('../middlewares/validate');
 
 router.get('/', getItems);
 router.get('/disc', getDiscountedItems);

@@ -13,7 +13,8 @@ const inputs = [
       pattern: REG_EXP_EMAIL,
       autoComplete: 'email',
     },
-  }, {
+  },
+  {
     name: 'password',
     nameText: 'Пароль',
     type: EInputType.PASSWORD,
@@ -40,7 +41,7 @@ const Signin: FC = () => {
       inputs={inputs}
       passwordCheck={false}
     />
-  )
-}
+  );
+};
 
-export default Signin
+export default Signin;

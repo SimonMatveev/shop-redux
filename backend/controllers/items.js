@@ -24,30 +24,30 @@ async function getItems(req, res, next) {
     const platforms = platformsData ? platformsData.split(',') : [];
     const page = !isNaN(Number(pageData)) ? Number(pageData) : 1;
     const limit = !isNaN(Number(limitData)) ? Number(limitData) : 1;
-    const items = await Item.find({}).sort({ [sortItemData]: sortOrderData })
-    const resItems = items.filter(item => {
+    const items = await Item.find({}).sort({ [sortItemData]: sortOrderData });
+    const resItems = items.filter((item) => {
       let isValidCategory = true;
       let isValidPlatform = true;
       if (category) {
         for (let filterCategory of category) {
-          isValidCategory = item.category.some(c => c === filterCategory);
+          isValidCategory = item.category.some((c) => c === filterCategory);
           if (isValidCategory) break;
         }
       }
       if (platforms) {
         for (let platformsItem of platforms) {
-          isValidPlatform = item.platforms.some(p => p === platformsItem);
+          isValidPlatform = item.platforms.some((p) => p === platformsItem);
           if (isValidPlatform) break;
         }
       }
       return isValidCategory && isValidPlatform;
-    })
+    });
     const lengthToSend = resItems.length;
     const itemsToSend = resItems.splice((page - 1) * limit, limit);
     res.send({
       data: itemsToSend,
       dbLength: lengthToSend,
-    })
+    });
   } catch (err) {
     next(err);
   }
@@ -56,10 +56,10 @@ async function getItems(req, res, next) {
 async function getDiscountedItems(req, res, next) {
   try {
     const items = await Item.find({});
-    const itemsToSend = items.filter(item => item.price !== item.priceWithSale);
+    const itemsToSend = items.filter((item) => item.price !== item.priceWithSale);
     res.send({
       data: itemsToSend,
-    })
+    });
   } catch (err) {
     next(err);
   }
@@ -67,7 +67,7 @@ async function getDiscountedItems(req, res, next) {
 
 async function getItem(req, res, next) {
   try {
-    const { itemId } = req.params
+    const { itemId } = req.params;
     const item = await Item.findOne({ _id: itemId });
     if (!item) throw new NotFoundError();
     res.send({ data: item });
@@ -81,7 +81,7 @@ async function getItem(req, res, next) {
 async function getSeriesList(res, res, next) {
   try {
     const seriesList = await Series.find({});
-    res.send({ data: seriesList })
+    res.send({ data: seriesList });
   } catch (err) {
     next(err);
   }
@@ -92,8 +92,8 @@ async function getSeries(req, res, next) {
     const { seriesId } = req.params;
     const series = await Series.findOne({ id: seriesId });
     if (!series) throw new NotFoundError();
-    const items = await Item.find({ series: series.name }).sort({ 'releaseDate': 'asc' });
-    res.send({ data: items })
+    const items = await Item.find({ series: series.name }).sort({ releaseDate: 'asc' });
+    res.send({ data: items });
   } catch (err) {
     next(err);
   }
@@ -124,10 +124,9 @@ function deleteItem(req, res, next) {
   Item.findById(req.params.itemId)
     .then((item) => {
       if (!item) throw new NotFoundError(DEL_ITEM_NOT_FOUND_ERR);
-      return Item.deleteOne(item)
-        .then(() => {
-          res.send({ data: item });
-        });
+      return Item.deleteOne(item).then(() => {
+        res.send({ data: item });
+      });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -143,13 +142,16 @@ function changePrice(req, res, next) {
   Item.findById(req.params.itemId)
     .then((item) => {
       if (!item) throw new NotFoundError(DEL_ITEM_NOT_FOUND_ERR);
-      return Item.findByIdAndUpdate(req.params.itemId, { price, priceWithSale }, {
-        new: true,
-        runValidators: true,
-      })
-        .then((item) => {
-          res.send({ data: item });
-        });
+      return Item.findByIdAndUpdate(
+        req.params.itemId,
+        { price, priceWithSale },
+        {
+          new: true,
+          runValidators: true,
+        }
+      ).then((item) => {
+        res.send({ data: item });
+      });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -165,13 +167,16 @@ function changeInStock(req, res, next) {
   Item.findById(req.params.itemId)
     .then((item) => {
       if (!item) throw new NotFoundError(DEL_ITEM_NOT_FOUND_ERR);
-      return Item.findByIdAndUpdate(req.params.itemId, { inStockAmount }, {
-        new: true,
-        runValidators: true,
-      })
-        .then((item) => {
-          res.send({ data: item });
-        });
+      return Item.findByIdAndUpdate(
+        req.params.itemId,
+        { inStockAmount },
+        {
+          new: true,
+          runValidators: true,
+        }
+      ).then((item) => {
+        res.send({ data: item });
+      });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {

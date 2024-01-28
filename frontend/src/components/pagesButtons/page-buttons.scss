@@ -6,10 +6,10 @@
 
   &__item {
     cursor: pointer;
-    transition: opacity .3s;
+    transition: opacity 0.3s;
 
     &:hover {
-      opacity: .7;
+      opacity: 0.7;
     }
 
     &_active {

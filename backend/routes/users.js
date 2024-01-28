@@ -1,6 +1,11 @@
 const router = require('express').Router();
 const {
-  getUsers, getCurrentUser, updateUser, incrementCart, decrementCart, clearCart,
+  getUsers,
+  getCurrentUser,
+  updateUser,
+  incrementCart,
+  decrementCart,
+  clearCart,
 } = require('../controllers/users');
 const { validatePatchMe, validateCart } = require('../middlewares/validate');
 

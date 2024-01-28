@@ -1,10 +1,8 @@
-import { FC } from 'react'
-import './preloader.scss'
+import { FC } from 'react';
+import './preloader.scss';
 
 const Preloader: FC = () => {
-  return (
-    <div className='preloader'>Loading...</div>
-  )
-}
+  return <div className='preloader'>Loading...</div>;
+};
 
-export default Preloader
+export default Preloader;

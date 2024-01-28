@@ -1,8 +1,8 @@
-import { useTypedSelector } from "./useTypedSelector";
+import { useTypedSelector } from './useTypedSelector';
 
 const useDataLength = () => {
-  const dataLength = useTypedSelector<number>(state => state.dataLength);
+  const dataLength = useTypedSelector<number>((state) => state.dataLength);
   return dataLength;
-}
+};
 
-export default useDataLength
+export default useDataLength;

@@ -1,24 +1,27 @@
 import { ICart } from '../types/types';
 
 export const toCapitalCase = (string: string) => {
-  string = string.replace(/\-/g, ' ')
-  const first = string[0].toUpperCase()
+  string = string.replace(/\-/g, ' ');
+  const first = string[0].toUpperCase();
   const rest = string.slice(1).toLowerCase();
   return first + rest;
-}
+};
 
 export function mapFilter<T>(values: {}) {
-  return Object.entries(values).filter(entry => entry[1]).map(entry => entry[0] as T)
+  return Object.entries(values)
+    .filter((entry) => entry[1])
+    .map((entry) => entry[0] as T);
 }
 
-export function getNameFromId<T>(DATA: { id: T, name: string }[], platformToFind: T) {
-  return DATA.find(platform => platform.id === platformToFind)!.name || '';
+export function getNameFromId<T>(DATA: { id: T; name: string }[], platformToFind: T) {
+  return DATA.find((platform) => platform.id === platformToFind)!.name || '';
 }
 
 export const calculateTotalAmount = (cart: ICart) =>
-  cart.items.reduce((acc, item) =>
-    item.orders.reduce((acc2, order) =>
-      order.amount + acc2, 0) + acc, 0);
+  cart.items.reduce(
+    (acc, item) => item.orders.reduce((acc2, order) => order.amount + acc2, 0) + acc,
+    0
+  );
 
 export const getRating = (rating: number) => {
   let ratingColor: string;
@@ -34,17 +37,17 @@ export const getRating = (rating: number) => {
     ratingColor = 'red';
   }
   return ratingColor;
-}
+};
 
-export function getRandomEntries<T> (arr: T[], n: number)  {
-  if (arr.length === 0 || n>arr.length) return [];
+export function getRandomEntries<T>(arr: T[], n: number) {
+  if (arr.length === 0 || n > arr.length) return [];
   let res = [];
   let usedN: number[] = [];
   for (let i = 0; i < n; i++) {
     let randomN: number;
     do {
       randomN = Math.floor(Math.random() * arr.length);
-    } while (usedN.includes(randomN))
+    } while (usedN.includes(randomN));
     res.push(arr[randomN]);
     usedN.push(randomN);
   }

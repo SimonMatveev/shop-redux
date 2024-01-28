@@ -1,15 +1,28 @@
-import { ENUM_LOCAL_STORAGE, ENUM_PLATFORMS, IClearResponse, IError, IPatchMe, ISignin, ISignup, IUser, IUserData, IUserNoPopulate, } from "../../types/types";
-import { filtersActions } from "../filters/filters.slice";
-import { storeApi } from "./storeApi";
+import {
+  ENUM_LOCAL_STORAGE,
+  ENUM_PLATFORMS,
+  IClearResponse,
+  IError,
+  IPatchMe,
+  ISignin,
+  ISignup,
+  IUser,
+  IUserData,
+  IUserNoPopulate,
+} from '../../types/types';
+import { filtersActions } from '../filters/filters.slice';
+import { storeApi } from './storeApi';
 
 export const userApi = storeApi.injectEndpoints({
-  endpoints: builder => ({
+  endpoints: (builder) => ({
     getCurrentUser: builder.query<IUser | null, null>({
       query: () => '/users/me',
-      providesTags: () => [{
-        type: 'User',
-      }],
-      transformResponse: (response) => (response as IUserData).data
+      providesTags: () => [
+        {
+          type: 'User',
+        },
+      ],
+      transformResponse: (response) => (response as IUserData).data,
     }),
     updateUser: builder.mutation<IUserNoPopulate, IPatchMe>({
       query: ({ name, email, password }) => ({
@@ -18,22 +31,24 @@ export const userApi = storeApi.injectEndpoints({
         method: 'PATCH',
       }),
       transformErrorResponse: (response) =>
-        response.status === 'FETCH_ERROR' ? response.error : (response as IError).data.message,
+        response.status === 'FETCH_ERROR'
+          ? response.error
+          : (response as IError).data.message,
       async onQueryStarted({ name, email }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
           userApi.util.updateQueryData('getCurrentUser', null, (user) => {
             if (name) user!.name = name;
             if (email) user!.email = email;
           })
-        )
+        );
         try {
           await queryFulfilled;
         } catch {
           patchResult.undo();
         }
-      }
+      },
     }),
-    incrementCart: builder.mutation<IUser, { itemId: string, platform: ENUM_PLATFORMS }>({
+    incrementCart: builder.mutation<IUser, { itemId: string; platform: ENUM_PLATFORMS }>({
       query: ({ itemId, platform }) => ({
         body: { itemId, platform },
         url: '/users/cart/add',
@@ -46,17 +61,17 @@ export const userApi = storeApi.injectEndpoints({
           dispatch(
             userApi.util.updateQueryData('getCurrentUser', null, (user) => {
               const { cart: userCart } = user!;
-              userCart.items = [...responseCart.items]
+              userCart.items = [...responseCart.items];
               userCart.totalPrice = responseCart.totalPrice;
               userCart.totalPriceWithSale = responseCart.totalPriceWithSale;
             })
-          )
+          );
         } catch (err) {
-          console.log(err)
+          console.log(err);
         }
-      }
+      },
     }),
-    decrementCart: builder.mutation<IUser, { itemId: string, platform: ENUM_PLATFORMS }>({
+    decrementCart: builder.mutation<IUser, { itemId: string; platform: ENUM_PLATFORMS }>({
       query: ({ itemId, platform }) => ({
         body: { itemId, platform },
         url: '/users/cart/remove',
@@ -73,11 +88,11 @@ export const userApi = storeApi.injectEndpoints({
               userCart.totalPrice = responseCart.totalPrice;
               userCart.totalPriceWithSale = responseCart.totalPriceWithSale;
             })
-          )
+          );
         } catch (err) {
-          console.log(err)
+          console.log(err);
         }
-      }
+      },
     }),
     clearCart: builder.mutation<IClearResponse, null>({
       query: () => ({
@@ -92,13 +107,13 @@ export const userApi = storeApi.injectEndpoints({
             userCart.totalPrice = 0;
             userCart.totalPriceWithSale = 0;
           })
-        )
+        );
         try {
           await queryFulfilled;
         } catch {
           patchResult.undo();
         }
-      }
+      },
     }),
     signIn: builder.mutation<IUserNoPopulate, ISignin>({
       query: ({ email, password }) => ({
@@ -106,9 +121,11 @@ export const userApi = storeApi.injectEndpoints({
         url: '/signin',
         method: 'POST',
       }),
-      invalidatesTags: (_, error) => error ? [] : [{ type: 'User' }],
+      invalidatesTags: (_, error) => (error ? [] : [{ type: 'User' }]),
       transformErrorResponse: (response) =>
-        response.status === 'FETCH_ERROR' ? response.error : (response as IError).data.message
+        response.status === 'FETCH_ERROR'
+          ? response.error
+          : (response as IError).data.message,
     }),
     signUp: builder.mutation<IUserNoPopulate, ISignup>({
       query: ({ email, password, name }) => ({
@@ -117,7 +134,9 @@ export const userApi = storeApi.injectEndpoints({
         method: 'POST',
       }),
       transformErrorResponse: (response) =>
-        response.status === 'FETCH_ERROR' ? response.error : (response as IError).data.message
+        response.status === 'FETCH_ERROR'
+          ? response.error
+          : (response as IError).data.message,
     }),
     signOut: builder.mutation<IClearResponse, null>({
       query: () => ({
@@ -125,20 +144,24 @@ export const userApi = storeApi.injectEndpoints({
         method: 'POST',
       }),
       transformErrorResponse: (response) =>
-        response.status === 'FETCH_ERROR' ? response.error : (response as IError).data.message,
+        response.status === 'FETCH_ERROR'
+          ? response.error
+          : (response as IError).data.message,
       async onCacheEntryAdded(_, { dispatch }) {
         try {
-          dispatch(userApi.util.updateQueryData('getCurrentUser', null, (user) => user = null));
-          dispatch(filtersActions.resetFilters())
+          dispatch(
+            userApi.util.updateQueryData('getCurrentUser', null, (user) => (user = null))
+          );
+          dispatch(filtersActions.resetFilters());
           localStorage.removeItem(ENUM_LOCAL_STORAGE.TOGGLE);
           localStorage.removeItem(ENUM_LOCAL_STORAGE.FILTER_STATE);
         } catch (err) {
-          console.log(err)
+          console.log(err);
         }
-      }
-    })
-  })
-})
+      },
+    }),
+  }),
+});
 
 export const {
   useGetCurrentUserQuery,

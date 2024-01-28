@@ -32,12 +32,22 @@ const validateAddItem = celebrate({
     studio: Joi.string().required(),
     price: Joi.number().required(),
     priceWithSale: Joi.number(),
-    category: Joi.array().items(Joi.string().required().valid(...CATEGORY_ENUM)),
+    category: Joi.array().items(
+      Joi.string()
+        .required()
+        .valid(...CATEGORY_ENUM)
+    ),
     inStockAmount: Joi.number().required(),
     releaseDate: Joi.string().required(),
-    platforms: Joi.array().items(Joi.string().required().valid(...PLATFORM_ENUM)),
+    platforms: Joi.array().items(
+      Joi.string()
+        .required()
+        .valid(...PLATFORM_ENUM)
+    ),
     series: Joi.string(),
-    images: Joi.array().items(Joi.string().required().pattern(REG_EXP_URL, { name: 'url' })),
+    images: Joi.array().items(
+      Joi.string().required().pattern(REG_EXP_URL, { name: 'url' })
+    ),
   }),
 });
 
@@ -69,7 +79,9 @@ const validateInStock = celebrate({
 const validateCart = celebrate({
   body: Joi.object().keys({
     itemId: Joi.string().length(24).hex().required(),
-    platform: Joi.string().required().valid(...PLATFORM_ENUM),
+    platform: Joi.string()
+      .required()
+      .valid(...PLATFORM_ENUM),
   }),
 });
 
@@ -97,7 +109,6 @@ const validateResetRating = celebrate({
     id: Joi.string().length(24).hex().required(),
   }),
 });
-
 
 module.exports = {
   validateSignUp,

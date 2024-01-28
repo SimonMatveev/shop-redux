@@ -12,14 +12,14 @@
     border-radius: 5px;
     cursor: pointer;
     min-width: 38px;
-    transition: background-color .3s;
+    transition: background-color 0.3s;
 
     &:not(:disabled):hover {
       background-color: $red-hover;
     }
 
     &_loading {
-      opacity: .5;
+      opacity: 0.5;
     }
   }
 

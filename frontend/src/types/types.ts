@@ -49,15 +49,15 @@ export interface IItem {
   images: string[];
 }
 
-export interface IItemInsert extends Omit<IItem, 'rating' | '_id'> { }
+export interface IItemInsert extends Omit<IItem, 'rating' | '_id'> {}
 
 export interface IItemData {
-  data: IItem[],
-  dbLength: number,
+  data: IItem[];
+  dbLength: number;
 }
 
 export interface ISingleItemData {
-  data: IItem
+  data: IItem;
 }
 
 export interface ICartItem {
@@ -65,7 +65,7 @@ export interface ICartItem {
   orders: {
     amount: number;
     platform: ENUM_PLATFORMS;
-  }[]
+  }[];
 }
 
 export interface ICart {
@@ -83,18 +83,18 @@ export interface IUser {
 }
 
 export interface IUserData {
-  data: IUser
+  data: IUser;
 }
 
 export interface IUserNoPopulate extends Omit<IUser, 'cart'> {
   cart: {
     items: {
-      itemInCart: string,
-      amount: number
+      itemInCart: string;
+      amount: number;
     }[];
     totalPrice: number;
     totalPriceWithSale: number;
-  }
+  };
 }
 
 export interface ISignin extends Pick<IUser, 'email'> {
@@ -128,13 +128,13 @@ export interface IError {
   status: number;
   data: {
     message: string;
-  }
+  };
 }
 
 export interface IClearResponse {
   data: {
     message: string;
-  }
+  };
 }
 
 export interface IInitialStateForUser {
@@ -147,7 +147,8 @@ export interface IInitialStateForUser {
     | 'decrementCart'
     | 'incrementCart'
     | 'clearCart',
-    boolean>;
+    boolean
+  >;
   error: Record<
     | 'getUser'
     | 'patchUser'
@@ -157,8 +158,9 @@ export interface IInitialStateForUser {
     | 'decrementCart'
     | 'incrementCart'
     | 'clearCart',
-    string | null>;
-  user: IUser | null
+    string | null
+  >;
+  user: IUser | null;
 }
 
 export interface IFilters {
