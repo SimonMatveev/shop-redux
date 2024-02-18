@@ -130,7 +130,9 @@ const Filters: FC<IfiltersProps> = ({ setIsLoading, setItems }) => {
       <Container newClass='filters__container'>
         <button
           type='button'
-          className={`filters__button filters__button_t_toggle${isActive ? ' filters__button_active' : ''}`}
+          className={`filters__button filters__button_t_toggle${
+            isActive ? ' filters__button_active' : ''
+          }`}
           onClick={handleFiltersToggle}
         >
           Фильтры
@@ -140,7 +142,11 @@ const Filters: FC<IfiltersProps> = ({ setIsLoading, setItems }) => {
             <button
               type='button'
               id={ENUM_FILTER_NAMES.CATEGORY}
-              className={`filters__select-title${isFilterOpen[ENUM_FILTER_NAMES.CATEGORY] ? ' filters__select-title_open' : ''}`}
+              className={`filters__select-title${
+                isFilterOpen[ENUM_FILTER_NAMES.CATEGORY]
+                  ? ' filters__select-title_open'
+                  : ''
+              }`}
               onClick={handleSelectClick}
             >
               Выберите жанры
@@ -149,7 +155,9 @@ const Filters: FC<IfiltersProps> = ({ setIsLoading, setItems }) => {
                 : ''}
             </button>
             <div
-              className={`filters__options${isFilterOpen[ENUM_FILTER_NAMES.CATEGORY] ? ' filters__options_open' : ''}`}
+              className={`filters__options${
+                isFilterOpen[ENUM_FILTER_NAMES.CATEGORY] ? ' filters__options_open' : ''
+              }`}
             >
               {CATEGORIES.map((category) => (
                 <div className='filters__item' key={category.id}>
@@ -175,7 +183,11 @@ const Filters: FC<IfiltersProps> = ({ setIsLoading, setItems }) => {
             <button
               type='button'
               id={ENUM_FILTER_NAMES.PLATFORMS}
-              className={`filters__select-title${isFilterOpen[ENUM_FILTER_NAMES.PLATFORMS] ? ' filters__select-title_open' : ''}`}
+              className={`filters__select-title${
+                isFilterOpen[ENUM_FILTER_NAMES.PLATFORMS]
+                  ? ' filters__select-title_open'
+                  : ''
+              }`}
               onClick={handleSelectClick}
             >
               Выберите платформы
@@ -184,7 +196,9 @@ const Filters: FC<IfiltersProps> = ({ setIsLoading, setItems }) => {
                 : ''}
             </button>
             <div
-              className={`filters__options${isFilterOpen[ENUM_FILTER_NAMES.PLATFORMS] ? ' filters__options_open' : ''}`}
+              className={`filters__options${
+                isFilterOpen[ENUM_FILTER_NAMES.PLATFORMS] ? ' filters__options_open' : ''
+              }`}
             >
               {PLATFORMS.map((platform) => (
                 <div className='filters__item' key={platform.id}>
