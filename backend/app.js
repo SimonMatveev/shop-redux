@@ -26,7 +26,9 @@ app.use(helmet());
 app.use(limiter);
 app.use(express.json());
 app.use(cookieParser());
-mongoose.connect(NODE_ENV === 'production' ? DB_URL : DB_URL_DEV);
+mongoose.connect(NODE_ENV === 'production' ? DB_URL : DB_URL_DEV, {
+  authSource: 'admin',
+});
 
 app.use('/', require('./routes/index'));
 

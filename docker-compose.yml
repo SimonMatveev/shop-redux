@@ -1,0 +1,58 @@
+version: "3"
+
+services:
+  mongo:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: shopdb
+    networks:
+      - backend
+    volumes:
+      - ./mongo:/docker-entrypoint-initdb.d/
+  mongo-express:
+    depends_on:
+      - mongo
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      ME_CONFIG_MONGODB_SERVER: mongo
+      ME_CONFIG_ENABLE_ADMN: true
+    networks:
+      - backend
+  api:
+    depends_on:
+      - mongo-express
+    build:
+      context: ./backend/
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    environment:
+      - NODE_ENV=production
+      - DB_URL=mongodb://root:example@mongo:27017/shopdb
+      - JWT_SECRET='q1qwe1248214h2j5d88s2'
+    networks:
+      - frontend
+      - backend
+  ui:
+    depends_on:
+      - api
+    build:
+      context: ./frontend/
+      dockerfile: Dockerfile
+    networks:
+      - frontend
+    ports:
+      - 5174:80
+    volumes:
+      - ./frontend/nginx:/etc/nginx/conf.d
+networks:
+  backend:
+  frontend:
